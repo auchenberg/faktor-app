@@ -8,42 +8,71 @@
 import SwiftUI
 import Foundation
 
+import LaunchAtLogin
+import Defaults
+
 struct AppMenu: View {
-
     
-    func action1() {
+    @State private var isLaunchedAtLoginEnabled: Bool = LaunchAtLogin.isEnabled
+    @State var recentMessages: [MessageWithParsedOTP]
+    @Default(.settingShowNotifications) var showNotifications
+    @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
         
+    func onCodeClicked() {
+        print("TODO: Paste code to clipboard")
     }
-    func action2() {
         
-    }
-    func action3() {
-        
-    }
-
     var body: some View {
-        Menu("Recent Codes") {
-            Button(action: action1, label: { Text("Code 1") })
-            Button(action: action1, label: { Text("Code 2") })
+            
+        
+        Button("Recent") {
+            
+        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+        
+        // List recent messages
+        ForEach(recentMessages, id: \.0.guid) { message in
+            Button(action: onCodeClicked, label: { Text(message.1.code) })
         }
+                
+        Divider()
+        
+        // List preferences
         Menu("Preferences") {
-            Toggle(isOn: .constant(true)) {
+            Toggle(isOn: $showNotifications) {
                  Text("Show Notifications")
              }
              .toggleStyle(.checkbox)
-            Toggle(isOn: .constant(true)) {
+            Toggle(isOn: $enableBrowserIntegration) {
                  Text("Enable browser integration")
              }
              .toggleStyle(.checkbox)
+            Toggle(isOn: $isLaunchedAtLoginEnabled) {
+                 Text("Open at Login")
+             }
+             .toggleStyle(.checkbox)
+             .onChange(of:isLaunchedAtLoginEnabled) { oldState, newState in
+                 print("Checkbox state is now: \(newState)")
+                 LaunchAtLogin.isEnabled = newState
+             }
+            
         }
 
         Divider()
         
-        Button(action: action3, label: { Text("Autho v1.0.0 (latest)") } ).disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+        Button("Autho v1.0.0 (latest)") {
+        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         
+        Button("Connected to iMessage") {
+            
+        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+        
+
         Divider()
 
-        Button(action: action3, label: { Text("Quit") })
+        Button("Quit") {
+            NSApplication.shared.terminate(nil)
+        }.keyboardShortcut("q")
+        
     }
 }
 
