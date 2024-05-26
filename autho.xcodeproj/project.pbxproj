@@ -35,6 +35,7 @@
 		E20BA1E22C0164C90052B8FC /* appMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C12C0164C90052B8FC /* appMenu.swift */; };
 		E20BA1E32C0164C90052B8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C22C0164C90052B8FC /* Assets.xcassets */; };
 		E20BA1E42C0164C90052B8FC /* authoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* authoApp.swift */; };
+		E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282AA612C03DC660016CDA8 /* NotificationManager.swift */; };
 		E299E0982C0232D500F1BDB5 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E299E0972C0232D500F1BDB5 /* SQLite */; };
 		E299E09B2C024A4700F1BDB5 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E299E09A2C024A4700F1BDB5 /* LaunchAtLogin */; };
 		E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E299E09D2C026A0900F1BDB5 /* Defaults */; };
@@ -101,6 +102,7 @@
 		E22C9B042C01517100D2984D /* Autho.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Autho.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E22C9B172C01517200D2984D /* authoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = authoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E22C9B212C01517200D2984D /* authoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = authoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E282AA612C03DC660016CDA8 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
 		E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParsers.swift; sourceTree = "<group>"; };
 		E299E0A32C02719A00F1BDB5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 			children = (
 				E299E0AE2C0271A100F1BDB5 /* MessageManager.swift */,
 				E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */,
+				E282AA612C03DC660016CDA8 /* NotificationManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				E299E0AB2C02719A00F1BDB5 /* OTPParser.swift in Sources */,
 				E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */,
 				E299E0AA2C02719A00F1BDB5 /* Extensions.swift in Sources */,
+				E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */,
 				E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */,
 				E299E0B72C0280A200F1BDB5 /* String.swift in Sources */,
 				E20BA1E22C0164C90052B8FC /* appMenu.swift in Sources */,

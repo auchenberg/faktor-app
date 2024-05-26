@@ -18,7 +18,7 @@ class MessageManager: ObservableObject, Identifiable {
     
     init() {    
         
-        var DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
+        let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
         
         self.otpParser = AuthoOTPParser(withConfig: DEFAULT_CONFIG)
     }
@@ -78,6 +78,7 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     func startListening() {
+        print("startListening")
         syncMessages()
         
         timer = Timer.scheduledTimer(withTimeInterval: checkTimeInterval, repeats: true) { [weak self] _ in
@@ -99,12 +100,14 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     @objc func syncMessages() {
+        print("syncMessages")
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }
         
         do {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
             guard parsedOtps.count > 0 else { return }
             messages.append(contentsOf: parsedOtps)
+
         } catch let err {
             print("ERR: \(err)")
         }
@@ -120,7 +123,7 @@ class MessageManager: ObservableObject, Identifiable {
         filteredMessages.forEach { message in
             processedGuids.insert(message.guid)
         }
-        
+                
         return filteredMessages.compactMap { message in
             guard let parsedOTP = otpParser.parseMessage(message.text) else { return nil }
             return (message, parsedOTP)

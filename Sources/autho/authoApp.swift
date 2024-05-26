@@ -1,4 +1,4 @@
-//
+    //
 //  authoApp.swift
 //  autho
 //
@@ -20,20 +20,21 @@ extension Defaults.Keys {
 struct authoApp: App {
     @Default(.settingShowNotifications) var settingShowNotifications
     var messageManager = MessageManager()
+    var notificationManager: NotificationManager
         
     init() {
+        notificationManager = NotificationManager(messageManager: messageManager)
                 
         if (AppStateManager.shared.hasRequiredPermissions()) {
             print("Permissions good")
+            
+            notificationManager.requestNotificationPermission()
             messageManager.startListening()
+            
         } else {
             print("Permissions missing")
             print("TODO: Show onboarding view")
         }
-    }
-    
-    func showNotification(message: MessageWithParsedOTP) {
-        print("Show notifiction")
     }
     
     var body: some Scene {
