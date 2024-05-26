@@ -15,7 +15,7 @@ import UserNotifications
 class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
     @ObservedObject var messageManager: MessageManager
-    @State private var latestMessage: MessageWithParsedOTP?
+    @Published private var latestMessage: MessageWithParsedOTP?
     private var cancellable: AnyCancellable?
     
     init(messageManager: MessageManager) {
@@ -24,20 +24,22 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().delegate = self
                 
         cancellable = messageManager.$messages.sink { [weak self] messages in
-            guard let self = self else { return }
+            guard let self = self else {
+                return
+            }
+            
             print("NotificationManager.messageChanged")
             if let newMessage = messages.last {
-                print(messages)
-                if latestMessage == nil || newMessage != latestMessage! {
-                    print("Should show")
-                    if self.settingShowNotifications {
-                        self.showNotification(for: newMessage)
+                if let latestMessage = self.latestMessage {
+                    if newMessage != latestMessage {
+                        if self.settingShowNotifications {
+                            self.showNotification(for: newMessage)
+                        }
                     }
                 }
-                self.latestMessage = newMessage
             }
+            self.latestMessage = messages.last
         }
-    
     }
     
     private func showNotification(for message: MessageWithParsedOTP) {

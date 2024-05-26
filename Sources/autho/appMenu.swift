@@ -59,12 +59,7 @@ struct AppMenu: View {
         Divider()
         
         Button("Autho v1.0.0 (latest)") {
-        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-        
-        Button("Connected to iMessage") {
-            
-        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-        
+        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)        
         
         Divider()
         
