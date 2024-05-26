@@ -16,8 +16,11 @@ class MessageManager: ObservableObject, Identifiable {
     
     var otpParser: OTPParser
     
-    init(withOTPParser otpParser: OTPParser) {
-        self.otpParser = otpParser
+    init() {    
+        
+        var DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
+        
+        self.otpParser = AuthoOTPParser(withConfig: DEFAULT_CONFIG)
     }
     
     var timer: Timer?
@@ -102,7 +105,6 @@ class MessageManager: ObservableObject, Identifiable {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
             guard parsedOtps.count > 0 else { return }
             messages.append(contentsOf: parsedOtps)
-            print("messages", messages)
         } catch let err {
             print("ERR: \(err)")
         }

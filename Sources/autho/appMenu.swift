@@ -14,26 +14,25 @@ import Defaults
 struct AppMenu: View {
     
     @State private var isLaunchedAtLoginEnabled: Bool = LaunchAtLogin.isEnabled
-    @State var recentMessages: [MessageWithParsedOTP]
+    @ObservedObject var messageManager: MessageManager
     @Default(.settingShowNotifications) var showNotifications
     @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
-        
-    func onCodeClicked() {
-        print("TODO: Paste code to clipboard")
+    
+    func onCodeClicked(message: MessageWithParsedOTP) {
+        message.1.copyToClipboard()
     }
-        
+    
     var body: some View {
-            
         
         Button("Recent") {
-            
+        
         }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         
         // List recent messages
-        ForEach(recentMessages, id: \.0.guid) { message in
-            Button(action: onCodeClicked, label: { Text(message.1.code) })
+        ForEach(messageManager.messages.reversed().prefix(3), id: \.0.guid) { message in
+            Button(action: {onCodeClicked(message: message)}, label: { Text(message.1.code + " from " + message.1.service!) })
         }
-                
+        
         Divider()
         
         // List preferences
@@ -56,7 +55,7 @@ struct AppMenu: View {
              }
             
         }
-
+        
         Divider()
         
         Button("Autho v1.0.0 (latest)") {
@@ -66,9 +65,9 @@ struct AppMenu: View {
             
         }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         
-
+        
         Divider()
-
+        
         Button("Quit") {
             NSApplication.shared.terminate(nil)
         }.keyboardShortcut("q")

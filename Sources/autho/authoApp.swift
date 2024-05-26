@@ -17,53 +17,29 @@ extension Defaults.Keys {
 
 @main
 
-class authoApp: App {
-    @Default(.settingShowNotifications) var showNotifications
-    @Published private var mostRecentMessages: [MessageWithParsedOTP] = []
-    var cancellable: Set<AnyCancellable> = [];
-    var messageManager: MessageManager?
-    var DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
-    
-    func startListeningForMesssages() {
+struct authoApp: App {
+    @Default(.settingShowNotifications) var settingShowNotifications
+    var messageManager = MessageManager()
         
-        messageManager?.$messages.sink { [weak self] messages in
-            guard let weakSelf = self else { return }
-            let newestMessage = messages.last;
-            
-            if newestMessage != nil && weakSelf.showNotifications {
-                weakSelf.showNotificationForMessage(newestMessage!)
-            }
-            
-            // Update most recent messsages
-            weakSelf.mostRecentMessages = messages.suffix(3)
-        }.store(in: &cancellable)
-        
-        messageManager?.startListening()
-    }
-
-    
-    func showNotificationForMessage(_ message: MessageWithParsedOTP) {
-        print("showNotificationForMessage")
-    }
-    
-    required init() {
-        
-        let otpParser = AuthoOTPParser(withConfig: DEFAULT_CONFIG)
-        messageManager = MessageManager(withOTPParser: otpParser)
-        
+    init() {
+                
         if (AppStateManager.shared.hasRequiredPermissions()) {
             print("Permissions good")
-            startListeningForMesssages()
+            messageManager.startListening()
         } else {
             print("Permissions missing")
+            print("TODO: Show onboarding view")
         }
     }
     
+    func showNotification(message: MessageWithParsedOTP) {
+        print("Show notifiction")
+    }
     
     var body: some Scene {
         
         MenuBarExtra("Autho", systemImage: "lock.rectangle") {
-            AppMenu(recentMessages: mostRecentMessages)
+            AppMenu(messageManager: messageManager)
         }
     
     }
