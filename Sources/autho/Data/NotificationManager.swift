@@ -45,6 +45,8 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     private func showNotification(for message: MessageWithParsedOTP) {
         print("Show notification to the user. \(message.0.guid)")
         
+        self.requestNotificationPermission()
+        
         let content = UNMutableNotificationContent()
         content.title = "New authentication code received"
         content.body = message.1.code
