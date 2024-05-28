@@ -32,7 +32,6 @@ struct AppMenu: View {
         }
         
         if appStateManager.hasRequiredPermissions() {
-                        
             Button("Recent") {
             }.disabled(true)
             
@@ -62,7 +61,6 @@ struct AppMenu: View {
                  print("Checkbox state is now: \(newState)")
                  LaunchAtLogin.isEnabled = newState
              }
-            
         }
         
         Divider()
