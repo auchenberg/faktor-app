@@ -18,8 +18,6 @@ struct AppMenu: View {
     @ObservedObject var appStateManager: AppStateManager
     @Default(.settingShowNotifications) var showNotifications
     @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
-    @State private var showOnboarding = false
-    @Environment(\.openWindow) var openWindow
     
     func onCodeClicked(message: MessageWithParsedOTP) {
         message.1.copyToClipboard()
