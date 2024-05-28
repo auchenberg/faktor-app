@@ -101,7 +101,7 @@ class MessageManager: ObservableObject, Identifiable {
     
     @objc func syncMessages() {
         print("syncMessages")
-        guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }
+        guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -24, to: Date()) else { return }
         
         do {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
