@@ -69,7 +69,7 @@ struct AppMenu: View {
         
         Divider()
         
-        Button("Autho v1.0.0 (latest)") {
+        Button("Autho v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (latest)") {
         }.disabled(true)
         
         Divider()
