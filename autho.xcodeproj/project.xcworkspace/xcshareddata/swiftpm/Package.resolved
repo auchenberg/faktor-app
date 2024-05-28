@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "cocoaasyncsocket",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/robbiehanson/CocoaAsyncSocket.git",
+      "state" : {
+        "revision" : "dbdc00669c1ced63b27c3c5f052ee4d28f10150c",
+        "version" : "7.6.5"
+      }
+    },
+    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
@@ -10,12 +19,39 @@
       }
     },
     {
+      "identity" : "fulldiskaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:inket/FullDiskAccess.git",
+      "state" : {
+        "revision" : "846e04ea2b84fce843f47d7e7f3421189221829c",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "httpparserc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Building42/HTTPParserC.git",
+      "state" : {
+        "revision" : "a32b391977a17c30fceec0f38933a359dfdaf112",
+        "version" : "9.2.0"
+      }
+    },
+    {
       "identity" : "launchatlogin-modern",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
       "state" : {
         "branch" : "main",
         "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
+      "identity" : "telegraph",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Building42/Telegraph.git",
+      "state" : {
+        "revision" : "f56b6726195e271fea397b7dd11c4adc36d5a32d",
+        "version" : "0.40.0"
       }
     }
   ],
