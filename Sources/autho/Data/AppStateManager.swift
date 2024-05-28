@@ -9,44 +9,23 @@ import Foundation
 import ServiceManagement
 import SwiftUI
 import ApplicationServices
+import FullDiskAccess
 
-enum FullDiskAccessStatus {
-    case authorized, denied, unknown
-}
-
-class AppStateManager {
-    static let shared = AppStateManager()
-    
-    private init() {}
-    
-    func hasFullDiscAccess() -> FullDiskAccessStatus {
-        var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
-        homeDirectory.appendPathComponent("/Library/Messages/chat.db")
-
-        let fileExists = FileManager.default.fileExists(atPath: homeDirectory.path)
-        let data = try? Data(contentsOf: homeDirectory)
-        if data == nil && fileExists {
-            return .denied
-        } else if fileExists {
-            return .authorized
-        }
-        
-        return .unknown
-    }
-    
-    func hasAccessibilityPermission() -> Bool {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]
-        let status = AXIsProcessTrustedWithOptions(options)
-    
-        return status
-    }
-
-    
+class AppStateManager: ObservableObject, Identifiable {
+            
     func hasRequiredPermissions() -> Bool {
-        let fullDiskAccess = hasFullDiscAccess()
-        
-        // Check if both permissions are authorized
-        return fullDiskAccess == .authorized
+        FullDiskAccess.isGranted
+    }
+    
+    func requestPermissions() {
+        FullDiskAccess.promptIfNotGranted(
+            title: "Enable Full Disk Access for Autho",
+            message: "Autho requires Full Disk Access to search for new codes",
+            settingsButtonTitle: "Open Settings",
+            skipButtonTitle: "Later",
+            canBeSuppressed: false,
+            icon: nil
+        )
     }
 
 }

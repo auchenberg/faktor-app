@@ -1,47 +1,45 @@
-    //
-//  authoApp.swift
-//  autho
-//
-//  Created by Kenneth Auchenberg on 5/24/24.
-//
-
 import SwiftUI
 import SwiftData
 import Defaults
 import Combine
+import FullDiskAccess
 
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
 }
 
-@main
-
-struct authoApp: App {
+class AppDelegate: NSObject, NSApplicationDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
     var messageManager = MessageManager()
+    var appStateManager = AppStateManager()
     var notificationManager: NotificationManager
-        
-    init() {
+    
+    override init() {
         notificationManager = NotificationManager(messageManager: messageManager)
-                
-        if (AppStateManager.shared.hasRequiredPermissions()) {
-            print("Permissions good")
-            
-            notificationManager.requestNotificationPermission()
-            messageManager.startListening()
-            
-        } else {
-            print("Permissions missing")
-            print("TODO: Show onboarding view")
-        }
+        super.init()
     }
     
-    var body: some Scene {
+    func applicationDidFinishLaunching(_ notification: Notification) {
         
-        MenuBarExtra("Autho", systemImage: "lock.rectangle") {
-            AppMenu(messageManager: messageManager)
+        if (appStateManager.hasRequiredPermissions()) {
+            print("Permissions good")
+            messageManager.startListening()
+        } else {
+            print("Permissions missing")
+            appStateManager.requestPermissions()
         }
+    }
+}
+
+@main
+struct authoApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
+    var body: some Scene {
+        MenuBarExtra("Autho", systemImage: "lock.rectangle") {
+            AppMenu(messageManager: appDelegate.messageManager,
+                    appStateManager: appDelegate.appStateManager)
+        }
     }
 }

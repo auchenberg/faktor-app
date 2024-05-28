@@ -15,22 +15,33 @@ struct AppMenu: View {
     
     @State private var isLaunchedAtLoginEnabled: Bool = LaunchAtLogin.isEnabled
     @ObservedObject var messageManager: MessageManager
+    @ObservedObject var appStateManager: AppStateManager
     @Default(.settingShowNotifications) var showNotifications
     @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
+    @State private var showOnboarding = false
+    @Environment(\.openWindow) var openWindow
     
     func onCodeClicked(message: MessageWithParsedOTP) {
         message.1.copyToClipboard()
     }
     
     var body: some View {
+
+        if !appStateManager.hasRequiredPermissions() {
+            Button("Permissions required. Click here") {
+                appStateManager.requestPermissions()
+            }
+        }
         
-        Button("Recent") {
-        
-        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-        
-        // List recent messages
-        ForEach(messageManager.messages.reversed().prefix(3), id: \.0.guid) { message in
-            Button(action: {onCodeClicked(message: message)}, label: { Text(message.1.code + " from " + message.1.service!) })
+        if appStateManager.hasRequiredPermissions() {
+                        
+            Button("Recent") {
+            }.disabled(true)
+            
+            // List recent messages
+            ForEach(messageManager.messages.reversed().prefix(3), id: \.0.guid) { message in
+                Button(action: {onCodeClicked(message: message)}, label: { Text(message.1.code + " from " + message.1.service!) })
+            }
         }
         
         Divider()
@@ -59,7 +70,7 @@ struct AppMenu: View {
         Divider()
         
         Button("Autho v1.0.0 (latest)") {
-        }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)        
+        }.disabled(true)
         
         Divider()
         
