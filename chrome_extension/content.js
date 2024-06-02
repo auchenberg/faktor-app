@@ -1,21 +1,18 @@
 // Wait for the DOM to be fully loaded
-console.log('content.js loaded');
+console.log('factor.contentscript.loaded');
 
+chrome.runtime.sendMessage({ event: 'factor.content.loaded' });
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        console.log(sender.tab ?
-            "from a content script:" + sender.tab.url :
-            "from the extension");
-
-        console.log('request', request);
+        console.log('factor.contentscript.request', request);
 
         if (request.event == 'code.received') {
             showAutocomplete(request.data);
         }
 
         if (request.event == 'app.ready') {
-            console.log('got app.ready');
+            console.log('factor.contentscript.app.ready');
         }
     }
 );
@@ -23,7 +20,7 @@ chrome.runtime.onMessage.addListener(
 function showAutocomplete(data) {
     let code = data.code;
 
-    console.log('showAutocomplete', data);
+    console.log('factor.contentscript.showAutocomplete', data);
 
     // Find all input elements with autocomplete="one-time-code"
     const inputElements = document.querySelectorAll('input[autocomplete="one-time-code"]');
@@ -53,23 +50,18 @@ function showAutocomplete(data) {
             </div>
         `;
 
-
-        // Insert the div element below the input element
+        // Insert the div element into the body
         document.body.appendChild(divElement);
     });
 }
 
 function onNotificationClicked(code, targetBox, targetInput, e) {
-    console.log('onNotificationClicked', code);
+    console.log('factor.contentscript.onNotificationClicked', code);
 
-    targetInput.value = code;
+    targetInput.focus();
+    targetInput.value = '';
 
-    setTimeout(() => {
-        targetInput.dispatchEvent(new KeyboardEvent('keydown', { key: code }));
-        targetInput.dispatchEvent(new KeyboardEvent('keyup', { key: code }));
-        targetInput.dispatchEvent(new KeyboardEvent('input', { key: code }));
-    }, 200);
+    document.execCommand('insertText', false, code);
 
     targetBox.remove();
 }
-

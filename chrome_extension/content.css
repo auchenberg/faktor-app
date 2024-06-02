@@ -7,8 +7,11 @@
 .autho-notification .autho-tooltip {
   position: relative;
   display: flex;
-  width: 200px;
-  padding: 15px 15px;
+  width: 228px;
+  height: 38px;
+  padding: 11px;
+
+  box-sizing: content-box !important;
 
   background-color: #555;
   color: #fff;
@@ -29,7 +32,7 @@
 .autho-notification .autho-tooltip .autho-content p {
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
   font-size: 14px;
-  padding: 2px 0;
+  padding: 0;
   margin: 0;
 }
 

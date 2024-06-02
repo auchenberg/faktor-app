@@ -1,22 +1,23 @@
 const TEN_SECONDS_MS = 10 * 1000;
 let webSocket = null;
+let keepAliveIntervalId = null;
 
-chrome.action.onClicked.addListener(async () => {
-    if (webSocket) {
-        disconnect();
-    } else {
-        connect();
-        keepAlive();
+console.log('factor.serviceworker.loaded');
+
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        if (request.event == 'factor.content.loaded') {
+            if (!webSocket) {
+                connect();
+            }
+            keepAlive();
+        }
     }
-});
+);
 
 function connect() {
-    console.log('connecting to websocket');
+    console.log('factor.serviceworker.connect');
     webSocket = new WebSocket('ws://localhost:9234');
-
-    webSocket.onopen = () => {
-        chrome.action.setIcon({ path: 'icons/socket-active.png' });
-    };
 
     webSocket.onmessage = (event) => {
         let data = JSON.parse(event.data);
@@ -24,7 +25,7 @@ function connect() {
     };
 
     webSocket.onclose = () => {
-        console.log('websocket connection closed');
+        console.log('factor.serviceworker.closed');
         webSocket = null;
     };
 }
@@ -36,13 +37,19 @@ function disconnect() {
 }
 
 function keepAlive() {
-    const keepAliveIntervalId = setInterval(
+
+    if (keepAliveIntervalId) {
+        return;
+    }
+
+    keepAliveIntervalId = setInterval(
         () => {
             if (webSocket) {
                 console.log('ping');
                 webSocket.send('ping');
             } else {
                 clearInterval(keepAliveIntervalId);
+                keepAliveIntervalId = null;
             }
         },
         // It's important to pick an interval that's shorter than 30s, to
@@ -52,7 +59,7 @@ function keepAlive() {
 }
 
 function sendNotification(message) {
-    console.log('sending notification', message);
+    console.log('factor.serviceworker.sendNotification');
     chrome.tabs.query({}, (tabs) => {
         tabs.forEach((tab) => {
             chrome.tabs.sendMessage(tab.id, { ...message });
