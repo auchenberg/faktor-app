@@ -4,6 +4,8 @@ import Defaults
 import Combine
 import FullDiskAccess
 
+import Logging
+
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
@@ -11,22 +13,28 @@ extension Defaults.Keys {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
+    @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
     var messageManager = MessageManager()
     var appStateManager = AppStateManager()
     var notificationManager: NotificationManager
+    var browserManager: BrowserManager
+    
+    let logger = Logger(label: "com.auchenberg.autho")
     
     override init() {
         notificationManager = NotificationManager(messageManager: messageManager)
+        browserManager = BrowserManager(messageManager: messageManager)
         super.init()
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         
         if (appStateManager.hasRequiredPermissions()) {
-            print("Permissions good")
+            logger.info("Permissions good")
             messageManager.startListening()
+            browserManager.startServer()
         } else {
-            print("Permissions missing")
+            logger.info("Permissions missing")
             appStateManager.requestPermissions()
         }
     }

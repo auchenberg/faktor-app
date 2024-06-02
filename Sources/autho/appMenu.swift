@@ -37,7 +37,18 @@ struct AppMenu: View {
             
             // List recent messages
             ForEach(messageManager.messages.reversed().prefix(3), id: \.0.guid) { message in
-                Button(action: {onCodeClicked(message: message)}, label: { Text(message.1.code + " from " + message.1.service!) })
+                Button(action: {onCodeClicked(message: message)}, label: {
+                    Text(message.1.code + " from " + (message.1.service ?? "unknown"))
+                })
+            }
+        }
+
+        if appStateManager.isDevelopmentMode() {
+            
+            Divider()
+            
+            Button("DEBUG: Trigger new code") {
+                messageManager.generateRandomMessage()
             }
         }
         
@@ -57,7 +68,7 @@ struct AppMenu: View {
                  Text("Open at Login")
              }
              .toggleStyle(.checkbox)
-             .onChange(of:isLaunchedAtLoginEnabled) { oldState, newState in
+             .onChange(of:isLaunchedAtLoginEnabled) { newState in
                  print("Checkbox state is now: \(newState)")
                  LaunchAtLogin.isEnabled = newState
              }

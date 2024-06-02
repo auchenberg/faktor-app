@@ -98,6 +98,19 @@ class MessageManager: ObservableObject, Identifiable {
         processedGuids = []
         startListening()
     }
+
+    func generateRandomMessage() {
+
+        let randomMessage = Message(
+            guid: UUID().uuidString,
+            text: "Your code is \(Int.random(in: 1000...9999)) from Auchenberg Bank",
+            handle: "random",
+            group: nil, 
+            fromMe: false
+        )
+
+        messages.append((randomMessage , ParsedOTP(service: "Auchenberg Bank", code: "\(Int.random(in: 1000...9999))")))
+    }
     
     @objc func syncMessages() {
         print("syncMessages")

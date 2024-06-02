@@ -10,6 +10,7 @@ import ServiceManagement
 import SwiftUI
 import ApplicationServices
 import FullDiskAccess
+import UserNotifications
 
 class AppStateManager: ObservableObject, Identifiable {
             
@@ -18,6 +19,8 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func requestPermissions() {
+        requestNotificationPermission();
+        
         FullDiskAccess.promptIfNotGranted(
             title: "Enable Full Disk Access for Autho",
             message: "Autho requires Full Disk Access to search for new codes",
@@ -26,6 +29,28 @@ class AppStateManager: ObservableObject, Identifiable {
             canBeSuppressed: false,
             icon: nil
         )
-    }
 
+    }
+    
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .criticalAlert]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permission: \(error.localizedDescription),")
+            } else if granted {
+                print("Notification permission granted.")
+            } else {
+                print("Notification permission denied.")
+            }
+        }
+    }
+    func isDevelopmentMode() -> Bool {
+        #if DEBUG
+            return true
+        #elseif ADHOC
+            return true
+        #else
+            return false
+        #endif
+    }
+    
 }
