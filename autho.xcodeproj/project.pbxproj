@@ -35,6 +35,8 @@
 		E20BA1E22C0164C90052B8FC /* appMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C12C0164C90052B8FC /* appMenu.swift */; };
 		E20BA1E32C0164C90052B8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C22C0164C90052B8FC /* Assets.xcassets */; };
 		E20BA1E42C0164C90052B8FC /* authoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* authoApp.swift */; };
+		E220407A2C06770000846029 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E22040792C06770000846029 /* Logging */; };
+		E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E220407B2C06BE2300846029 /* BrowserManager.swift */; };
 		E22166A32C0657CA00D9FCF7 /* FullDiskAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E22166A22C0657CA00D9FCF7 /* FullDiskAccess */; };
 		E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282AA612C03DC660016CDA8 /* NotificationManager.swift */; };
 		E299E0982C0232D500F1BDB5 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E299E0972C0232D500F1BDB5 /* SQLite */; };
@@ -84,6 +86,7 @@
 		E20BA1C22C0164C90052B8FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E20BA1C32C0164C90052B8FC /* autho.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = autho.entitlements; sourceTree = "<group>"; };
 		E20BA1C42C0164C90052B8FC /* authoApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = authoApp.swift; sourceTree = "<group>"; };
+		E220407B2C06BE2300846029 /* BrowserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserManager.swift; sourceTree = "<group>"; };
 		E22C9B042C01517100D2984D /* Autho.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Autho.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E282AA612C03DC660016CDA8 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
@@ -104,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E220407A2C06770000846029 /* Logging in Frameworks */,
 				E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */,
 				E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */,
 				E299E09B2C024A4700F1BDB5 /* LaunchAtLogin in Frameworks */,
@@ -302,6 +306,7 @@
 				E299E0AE2C0271A100F1BDB5 /* MessageManager.swift */,
 				E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */,
 				E282AA612C03DC660016CDA8 /* NotificationManager.swift */,
+				E220407B2C06BE2300846029 /* BrowserManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -339,6 +344,7 @@
 				E299E09D2C026A0900F1BDB5 /* Defaults */,
 				E2EF8F892C04D3E100AC3652 /* Telegraph */,
 				E22166A22C0657CA00D9FCF7 /* FullDiskAccess */,
+				E22040792C06770000846029 /* Logging */,
 			);
 			productName = autho;
 			productReference = E22C9B042C01517100D2984D /* Autho.app */;
@@ -374,6 +380,7 @@
 				E299E09C2C026A0900F1BDB5 /* XCRemoteSwiftPackageReference "Defaults" */,
 				E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */,
 				E22166A12C0657CA00D9FCF7 /* XCRemoteSwiftPackageReference "FullDiskAccess" */,
+				E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
@@ -434,6 +441,7 @@
 				E299E0B72C0280A200F1BDB5 /* String.swift in Sources */,
 				E20BA1E22C0164C90052B8FC /* appMenu.swift in Sources */,
 				E299E0B22C0271A100F1BDB5 /* MessageManager.swift in Sources */,
+				E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */,
 				E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */,
 				E20BA1E42C0164C90052B8FC /* authoApp.swift in Sources */,
 				E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */,
@@ -589,18 +597,19 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Sources/autho/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Autho;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_LSBackgroundOnly = NO;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = auchenberg.autho;
 				PRODUCT_NAME = Autho;
@@ -622,18 +631,19 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Sources/autho/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Autho;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_LSBackgroundOnly = NO;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = auchenberg.autho;
 				PRODUCT_NAME = Autho;
@@ -666,6 +676,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.4;
+			};
+		};
 		E22166A12C0657CA00D9FCF7 /* XCRemoteSwiftPackageReference "FullDiskAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:inket/FullDiskAccess.git";
@@ -712,6 +730,11 @@
 		E20BA1E82C0165D80052B8FC /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SQLite;
+		};
+		E22040792C06770000846029 /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
 		};
 		E22166A22C0657CA00D9FCF7 /* FullDiskAccess */ = {
 			isa = XCSwiftPackageProductDependency;
