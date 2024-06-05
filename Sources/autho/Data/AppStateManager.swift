@@ -22,8 +22,8 @@ class AppStateManager: ObservableObject, Identifiable {
         requestNotificationPermission();
         
         FullDiskAccess.promptIfNotGranted(
-            title: "Enable Full Disk Access for Autho",
-            message: "Autho requires Full Disk Access to search for new codes",
+            title: "Enable Full Disk Access for Faktor",
+            message: "Faktor requires Full Disk Access to search for new 2fa codes",
             settingsButtonTitle: "Open Settings",
             skipButtonTitle: "Later",
             canBeSuppressed: false,
