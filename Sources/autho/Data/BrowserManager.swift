@@ -37,6 +37,11 @@ class BrowserManager: ServerWebSocketDelegate {
     
     
     func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
+        guard handshake.headers["Host"] == "localhost" else {
+            print("Connection rejected - not from localhost")
+            return
+        }
+        
         print("webSocketDidConnect", handshake, webSocket)
         let data: [String: Any] = [
             "event": "app.ready",
@@ -107,7 +112,6 @@ class BrowserManager: ServerWebSocketDelegate {
         print("sendNotificationToBrowsers", message)
 
         for socket in server.webSockets {
-            
             
             let data: [String: Any] = [
                 "event": "code.received",
