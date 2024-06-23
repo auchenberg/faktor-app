@@ -10,6 +10,7 @@ import Foundation
 
 import LaunchAtLogin
 import Defaults
+import PostHog
 
 struct AppMenu: View {
     
@@ -21,6 +22,7 @@ struct AppMenu: View {
     
     func onCodeClicked(message: MessageWithParsedOTP) {
         message.1.copyToClipboard()
+        PostHogSDK.shared.capture("faktor.copyToClipboard")
     }
     
     var body: some View {

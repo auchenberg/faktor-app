@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20005C12C28A31F00DB8615 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = E20005C02C28A31F00DB8615 /* PostHog */; };
 		E20BA1C92C0164C90052B8FC /* SQLite.swift in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19B2C0164C90052B8FC /* SQLite.swift */; };
 		E20BA1CA2C0164C90052B8FC /* applypatch-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19D2C0164C90052B8FC /* applypatch-msg.sample */; };
 		E20BA1CB2C0164C90052B8FC /* commit-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19E2C0164C90052B8FC /* commit-msg.sample */; };
@@ -57,16 +58,6 @@
 		E2FC7C002C0FE9C10046A860 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E2FC7BFF2C0FE9C10046A860 /* LaunchAtLogin */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E230C0A52C15322700C2BF61 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E22C9AFC2C01517100D2984D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E22C9B032C01517100D2984D;
-			remoteInfo = faktor;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		E20BA19B2C0164C90052B8FC /* SQLite.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SQLite.swift; sourceTree = "<group>"; };
 		E20BA19D2C0164C90052B8FC /* applypatch-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "applypatch-msg.sample"; sourceTree = "<group>"; };
@@ -100,7 +91,6 @@
 		E220407B2C06BE2300846029 /* BrowserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserManager.swift; sourceTree = "<group>"; };
 		E22C9B042C01517100D2984D /* Faktor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Faktor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E230C0932C1520F800C2BF61 /* testMessages.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = testMessages.json; sourceTree = "<group>"; };
-		E230C09E2C1531D400C2BF61 /* FaktorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaktorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E282AA612C03DC660016CDA8 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
 		E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParsers.swift; sourceTree = "<group>"; };
@@ -122,17 +112,11 @@
 			files = (
 				E2FC7C002C0FE9C10046A860 /* LaunchAtLogin in Frameworks */,
 				E220407A2C06770000846029 /* Logging in Frameworks */,
+				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
 				E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */,
 				E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */,
 				E22166A32C0657CA00D9FCF7 /* FullDiskAccess in Frameworks */,
 				E299E0982C0232D500F1BDB5 /* SQLite in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E230C09B2C1531D400C2BF61 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +288,6 @@
 			isa = PBXGroup;
 			children = (
 				E22C9B042C01517100D2984D /* Faktor.app */,
-				E230C09E2C1531D400C2BF61 /* FaktorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -383,28 +366,11 @@
 				E22166A22C0657CA00D9FCF7 /* FullDiskAccess */,
 				E22040792C06770000846029 /* Logging */,
 				E2FC7BFF2C0FE9C10046A860 /* LaunchAtLogin */,
+				E20005C02C28A31F00DB8615 /* PostHog */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
 			productType = "com.apple.product-type.application";
-		};
-		E230C09D2C1531D400C2BF61 /* FaktorTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E230C0A22C1531D400C2BF61 /* Build configuration list for PBXNativeTarget "FaktorTests" */;
-			buildPhases = (
-				E230C09A2C1531D400C2BF61 /* Sources */,
-				E230C09B2C1531D400C2BF61 /* Frameworks */,
-				E230C09C2C1531D400C2BF61 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E230C0A62C15322700C2BF61 /* PBXTargetDependency */,
-			);
-			name = FaktorTests;
-			productName = FaktorTests;
-			productReference = E230C09E2C1531D400C2BF61 /* FaktorTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -418,10 +384,6 @@
 				TargetAttributes = {
 					E22C9B032C01517100D2984D = {
 						CreatedOnToolsVersion = 15.4;
-					};
-					E230C09D2C1531D400C2BF61 = {
-						CreatedOnToolsVersion = 15.4;
-						TestTargetID = E22C9B032C01517100D2984D;
 					};
 				};
 			};
@@ -441,13 +403,13 @@
 				E22166A12C0657CA00D9FCF7 /* XCRemoteSwiftPackageReference "FullDiskAccess" */,
 				E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */,
 				E2FC7BFE2C0FE9C10046A860 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Legacy" */,
+				E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				E22C9B032C01517100D2984D /* faktor */,
-				E230C09D2C1531D400C2BF61 /* FaktorTests */,
 			);
 		};
 /* End PBXProject section */
@@ -487,13 +449,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E230C09C2C1531D400C2BF61 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -519,24 +474,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E230C09A2C1531D400C2BF61 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		E20BA1E92C0165D80052B8FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = E20BA1E82C0165D80052B8FC /* SQLite */;
-		};
-		E230C0A62C15322700C2BF61 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E22C9B032C01517100D2984D /* faktor */;
-			targetProxy = E230C0A52C15322700C2BF61 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -678,7 +621,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Faktor;
@@ -712,7 +655,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Faktor;
@@ -730,49 +673,6 @@
 				PRODUCT_NAME = Faktor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		E230C0A32C1531D400C2BF61 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1.1;
-				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = auchenberg.FaktorTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Faktor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Faktor";
-			};
-			name = Debug;
-		};
-		E230C0A42C1531D400C2BF61 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1.1;
-				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = auchenberg.FaktorTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Faktor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Faktor";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -797,18 +697,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E230C0A22C1531D400C2BF61 /* Build configuration list for PBXNativeTarget "FaktorTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E230C0A32C1531D400C2BF61 /* Debug */,
-				E230C0A42C1531D400C2BF61 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.5.2;
+			};
+		};
 		E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-log.git";
@@ -860,6 +759,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E20005C02C28A31F00DB8615 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
 		E20BA1E82C0165D80052B8FC /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SQLite;

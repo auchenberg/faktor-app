@@ -3,6 +3,7 @@ import SwiftData
 import Defaults
 import Combine
 import FullDiskAccess
+import PostHog
 
 import Logging
 
@@ -37,6 +38,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.info("Permissions missing")
             appStateManager.requestPermissions()
         }
+        
+        // Analytics
+        let POSTHOG_API_KEY = "phc_zlgdjtWBUz7s2P7Hf3OzMkA39WJ4iZWN5bVaoao0sqg"
+        let POSTHOG_HOST = "https://us.i.posthog.com"
+        
+        let config = PostHogConfig(apiKey: POSTHOG_API_KEY, host: POSTHOG_HOST)
+        PostHogSDK.shared.setup(config)
+        
+        PostHogSDK.shared.capture("faktor.init")
     }
 }
 
