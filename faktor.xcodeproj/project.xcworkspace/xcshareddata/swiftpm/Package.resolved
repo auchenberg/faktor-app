@@ -37,12 +37,12 @@
       }
     },
     {
-      "identity" : "launchatlogin-legacy",
+      "identity" : "launchatlogin-modern",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/LaunchAtLogin-Legacy",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
       "state" : {
         "branch" : "main",
-        "revision" : "f326e3d9be46aff3b68ede6061721f639e0840e0"
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
       }
     },
     {
