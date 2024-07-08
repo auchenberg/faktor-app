@@ -10,11 +10,13 @@ import Logging
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
+    static let settingsShowWelcome = Key<Bool>("showWelcome", default: true)
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
     @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
+    @Default(.settingsShowWelcome) var settingsShowWelcome
     var messageManager = MessageManager()
     var appStateManager = AppStateManager()
     var notificationManager: NotificationManager
@@ -30,6 +32,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         
+        // Analytics
+        let POSTHOG_API_KEY = "phc_zlgdjtWBUz7s2P7Hf3OzMkA39WJ4iZWN5bVaoao0sqg"
+        let POSTHOG_HOST = "https://us.i.posthog.com"
+        
+        let config = PostHogConfig(apiKey: POSTHOG_API_KEY, host: POSTHOG_HOST)
+        PostHogSDK.shared.setup(config)
+        PostHogSDK.shared.capture("faktor.init")
+        
+        // Permissions
         if (appStateManager.hasRequiredPermissions()) {
             logger.info("Permissions good")
             messageManager.startListening()
@@ -39,14 +50,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             appStateManager.requestPermissions()
         }
         
-        // Analytics
-        let POSTHOG_API_KEY = "phc_zlgdjtWBUz7s2P7Hf3OzMkA39WJ4iZWN5bVaoao0sqg"
-        let POSTHOG_HOST = "https://us.i.posthog.com"
-        
-        let config = PostHogConfig(apiKey: POSTHOG_API_KEY, host: POSTHOG_HOST)
-        PostHogSDK.shared.setup(config)
-        
-        PostHogSDK.shared.capture("faktor.init")
+        if(settingsShowWelcome) {
+            // Show welcome view
+        }
+    
     }
 }
 
@@ -55,6 +62,10 @@ struct faktorApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
+//        MainScene()
+//        Settings {
+//            SettingsView()
+//        }
         MenuBarExtra {
             AppMenu(messageManager: appDelegate.messageManager,
                     appStateManager: appDelegate.appStateManager)
@@ -63,6 +74,7 @@ struct faktorApp: App {
                 let ratio = $0.size.height / $0.size.width
                 $0.size.height = 14
                 $0.size.width = 14 / ratio
+                $0.isTemplate = true
                 return $0
             }(NSImage(named: "menuIcon")!)
 
