@@ -8,6 +8,12 @@
 import Foundation
 import SQLite
 
+enum MessageManagerError: Error {
+    case generic(message: String)
+    case permission(message: String)
+}
+
+
 class MessageManager: ObservableObject, Identifiable {
     @Published var messages: [MessageWithParsedOTP] = []
     
@@ -17,10 +23,7 @@ class MessageManager: ObservableObject, Identifiable {
     var otpParser: OTPParser
     
     init() {    
-        
-        let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
-        
-        self.otpParser = OTPParser(withConfig: DEFAULT_CONFIG)
+        self.otpParser = OTPParser()
     }
     
     var timer: Timer?
@@ -36,45 +39,71 @@ class MessageManager: ObservableObject, Identifiable {
         
         return appleOffsetForDate
     }
-    
-    private func loadMessagesAfterDate(_ date: Date) throws -> [Message] {
-        var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
-        homeDirectory.appendPathComponent("/Library/Messages/chat.db")
-        let db = try Connection(homeDirectory.absoluteString)
         
-        let textColumn = Expression<String?>("text")
-        let guidColumn = Expression<String>("guid")
-        let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
-        let fromMeColumn = Expression<Bool>("is_from_me")
-        let dateColumn = Expression<Int>("date")
-        let serviceColumn = Expression<String>("service")
+    private func loadMessagesAfterDate(_ date: Date) throws -> [Message]? {
         
-        let ROWID = Expression<Int>("ROWID")
-
-        let handleTable = Table("handle")
-        let handleFrom = handleTable[Expression<String?>("id")]
-        let messageTable = Table("message")
-        let messageHandleId = messageTable[Expression<Int>("handle_id")]
-        
-        let query = messageTable
-            .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
-            .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-            .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
-            .order(messageTable[dateColumn].asc)
-
-        let mapRowIterator = try db.prepareRowIterator(query)
-        let messages = try mapRowIterator.map { messageRow -> Message? in
-            guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
+        do {
+            guard let bookmarkData = UserDefaults.standard.data(forKey: "messagesLibraryFolder") else {
+                throw MessageManagerError.permission(message: "No bookmark data found")
+            }
+                    
+            var bookmarkDataIsStale = false
             
-            return Message(
-                guid: messageRow[guidColumn],
-                text: text,
-                handle: handle,
-                group: messageRow[cacheRoomnamesColumn],
-                fromMe: messageRow[fromMeColumn])
+            var url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+                        
+            if bookmarkDataIsStale {
+                throw MessageManagerError.permission(message: "Bookmark data is stale")
+            }
+            
+            if url.startAccessingSecurityScopedResource() {
+                // Build path for databsse
+                url.appendPathComponent("/chat.db")
+                
+                let db = try Connection(url.absoluteString)
+                
+                let textColumn = Expression<String?>("text")
+                let guidColumn = Expression<String>("guid")
+                let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
+                let fromMeColumn = Expression<Bool>("is_from_me")
+                let dateColumn = Expression<Int>("date")
+                let serviceColumn = Expression<String>("service")
+                
+                let ROWID = Expression<Int>("ROWID")
+
+                let handleTable = Table("handle")
+                let handleFrom = handleTable[Expression<String?>("id")]
+                let messageTable = Table("message")
+                let messageHandleId = messageTable[Expression<Int>("handle_id")]
+                
+                let query = messageTable
+                    .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
+                    .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
+                    .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
+                    .order(messageTable[dateColumn].asc)
+
+                let mapRowIterator = try db.prepareRowIterator(query)
+                let messages = try mapRowIterator.map { messageRow -> Message? in
+                    guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
+                    
+                    return Message(
+                        guid: messageRow[guidColumn],
+                        text: text,
+                        handle: handle,
+                        group: messageRow[cacheRoomnamesColumn],
+                        fromMe: messageRow[fromMeColumn])
+                }
+                
+                // After you're done, don't forget to stop accessing the resource
+                url.stopAccessingSecurityScopedResource()
+                
+                return messages.compactMap { $0 }
+            } else {
+                throw MessageManagerError.permission(message:"Failed to start accessing security scoped resource")
+            }
+        } catch {
+            print("Error resolving bookmark: \(error)")
+            return nil;
         }
-        
-        return messages.compactMap { $0 }
     }
     
     func startListening() {
@@ -127,19 +156,23 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     private func findPossibleOTPMessagesAfterDate(_ date: Date) throws -> [MessageWithParsedOTP] {
-        let messagesFromDB = try loadMessagesAfterDate(date)
-        let filteredMessages = messagesFromDB
-            .filter { !$0.fromMe }
-            .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
-            .filter { !processedGuids.contains($0.guid) }
-        
-        filteredMessages.forEach { message in
-            processedGuids.insert(message.guid)
-        }
-                
-        return filteredMessages.compactMap { message in
-            guard let parsedOTP = otpParser.parseMessage(message.text) else { return nil }
-            return (message, parsedOTP)
+        if let messagesFromDB = (try loadMessagesAfterDate(date)) {
+            let filteredMessages = messagesFromDB
+                .filter { !$0.fromMe }
+                .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
+                .filter { !processedGuids.contains($0.guid) }
+            
+            filteredMessages.forEach { message in
+                processedGuids.insert(message.guid)
+            }
+                    
+            return filteredMessages.compactMap { message in
+                guard let parsedOTP = otpParser.parseMessage(message.text) else { return nil }
+                return (message, parsedOTP)
+            }
+        } else {
+            print("No messages found or an error occurred.")
+            return []
         }
     }
     

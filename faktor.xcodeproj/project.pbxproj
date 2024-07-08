@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E20005C12C28A31F00DB8615 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = E20005C02C28A31F00DB8615 /* PostHog */; };
+		E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E208F9712C3C2541000ACAE2 /* LaunchAtLogin */; };
+		E208F9742C3C255B000ACAE2 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E208F9732C3C255B000ACAE2 /* SQLite */; };
 		E20BA1C92C0164C90052B8FC /* SQLite.swift in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19B2C0164C90052B8FC /* SQLite.swift */; };
 		E20BA1CA2C0164C90052B8FC /* applypatch-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19D2C0164C90052B8FC /* applypatch-msg.sample */; };
 		E20BA1CB2C0164C90052B8FC /* commit-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19E2C0164C90052B8FC /* commit-msg.sample */; };
@@ -33,16 +35,13 @@
 		E20BA1DF2C0164C90052B8FC /* workspace-state.json in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1BC2C0164C90052B8FC /* workspace-state.json */; };
 		E20BA1E02C0164C90052B8FC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1BE2C0164C90052B8FC /* Preview Assets.xcassets */; };
 		E20BA1E12C0164C90052B8FC /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C02C0164C90052B8FC /* .gitignore */; };
-		E20BA1E22C0164C90052B8FC /* appMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C12C0164C90052B8FC /* appMenu.swift */; };
+		E20BA1E22C0164C90052B8FC /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C12C0164C90052B8FC /* AppMenu.swift */; };
 		E20BA1E32C0164C90052B8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C22C0164C90052B8FC /* Assets.xcassets */; };
 		E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* faktorApp.swift */; };
 		E220407A2C06770000846029 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E22040792C06770000846029 /* Logging */; };
 		E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E220407B2C06BE2300846029 /* BrowserManager.swift */; };
-		E22166A32C0657CA00D9FCF7 /* FullDiskAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E22166A22C0657CA00D9FCF7 /* FullDiskAccess */; };
 		E230C0942C1520F900C2BF61 /* testMessages.json in Resources */ = {isa = PBXBuildFile; fileRef = E230C0932C1520F800C2BF61 /* testMessages.json */; };
-		E27141852C28F20B00A55616 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E27141842C28F20B00A55616 /* LaunchAtLogin */; };
 		E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282AA612C03DC660016CDA8 /* NotificationManager.swift */; };
-		E299E0982C0232D500F1BDB5 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E299E0972C0232D500F1BDB5 /* SQLite */; };
 		E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E299E09D2C026A0900F1BDB5 /* Defaults */; };
 		E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */; };
 		E299E0A92C02719A00F1BDB5 /* CustomOTPParsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */; };
@@ -55,8 +54,24 @@
 		E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */; };
 		E299E0B72C0280A200F1BDB5 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B62C0280A200F1BDB5 /* String.swift */; };
 		E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */; };
+		E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527C62C39B1D90085ECC7 /* SettingsView.swift */; };
+		E2C527C92C39C2210085ECC7 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527C82C39C2210085ECC7 /* GeneralSettingsView.swift */; };
+		E2C527CB2C39C24A0085ECC7 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CA2C39C24A0085ECC7 /* AboutSettingsView.swift */; };
+		E2C527CD2C39E37E0085ECC7 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CC2C39E37E0085ECC7 /* Main.swift */; };
+		E2C527CF2C3A00D80085ECC7 /* LogsViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CE2C3A00D80085ECC7 /* LogsViewer.swift */; };
+		E2C527E02C3B4F600085ECC7 /* FaktorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */; };
 		E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF8F892C04D3E100AC3652 /* Telegraph */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E2C527DB2C3B4F550085ECC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E22C9AFC2C01517100D2984D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E22C9B032C01517100D2984D;
+			remoteInfo = faktor;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		E20BA19B2C0164C90052B8FC /* SQLite.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SQLite.swift; sourceTree = "<group>"; };
@@ -84,7 +99,7 @@
 		E20BA1BC2C0164C90052B8FC /* workspace-state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "workspace-state.json"; sourceTree = "<group>"; };
 		E20BA1BE2C0164C90052B8FC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E20BA1C02C0164C90052B8FC /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		E20BA1C12C0164C90052B8FC /* appMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = appMenu.swift; sourceTree = "<group>"; };
+		E20BA1C12C0164C90052B8FC /* AppMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
 		E20BA1C22C0164C90052B8FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E20BA1C32C0164C90052B8FC /* faktor.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = faktor.entitlements; sourceTree = "<group>"; };
 		E20BA1C42C0164C90052B8FC /* faktorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = faktorApp.swift; sourceTree = "<group>"; };
@@ -103,7 +118,14 @@
 		E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedOTP.swift; sourceTree = "<group>"; };
 		E299E0B62C0280A200F1BDB5 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
-		E2AF93122C28EB2A0051E4F9 /* faktorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = faktorTests.swift; sourceTree = "<group>"; };
+		E2C527C62C39B1D90085ECC7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E2C527C82C39C2210085ECC7 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		E2C527CA2C39C24A0085ECC7 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
+		E2C527CC2C39E37E0085ECC7 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		E2C527CE2C3A00D80085ECC7 /* LogsViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsViewer.swift; sourceTree = "<group>"; };
+		E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaktorTests.swift; sourceTree = SOURCE_ROOT; };
+		E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaktorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2C527E32C3B4F830085ECC7 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,19 +133,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E208F9742C3C255B000ACAE2 /* SQLite in Frameworks */,
 				E220407A2C06770000846029 /* Logging in Frameworks */,
 				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
-				E27141852C28F20B00A55616 /* LaunchAtLogin in Frameworks */,
+				E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */,
 				E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */,
 				E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */,
-				E22166A32C0657CA00D9FCF7 /* FullDiskAccess in Frameworks */,
-				E299E0982C0232D500F1BDB5 /* SQLite in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2C527D42C3B4F550085ECC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E208F9702C3C2541000ACAE2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E20BA19A2C0164C90052B8FC /* artifacts */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,8 +315,9 @@
 			isa = PBXGroup;
 			children = (
 				E20BA1C82C0164C90052B8FC /* Faktor */,
-				E2AF93112C28EB2A0051E4F9 /* faktorTests */,
+				E2C527D82C3B4F550085ECC7 /* FaktorTests */,
 				E22C9B052C01517100D2984D /* Products */,
+				E208F9702C3C2541000ACAE2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -289,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				E22C9B042C01517100D2984D /* Faktor.app */,
+				E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -296,7 +333,12 @@
 		E230C08E2C13A28B00C2BF61 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				E20BA1C12C0164C90052B8FC /* appMenu.swift */,
+				E20BA1C12C0164C90052B8FC /* AppMenu.swift */,
+				E2C527C62C39B1D90085ECC7 /* SettingsView.swift */,
+				E2C527C82C39C2210085ECC7 /* GeneralSettingsView.swift */,
+				E2C527CA2C39C24A0085ECC7 /* AboutSettingsView.swift */,
+				E2C527CC2C39E37E0085ECC7 /* Main.swift */,
+				E2C527CE2C3A00D80085ECC7 /* LogsViewer.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -335,13 +377,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		E2AF93112C28EB2A0051E4F9 /* faktorTests */ = {
+		E2C527D82C3B4F550085ECC7 /* FaktorTests */ = {
 			isa = PBXGroup;
 			children = (
+				E2C527E32C3B4F830085ECC7 /* TestPlan.xctestplan */,
 				E230C0932C1520F800C2BF61 /* testMessages.json */,
-				E2AF93122C28EB2A0051E4F9 /* faktorTests.swift */,
+				E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */,
 			);
-			path = faktorTests;
+			path = FaktorTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,17 +405,34 @@
 			);
 			name = faktor;
 			packageProductDependencies = (
-				E299E0972C0232D500F1BDB5 /* SQLite */,
 				E299E09D2C026A0900F1BDB5 /* Defaults */,
 				E2EF8F892C04D3E100AC3652 /* Telegraph */,
-				E22166A22C0657CA00D9FCF7 /* FullDiskAccess */,
 				E22040792C06770000846029 /* Logging */,
 				E20005C02C28A31F00DB8615 /* PostHog */,
-				E27141842C28F20B00A55616 /* LaunchAtLogin */,
+				E208F9712C3C2541000ACAE2 /* LaunchAtLogin */,
+				E208F9732C3C255B000ACAE2 /* SQLite */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E2C527D62C3B4F550085ECC7 /* FaktorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E2C527DD2C3B4F550085ECC7 /* Build configuration list for PBXNativeTarget "FaktorTests" */;
+			buildPhases = (
+				E2C527D32C3B4F550085ECC7 /* Sources */,
+				E2C527D42C3B4F550085ECC7 /* Frameworks */,
+				E2C527D52C3B4F550085ECC7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E2C527DC2C3B4F550085ECC7 /* PBXTargetDependency */,
+			);
+			name = FaktorTests;
+			productName = FaktorTests;
+			productReference = E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -386,6 +446,10 @@
 				TargetAttributes = {
 					E22C9B032C01517100D2984D = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					E2C527D62C3B4F550085ECC7 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = E22C9B032C01517100D2984D;
 					};
 				};
 			};
@@ -412,6 +476,7 @@
 			projectRoot = "";
 			targets = (
 				E22C9B032C01517100D2984D /* faktor */,
+				E2C527D62C3B4F550085ECC7 /* FaktorTests */,
 			);
 		};
 /* End PBXProject section */
@@ -451,6 +516,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E2C527D52C3B4F550085ECC7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -465,14 +537,27 @@
 				E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */,
 				E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */,
 				E299E0B72C0280A200F1BDB5 /* String.swift in Sources */,
-				E20BA1E22C0164C90052B8FC /* appMenu.swift in Sources */,
+				E20BA1E22C0164C90052B8FC /* AppMenu.swift in Sources */,
 				E299E0B22C0271A100F1BDB5 /* MessageManager.swift in Sources */,
+				E2C527CB2C39C24A0085ECC7 /* AboutSettingsView.swift in Sources */,
+				E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */,
+				E2C527C92C39C2210085ECC7 /* GeneralSettingsView.swift in Sources */,
+				E2C527CD2C39E37E0085ECC7 /* Main.swift in Sources */,
 				E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */,
+				E2C527CF2C3A00D80085ECC7 /* LogsViewer.swift in Sources */,
 				E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */,
 				E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */,
 				E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */,
 				E299E0A92C02719A00F1BDB5 /* CustomOTPParsers.swift in Sources */,
 				E299E0B32C0271A100F1BDB5 /* Message.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2C527D32C3B4F550085ECC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2C527E02C3B4F600085ECC7 /* FaktorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +567,11 @@
 		E20BA1E92C0165D80052B8FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = E20BA1E82C0165D80052B8FC /* SQLite */;
+		};
+		E2C527DC2C3B4F550085ECC7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E22C9B032C01517100D2984D /* faktor */;
+			targetProxy = E2C527DB2C3B4F550085ECC7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -618,15 +708,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = faktor/faktor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CURRENT_PROJECT_VERSION = 1.3;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -640,7 +730,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = faktor.mac;
 				PRODUCT_NAME = Faktor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -655,15 +745,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = faktor/faktor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CURRENT_PROJECT_VERSION = 1.3;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -677,12 +768,68 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = faktor.mac;
 				PRODUCT_NAME = Faktor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E2C527DE2C3B4F550085ECC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TP8BN7C8C6;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = auchenberg.FaktorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Faktor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Faktor";
+			};
+			name = Debug;
+		};
+		E2C527DF2C3B4F550085ECC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TP8BN7C8C6;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = auchenberg.FaktorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Faktor.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Faktor";
 			};
 			name = Release;
 		};
@@ -703,6 +850,15 @@
 			buildConfigurations = (
 				E22C9B2C2C01517200D2984D /* Debug */,
 				E22C9B2D2C01517200D2984D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E2C527DD2C3B4F550085ECC7 /* Build configuration list for PBXNativeTarget "FaktorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2C527DE2C3B4F550085ECC7 /* Debug */,
+				E2C527DF2C3B4F550085ECC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -774,6 +930,16 @@
 			package = E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */;
 			productName = PostHog;
 		};
+		E208F9712C3C2541000ACAE2 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
+		};
+		E208F9732C3C255B000ACAE2 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E299E0962C0232D500F1BDB5 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
 		E20BA1E82C0165D80052B8FC /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SQLite;
@@ -782,21 +948,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
-		};
-		E22166A22C0657CA00D9FCF7 /* FullDiskAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E22166A12C0657CA00D9FCF7 /* XCRemoteSwiftPackageReference "FullDiskAccess" */;
-			productName = FullDiskAccess;
-		};
-		E27141842C28F20B00A55616 /* LaunchAtLogin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
-			productName = LaunchAtLogin;
-		};
-		E299E0972C0232D500F1BDB5 /* SQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E299E0962C0232D500F1BDB5 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
-			productName = SQLite;
 		};
 		E299E09D2C026A0900F1BDB5 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;

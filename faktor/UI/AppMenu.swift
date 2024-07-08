@@ -54,6 +54,24 @@ struct AppMenu: View {
             }
         }
         
+//        Divider()
+//        
+//        if #available(macOS 14, *) {
+//            SettingsLink {
+//                Text("Perferences...")
+//            }
+//            .keyboardShortcut(",")
+//        } else {
+//            Button("Perferences...") {
+//                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+//                for window in NSApplication.shared.windows {
+//                    if window.title == "General" || window.title == "Snippet" || window.title == "About" {
+//                        window.level = .floating
+//                    }
+//                }
+//            }.keyboardShortcut(",")
+//        }
+        
         Divider()
         
         // List preferences
@@ -74,12 +92,16 @@ struct AppMenu: View {
                  print("Checkbox state is now: \(newState)")
                  LaunchAtLogin.isEnabled = newState
              }
+            Button("Reset Faktor and quit") {
+                appStateManager.resetStateAndQuit()
+            }
         }
         
         Divider()
         
-        Button("Faktor v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (latest)") {
+        Button("Faktor v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")") {
         }.disabled(true)
+        
         
         Divider()
         

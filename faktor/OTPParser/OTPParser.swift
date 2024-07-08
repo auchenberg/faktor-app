@@ -9,8 +9,9 @@ protocol CoreOTPParser {
 public class OTPParser: CoreOTPParser {
     var config: OTPParserConfiguration
     
-    public init(withConfig config: OTPParserConfiguration) {
-        self.config = config
+    public init() {
+        let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
+        self.config = DEFAULT_CONFIG
     }
     
     public func parseMessage(_ message: String) -> ParsedOTP? {
