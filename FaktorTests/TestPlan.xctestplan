@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "EAE8D661-04F7-4C37-B514-50D37F6E163D",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:faktor.xcodeproj",
+        "identifier" : "E2C527D62C3B4F550085ECC7",
+        "name" : "FaktorTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -11,15 +11,31 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:TestPlan.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO"
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E230C09D2C1531D400C2BF61"
+               BlueprintIdentifier = "E2C527D62C3B4F550085ECC7"
+               BuildableName = "FaktorTests.xctest"
+               BlueprintName = "FaktorTests"
+               ReferencedContainer = "container:faktor.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E2C527D62C3B4F550085ECC7"
                BuildableName = "FaktorTests.xctest"
                BlueprintName = "FaktorTests"
                ReferencedContainer = "container:faktor.xcodeproj">
