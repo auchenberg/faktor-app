@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AboutSettingsView: View {
+    @EnvironmentObject var appStateManager: AppStateManager
+    
     var body: some View {
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         
@@ -41,6 +43,20 @@ struct AboutSettingsView: View {
                     }
                     
                     
+                }
+                
+                Section("Reset") {
+
+                        HStack {
+                            Spacer()
+                            Button("Reset data and quit") {
+                                appStateManager.resetStateAndQuit()
+                            }
+                            .controlSize(.large)
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                
                 }
                 
             }

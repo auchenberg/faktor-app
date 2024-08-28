@@ -1,16 +1,16 @@
 import SwiftUI
-
 import LaunchAtLogin
 import Defaults
 
 struct GeneralSettingsView: View {
-
     @Default(.settingsShowInDock) var showInDock
     @Default(.settingShowNotifications) var showNotifications
     @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
+    @EnvironmentObject var appStateManager: AppStateManager
         
     var body: some View {
         Form {
+            
             Section("Application") {
                 LaunchAtLogin.Toggle("Launch on login")
                 .controlSize(.large)
@@ -22,10 +22,11 @@ struct GeneralSettingsView: View {
                 .onChange(of: showInDock) { newValue in
                     Defaults[.settingsShowInDock] = newValue
                 }
+            
             }
             Section("Notifications") {
                 Toggle(isOn: $showNotifications) {
-                    Text("Show Notifications")
+                    Text("Show notifications on new message")
                 }
                 .controlSize(.large)
                 .onChange(of: showNotifications) { newValue in
@@ -33,19 +34,17 @@ struct GeneralSettingsView: View {
                 }
 
                 Toggle(isOn: $enableBrowserIntegration) {
-                     Text("Enable browser extension")
+                     Text("Enable browser extension communication")
                  }
                 .controlSize(.large)
                 .onChange(of: enableBrowserIntegration) { newValue in
                     Defaults[.settingsEnableBrowserIntegration] = newValue
                 }                
             }
-        
         }
         .formStyle(.grouped)
         .padding(40)
     }
-
 }
 
 struct GeneralTab_Previews: PreviewProvider {
