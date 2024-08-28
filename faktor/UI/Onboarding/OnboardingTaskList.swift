@@ -10,20 +10,20 @@ import SwiftUI
 
 struct OnboardingTaskList: View {
     @Environment(\.controlActiveState) private var controlActiveState
-//    @EnvironmentObject private var utilityPathPreferences: UtilityPathPreferences
+    @EnvironmentObject var appStateManager: AppStateManager
 
     var body: some View {
         Form {
             Section {
-                DiskAccessOnboardingTask()
+                DiskAccessOnboardingTask(appStateManager: appStateManager)
             }
 
             Section {
-                NotificationsOnboardingTask()
+                NotificationsOnboardingTask(appStateManager: appStateManager)
             }
             
             Section {
-                BrowserExtensionOnboardingTask()
+                BrowserExtensionOnboardingTask(appStateManager: appStateManager)
             }
         }
         .formStyle(.grouped)

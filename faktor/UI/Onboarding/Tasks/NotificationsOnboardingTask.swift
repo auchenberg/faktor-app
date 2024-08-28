@@ -9,22 +9,23 @@ import Foundation
 import SwiftUI
 
 struct NotificationsOnboardingTask: View {
-    @Environment(\.controlActiveState) private var controlActiveState
-//    @Environment(\.appStateManager) private var appStateManager
-    @State private var isComplete = Self.isCommandLineToolReachable
+    @ObservedObject var appStateManager: AppStateManager
 
     var body: some View {
         OnboardingItemLayout(
-            title: "Notifications permission to show notifications",
-            description: "Faktor requires disk access to your library folder to search for new 2fa codes"
+            title: "Allow Faktor to show notifications",
+            description: "Faktor requires permissions to show notifications on your Mac."
         ) {
             Image("Xcode")
                 .resizable()
                 .interpolation(.high)
-        } infoPopoverContent: {
-            OnboardingPopoverContent(title: "Disk access") {
-                Text("In order for Faktor to search for new 2FA Codes, we need access to your library folder, where iMesssage stores it's messages.")
-                    .lineLimit(3, reservesSpace: true)
+        } actionView: {
+            if !isComplete {
+                Button("Allow") {
+                    Task {
+                        await self.appStateManager.requestNotificationPermission()
+                    }
+                }.buttonStyle(.borderedProminent)
             }
         } content: {
             OnboardingItemStatusIcon(state: isComplete ? .complete : .warning) {
@@ -34,23 +35,9 @@ struct NotificationsOnboardingTask: View {
                 }
             }
         }
-        .onChange(of: controlActiveState) { newValue in
-            if newValue == .key {
-                updateStatus()
-            }
-        }
     }
 
-    private func updateStatus() {
-        let newValue = Self.isCommandLineToolReachable
-
-        if self.isComplete != newValue {
-            self.isComplete = newValue
-        }
-    }
-
-    private static var isCommandLineToolReachable: Bool {
-        false
-//        URL(filePath: "/usr/bin/xcrun").isReachable()
+    private var isComplete: Bool {
+        self.appStateManager.hasNotificationPermissions()
     }
 }

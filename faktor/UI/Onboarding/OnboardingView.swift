@@ -10,12 +10,12 @@ import Foundation
 import SwiftUI
 
 struct OnboardingView: View {
-//    @Environment(\.customWindowPresentation) private var customWindowPresentation
+    @EnvironmentObject var appStateManager: AppStateManager
 
     var body: some View {
         VStack(alignment: .center, spacing: 36) {
             VStack(spacing: 8) {
-                Image("Icon")
+                Image(.icon)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 128, height: 128)
@@ -31,16 +31,17 @@ struct OnboardingView: View {
             }
 
             VStack(spacing: 0) {
-                Text("To get started please complete the following items:")
+                Text("To get started complete the following items:")
                     .font(.body)
                     .foregroundColor(.primary)
                     .padding(.horizontal, 56)
 
                 OnboardingTaskList()
+                    .environmentObject(appStateManager)
 
                 VStack(spacing: 32) {
-                    Button("Start Using Faktor") {
-//                        customWindowPresentation?.dismiss()
+                    Button("Start using Faktor") {
+                        appStateManager.markOnboardingAsCompleted()
                     }
                     .controlSize(.large)
                     .keyboardShortcut(.return)

@@ -9,9 +9,7 @@ import Foundation
 import SwiftUI
 
 struct DiskAccessOnboardingTask: View {
-    @Environment(\.controlActiveState) private var controlActiveState
-//    @Environment(\.appStateManager) private var appStateManager
-    @State private var isComplete = Self.isCommandLineToolReachable
+    @ObservedObject var appStateManager: AppStateManager
 
     var body: some View {
         OnboardingItemLayout(
@@ -21,6 +19,12 @@ struct DiskAccessOnboardingTask: View {
             Image("Xcode")
                 .resizable()
                 .interpolation(.high)
+        } actionView: {
+            if !isComplete {
+                Button("Grant") {
+                    self.appStateManager.requestLibraryFolderAccess()
+                }.buttonStyle(.borderedProminent)
+            }
         } infoPopoverContent: {
             OnboardingPopoverContent(title: "Disk access") {
                 Text("In order for Faktor to search for new 2FA Codes, we need access to your library folder, where iMesssage stores it's messages.")
@@ -34,23 +38,9 @@ struct DiskAccessOnboardingTask: View {
                 }
             }
         }
-        .onChange(of: controlActiveState) { newValue in
-            if newValue == .key {
-                updateStatus()
-            }
-        }
     }
 
-    private func updateStatus() {
-        let newValue = Self.isCommandLineToolReachable
-
-        if self.isComplete != newValue {
-            self.isComplete = newValue
-        }
-    }
-
-    private static var isCommandLineToolReachable: Bool {
-        false
-//        URL(filePath: "/usr/bin/xcrun").isReachable()
+    private var isComplete: Bool {
+        self.appStateManager.hasLibraryAccessPermissions()
     }
 }

@@ -7,24 +7,24 @@
 
 import Foundation
 import SwiftUI
+import Defaults
 
 struct BrowserExtensionOnboardingTask: View {
-    @Environment(\.controlActiveState) private var controlActiveState
-//    @Environment(\.appStateManager) private var appStateManager
-    @State private var isComplete = Self.isCommandLineToolReachable
+    @ObservedObject var appStateManager: AppStateManager
 
     var body: some View {
         OnboardingItemLayout(
-            title: "Browser extensions for autocomplete experience",
-            description: "Faktor requires disk access to your library folder to search for new 2fa codes"
+            title: "Install browser extension",
+            description: "Faktor uses a browser extension to provide the autocomplete experience"
         ) {
             Image("Xcode")
                 .resizable()
                 .interpolation(.high)
-        } infoPopoverContent: {
-            OnboardingPopoverContent(title: "Disk access") {
-                Text("In order for Faktor to search for new 2FA Codes, we need access to your library folder, where iMesssage stores it's messages.")
-                    .lineLimit(3, reservesSpace: true)
+        } actionView: {
+            if !isComplete {
+                Button("Install") {
+                    self.appStateManager.installBrowserExtension()
+                }.buttonStyle(.borderedProminent)
             }
         } content: {
             OnboardingItemStatusIcon(state: isComplete ? .complete : .warning) {
@@ -34,23 +34,29 @@ struct BrowserExtensionOnboardingTask: View {
                 }
             }
         }
-        .onChange(of: controlActiveState) { newValue in
-            if newValue == .key {
-                updateStatus()
-            }
-        }
     }
 
-    private func updateStatus() {
-        let newValue = Self.isCommandLineToolReachable
-
-        if self.isComplete != newValue {
-            self.isComplete = newValue
-        }
+private var isComplete: Bool {
+    // Check if Chrome is installed
+    let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
+    guard FileManager.default.fileExists(atPath: chromeURL.path) else {
+        return false
     }
-
-    private static var isCommandLineToolReachable: Bool {
-        false
-//        URL(filePath: "/usr/bin/xcrun").isReachable()
+    
+    // Chrome extension ID for Faktor
+    let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
+    
+    var bookmarkDataIsStale = false
+    guard let bookmarkData = Defaults[.libraryFolderBookmark],
+          let extensionsPath = try? URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, 
+                                        relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale) else {
+        return false
     }
+    
+    let fullPath = extensionsPath
+        .appendingPathComponent("Application Support/Google/Chrome/Default/Extensions")
+        .appendingPathComponent(extensionID)
+    
+    return FileManager.default.fileExists(atPath: fullPath.path)
+}
 }
