@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 import Defaults
 import Combine
-import FullDiskAccess
 import PostHog
 
 import Logging
