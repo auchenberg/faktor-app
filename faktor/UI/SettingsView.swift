@@ -7,26 +7,36 @@
 
 import SwiftUI
 
+enum SettingsTab: Int {
+    case general = 0
+    case about = 1
+}
+
 struct SettingsView: View {
-    private enum Tabs: Hashable {
-        case general, about, snippet
-    }
+    @AppStorage("SettingsSelectedTabIndex") var selectedTab: SettingsTab = .general
+    
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             GeneralSettingsView()
                 .tabItem {
-                    Label("General", systemImage: "gear")
+                    Label("General", systemImage: "gearshape")
                 }
-                .tag(Tabs.general)
-                .padding(10)
+                .tag(SettingsTab.general)
             AboutSettingsView()
                 .tabItem {
-                    Label("About", systemImage: "timelapse")
+                    Label("About", systemImage: "info.circle")
                 }
-                .tag(Tabs.about)
-                .padding(10)
+                .tag(SettingsTab.about)
         }
-        .padding(20)
-        .frame(width: 840, height: 500)
+        .frame(width: 600)
+        .frame(maxHeight: 1200)
+        .fixedSize()
+    }
+}
+
+
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsView()
     }
 }

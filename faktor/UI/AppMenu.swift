@@ -54,48 +54,43 @@ struct AppMenu: View {
             }
         }
         
-//        Divider()
-//        
-//        if #available(macOS 14, *) {
-//            SettingsLink {
-//                Text("Perferences...")
-//            }
-//            .keyboardShortcut(",")
-//        } else {
-//            Button("Perferences...") {
-//                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-//                for window in NSApplication.shared.windows {
-//                    if window.title == "General" || window.title == "Snippet" || window.title == "About" {
-//                        window.level = .floating
-//                    }
-//                }
-//            }.keyboardShortcut(",")
-//        }
+        Divider()
+        
+        if #available(macOS 14, *) {
+            SettingsLink {
+                Text("Settings…")
+            }
+            .keyboardShortcut(",")
+        } else {
+            Button("Settings…") {
+                NSApp.showSettingsWindow()
+            }.keyboardShortcut(",")
+        }
         
         Divider()
         
-        // List preferences
-        Menu("Preferences") {
-            Toggle(isOn: $showNotifications) {
-                 Text("Show Notifications")
-             }
-             .toggleStyle(.checkbox)
-            Toggle(isOn: $enableBrowserIntegration) {
-                 Text("Enable browser integration")
-             }
-             .toggleStyle(.checkbox)
-            Toggle(isOn: $isLaunchedAtLoginEnabled) {
-                 Text("Open at Login")
-             }
-             .toggleStyle(.checkbox)
-             .onChange(of:isLaunchedAtLoginEnabled) { newState in
-                 print("Checkbox state is now: \(newState)")
-                 LaunchAtLogin.isEnabled = newState
-             }
-            Button("Reset Faktor and quit") {
-                appStateManager.resetStateAndQuit()
-            }
-        }
+//        // List preferences
+//        Menu("Preferences") {
+//            Toggle(isOn: $showNotifications) {
+//                 Text("Show Notifications")
+//             }
+//             .toggleStyle(.checkbox)
+//            Toggle(isOn: $enableBrowserIntegration) {
+//                 Text("Enable browser integration")
+//             }
+//             .toggleStyle(.checkbox)
+//            Toggle(isOn: $isLaunchedAtLoginEnabled) {
+//                 Text("Open at Login")
+//             }
+//             .toggleStyle(.checkbox)
+//             .onChange(of:isLaunchedAtLoginEnabled) { newState in
+//                 print("Checkbox state is now: \(newState)")
+//                 LaunchAtLogin.isEnabled = newState
+//             }
+//            Button("Reset Faktor and quit") {
+//                appStateManager.resetStateAndQuit()
+//            }
+//        }
         
         Divider()
         

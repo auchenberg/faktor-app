@@ -82,10 +82,9 @@ struct faktorApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-//        MainScene()
-//        Settings {
-//            SettingsView()
-//        }
+        Settings {
+            SettingsView()
+        }
         MenuBarExtra {
             AppMenu(messageManager: appDelegate.messageManager,
                     appStateManager: appDelegate.appStateManager)
