@@ -39,25 +39,47 @@ struct BrowserExtensionOnboardingTask: View {
     private var isComplete: Bool {
 
         
+        do {
         // Check if Chrome is installed
         let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
         guard FileManager.default.fileExists(atPath: chromeURL.path) else {
             return false
         }
         
-        // Chrome extension ID for Faktor
+        // Chrome extension ID for Faktor (replace with actual ID)
         let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
         
-        guard let bookmarkData = Defaults[.libraryFolderBookmark],
-              let extensionsPath = try? URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: nil) else {
+        // Path to Chrome extensions directory
+
+            guard let bookmarkData =  Defaults[.libraryFolderBookmark]  else {
+                print("No bookmark data found")
+                return false
+            }
+            
+            var bookmarkDataIsStale = false
+            
+            var extensionsPath = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+            
+            if bookmarkDataIsStale {
+                print("Bookmark data is stale")
+            }
+            
+            if extensionsPath.startAccessingSecurityScopedResource() {
+                // Build path for databsse
+                extensionsPath.appendPathComponent("/Application Support/Google/Chrome/Default/Extensions")
+                extensionsPath.appendPathComponent(extensionID)
+                
+                // Check if the extension directory exists
+                let status = FileManager.default.fileExists(atPath: extensionsPath.path)
+                
+                return status
+                
+            }
+        } catch {
+            print("Error resolving bookmark: \(error)")
             return false
         }
-        
-        let fullPath = extensionsPath
-            .appendingPathComponent("Application Support/Google/Chrome/Default/Extensions")
-            .appendingPathComponent(extensionID)
-        
-        return FileManager.default.fileExists(atPath: fullPath.path)
+        return false
         
         
     }
