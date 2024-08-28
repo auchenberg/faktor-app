@@ -36,27 +36,29 @@ struct BrowserExtensionOnboardingTask: View {
         }
     }
 
-private var isComplete: Bool {
-    // Check if Chrome is installed
-    let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
-    guard FileManager.default.fileExists(atPath: chromeURL.path) else {
-        return false
+    private var isComplete: Bool {
+
+        
+        // Check if Chrome is installed
+        let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
+        guard FileManager.default.fileExists(atPath: chromeURL.path) else {
+            return false
+        }
+        
+        // Chrome extension ID for Faktor
+        let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
+        
+        guard let bookmarkData = Defaults[.libraryFolderBookmark],
+              let extensionsPath = try? URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: nil) else {
+            return false
+        }
+        
+        let fullPath = extensionsPath
+            .appendingPathComponent("Application Support/Google/Chrome/Default/Extensions")
+            .appendingPathComponent(extensionID)
+        
+        return FileManager.default.fileExists(atPath: fullPath.path)
+        
+        
     }
-    
-    // Chrome extension ID for Faktor
-    let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
-    
-    var bookmarkDataIsStale = false
-    guard let bookmarkData = Defaults[.libraryFolderBookmark],
-          let extensionsPath = try? URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, 
-                                        relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale) else {
-        return false
-    }
-    
-    let fullPath = extensionsPath
-        .appendingPathComponent("Application Support/Google/Chrome/Default/Extensions")
-        .appendingPathComponent(extensionID)
-    
-    return FileManager.default.fileExists(atPath: fullPath.path)
-}
 }
