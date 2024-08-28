@@ -51,3 +51,4 @@ extension NSRegularExpression {
         return match.firstCaptureGroupInString(string)
     }
 }
+
