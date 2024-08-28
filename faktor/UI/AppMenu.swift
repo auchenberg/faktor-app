@@ -28,8 +28,8 @@ struct AppMenu: View {
     var body: some View {
 
         if !appStateManager.hasRequiredPermissions() {
-            Button("Permissions required. Click here") {
-                appStateManager.requestPermissions()
+            Button("Start onboarding") {
+                appStateManager.startOnboarding()
             }
         }
         
@@ -69,30 +69,6 @@ struct AppMenu: View {
         
         Divider()
         
-//        // List preferences
-//        Menu("Preferences") {
-//            Toggle(isOn: $showNotifications) {
-//                 Text("Show Notifications")
-//             }
-//             .toggleStyle(.checkbox)
-//            Toggle(isOn: $enableBrowserIntegration) {
-//                 Text("Enable browser integration")
-//             }
-//             .toggleStyle(.checkbox)
-//            Toggle(isOn: $isLaunchedAtLoginEnabled) {
-//                 Text("Open at Login")
-//             }
-//             .toggleStyle(.checkbox)
-//             .onChange(of:isLaunchedAtLoginEnabled) { newState in
-//                 print("Checkbox state is now: \(newState)")
-//                 LaunchAtLogin.isEnabled = newState
-//             }
-//            Button("Reset Faktor and quit") {
-//                appStateManager.resetStateAndQuit()
-//            }
-//        }
-        
-        Divider()
         
         Button("Faktor v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")") {
         }.disabled(true)
