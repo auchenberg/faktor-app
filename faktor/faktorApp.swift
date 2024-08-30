@@ -3,28 +3,29 @@ import SwiftData
 import Defaults
 import Combine
 import PostHog
+import LaunchAtLogin
 
 import Logging
 
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
-    static let settingsShowWelcome = Key<Bool>("showWelcome", default: true)
     static let settingsShowInDock = Key<Bool>("showInDock", default: false)
+    static let libraryFolderBookmark = Key<Data?>("libraryFolderBookmark")
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
     @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
-    @Default(.settingsShowWelcome) var settingsShowWelcome
     @Default(.settingsShowInDock) var settingsShowIndock
     var messageManager = MessageManager()
     var appStateManager = AppStateManager()
     var notificationManager: NotificationManager
     var browserManager: BrowserManager
+    var cancellables = Set<AnyCancellable>()
     
     let logger = Logger(label: "com.auchenberg.faktor")
-    
+        
     override init() {
         notificationManager = NotificationManager(messageManager: messageManager)
         browserManager = BrowserManager(messageManager: messageManager)
@@ -32,15 +33,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillFinishLaunching(_ notification: Notification) {
-        updateDockIconVisibility(isVisible: settingsShowIndock)
+        appStateManager.updateDockIconVisibility(isVisible: settingsShowIndock)
         
         // Set up observer for settings changes
         Task {
             for await value in Defaults.updates(.settingsShowInDock) {
-                self.updateDockIconVisibility(isVisible: value)
+                appStateManager.updateDockIconVisibility(isVisible: value)
             }
         }
-
      }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -54,27 +54,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         PostHogSDK.shared.capture("faktor.init")
         
         // Permissions
-        if (appStateManager.hasRequiredPermissions()) {
-            logger.info("Permissions good")
-            messageManager.startListening()
-            browserManager.startServer()
-        } else {
-            logger.info("Permissions missing")
-            appStateManager.requestPermissions()
-        }
+        appStateManager.$hasAllRequiredPermissions
+            .sink { hasPermissions in
+                if hasPermissions {
+                    self.logger.info("Permissions have been granted.")
+                    self.messageManager.startListening()
+                    self.browserManager.startServer()
+                    
+                    // Set up observer for settings changes
+                    Task {
+                        for await value in Defaults.updates(.settingsShowInDock) {
+                            print("updateDockIconVisibility.update")
+                            self.appStateManager.updateDockIconVisibility(isVisible: value)
+                        }
+                    }
+                    
+                } else {
+                    self.logger.info("Permissions are missing.")
+                    self.appStateManager.startOnboarding()
+                }
+            }
+            .store(in: &cancellables)
         
-        if(settingsShowWelcome) {
-            // Show welcome view
+        if !appStateManager.isDevelopmentMode() {
+            // Configure the application to launch at login.
+            if !LaunchAtLogin.isEnabled {
+                LaunchAtLogin.isEnabled = true
+            }
         }
-    
     }
-    
-    // Initial setup of dock icon visibility
-    func updateDockIconVisibility(isVisible: Bool = false) {
-        print("updateDockIconVisibility", isVisible)
-        NSApp.setActivationPolicy(isVisible ? .regular : .accessory)
-    }
+
 }
+
 
 @main
 struct faktorApp: App {
@@ -83,10 +94,12 @@ struct faktorApp: App {
     var body: some Scene {
         Settings {
             SettingsView()
+                .environmentObject(appDelegate.appStateManager)
         }
         MenuBarExtra {
             AppMenu(messageManager: appDelegate.messageManager,
-                    appStateManager: appDelegate.appStateManager)
+                    appStateManager: appDelegate.appStateManager,
+                    browserManager: appDelegate.browserManager)
         } label: {
             let image: NSImage = {
                 let ratio = $0.size.height / $0.size.width
