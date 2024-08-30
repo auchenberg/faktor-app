@@ -44,9 +44,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     
     private func showNotification(for message: MessageWithParsedOTP) {
         print("Show notification to the user. \(message.0.guid)")
-        
-        self.requestNotificationPermission()
-        
+                
         let content = UNMutableNotificationContent()
         content.title = "New authentication code received"
         content.body = message.1.code
@@ -66,19 +64,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
             }
         }
     }
-    
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .criticalAlert]) { granted, error in
-            if let error = error {
-                print("Error requesting notification permission: \(error.localizedDescription)")
-            } else if granted {
-                print("Notification permission granted.")
-            } else {
-                print("Notification permission denied.")
-            }
-        }
-    }
-    
+        
     // Handle notification interactions
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo

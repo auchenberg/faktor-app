@@ -14,15 +14,14 @@ import PostHog
 
 struct AppMenu: View {
     
-    @State private var isLaunchedAtLoginEnabled: Bool = LaunchAtLogin.isEnabled
     @ObservedObject var messageManager: MessageManager
     @ObservedObject var appStateManager: AppStateManager
-    @Default(.settingShowNotifications) var showNotifications
-    @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
+    @ObservedObject var browserManager: BrowserManager
     
     func onCodeClicked(message: MessageWithParsedOTP) {
-        message.1.copyToClipboard()
         PostHogSDK.shared.capture("faktor.copyToClipboard")
+        message.1.copyToClipboard()
+        browserManager.sendNotificationToBrowsers(message: message)
     }
     
     var body: some View {
@@ -46,7 +45,6 @@ struct AppMenu: View {
         }
 
         if appStateManager.isDevelopmentMode() {
-            
             Divider()
             
             Button("DEBUG: Trigger new code") {

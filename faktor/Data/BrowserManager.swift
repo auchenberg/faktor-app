@@ -13,7 +13,36 @@ import Defaults
 import UserNotifications
 import Telegraph
 
-class BrowserManager: ServerWebSocketDelegate {
+class BrowserManager: ObservableObject, ServerWebSocketDelegate {
+    
+    @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
+    @ObservedObject var messageManager: MessageManager
+    @Published private var latestMessage: MessageWithParsedOTP?
+    private var cancellable: AnyCancellable?
+    var server: Server!
+    
+    init(messageManager: MessageManager) {
+        self.messageManager = messageManager
+                
+        cancellable = messageManager.$messages.sink { [weak self] messages in
+            guard let self = self else {
+                return
+            }
+            
+            print("NotificationManager.messageChanged")
+            if let newMessage = messages.last {
+                if let latestMessage = self.latestMessage {
+                    if newMessage != latestMessage {
+                        if self.settingsEnableBrowserIntegration {
+                            // Send message to web server
+                            sendNotificationToBrowsers(message:newMessage)
+                        }
+                    }
+                }
+            }
+            self.latestMessage = messages.last
+        }
+    }
     
     /// Raised when the web socket client has connected to the server.
     public func webSocketClient(_ client: WebSocketClient, didConnectToHost host: String) {
@@ -66,37 +95,7 @@ class BrowserManager: ServerWebSocketDelegate {
     func serverDidDisconnect(_ server: Telegraph.Server) {
         print("serverDidDisconnect")
     }
-    
-    @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
-    @ObservedObject var messageManager: MessageManager
-    @Published private var latestMessage: MessageWithParsedOTP?
-    private var cancellable: AnyCancellable?
-    
-    var server: Server!
-    
-    init(messageManager: MessageManager) {
-        self.messageManager = messageManager
-                
-        cancellable = messageManager.$messages.sink { [weak self] messages in
-            guard let self = self else {
-                return
-            }
-            
-            print("NotificationManager.messageChanged")
-            if let newMessage = messages.last {
-                if let latestMessage = self.latestMessage {
-                    if newMessage != latestMessage {
-                        if self.settingsEnableBrowserIntegration {
-                            // Send message to web server
-                            sendNotificationToBrowsers(message:newMessage)
-                        }
-                    }
-                }
-            }
-            self.latestMessage = messages.last
-        }
-    }
-    
+        
     func startServer() {
         
         server = Server()
@@ -106,6 +105,15 @@ class BrowserManager: ServerWebSocketDelegate {
         try! server.start(port: 9234)
         
         print("[SERVER]", "Server is running - url:")
+    }
+
+    func stopServer() {
+        if let server = server {
+            server.stop()
+            print("[SERVER]", "Server has been stopped")
+        } else {
+            print("[SERVER]", "No server running to stop")
+        }
     }
     
     func sendNotificationToBrowsers(message:MessageWithParsedOTP) {

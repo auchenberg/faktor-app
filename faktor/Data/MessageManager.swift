@@ -7,12 +7,12 @@
 
 import Foundation
 import SQLite
+import Defaults
 
 enum MessageManagerError: Error {
     case generic(message: String)
     case permission(message: String)
 }
-
 
 class MessageManager: ObservableObject, Identifiable {
     @Published var messages: [MessageWithParsedOTP] = []
@@ -43,12 +43,11 @@ class MessageManager: ObservableObject, Identifiable {
     private func loadMessagesAfterDate(_ date: Date) throws -> [Message]? {
         
         do {
-            guard let bookmarkData = UserDefaults.standard.data(forKey: "messagesLibraryFolder") else {
+            guard let bookmarkData =  Defaults[.libraryFolderBookmark]  else {
                 throw MessageManagerError.permission(message: "No bookmark data found")
             }
                     
             var bookmarkDataIsStale = false
-            
             var url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
                         
             if bookmarkDataIsStale {
@@ -57,7 +56,7 @@ class MessageManager: ObservableObject, Identifiable {
             
             if url.startAccessingSecurityScopedResource() {
                 // Build path for databsse
-                url.appendPathComponent("/chat.db")
+                url.appendPathComponent("/Messages/chat.db")
                 
                 let db = try Connection(url.absoluteString)
                 

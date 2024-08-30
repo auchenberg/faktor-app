@@ -37,20 +37,18 @@ struct BrowserExtensionOnboardingTask: View {
     }
 
     private var isComplete: Bool {
-
         
         do {
-        // Check if Chrome is installed
-        let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
-        guard FileManager.default.fileExists(atPath: chromeURL.path) else {
-            return false
-        }
+            // Check if Chrome is installed
+            let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
+            guard FileManager.default.fileExists(atPath: chromeURL.path) else {
+                return false
+            }
         
-        // Chrome extension ID for Faktor (replace with actual ID)
-        let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
-        
-        // Path to Chrome extensions directory
-
+            // Chrome extension ID for Faktor (replace with actual ID)
+            let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
+            
+            // Path to Chrome extensions directory
             guard let bookmarkData =  Defaults[.libraryFolderBookmark]  else {
                 print("No bookmark data found")
                 return false
@@ -71,16 +69,12 @@ struct BrowserExtensionOnboardingTask: View {
                 
                 // Check if the extension directory exists
                 let status = FileManager.default.fileExists(atPath: extensionsPath.path)
-                
                 return status
-                
             }
         } catch {
             print("Error resolving bookmark: \(error)")
             return false
         }
         return false
-        
-        
     }
 }
