@@ -1,6 +1,6 @@
 import Foundation
 import AppKit
-
+import OSLog
 
 protocol CoreOTPParser {
     func parseMessage(_ message: String) -> ParsedOTP?
@@ -24,19 +24,19 @@ public class OTPParser: CoreOTPParser {
 
         // If a phone number pattern is found, return nil to ignore the message
         if !phoneNumberMatches.isEmpty {
-            print("Message contains a phone number, ignoring...")
+            Logger.core.info("Message contains a phone number, ignoring...")
             return nil
         }
         
-        print("Lowercase Message: \(lowercaseMessage)")
+        Logger.core.info("Lowercase Message: \(lowercaseMessage)")
         
         if let googleOTP = OTPParserConstants.googleOTPRegex.firstCaptureGroupInString(message) {
-            print("Google OTP found: \(googleOTP)")
+            Logger.core.info("Google OTP found: \(googleOTP)")
             return ParsedOTP(service: "google", code: googleOTP)
         }
         
         let service = inferServiceFromMessage(message)
-        print("Inferred Service: \(service ?? "Unknown")")
+        Logger.core.info("Inferred Service: \(service ?? "Unknown")")
         
         let standardRegExps: [NSRegularExpression] = [
             OTPParserConstants.CodeMatchingRegularExpressions.standardFourToEight,
@@ -46,7 +46,7 @@ public class OTPParser: CoreOTPParser {
         
         for customPattern in config.customPatterns {
             if let matchedCode = customPattern.matcherPattern.firstCaptureGroupInString(lowercaseMessage) {
-                print("Custom pattern matched. Service: \(customPattern.serviceName ?? "Unknown"), Code: \(matchedCode)")
+                Logger.core.info("Custom pattern matched. Service: \(customPattern.serviceName ?? "Unknown"), Code: \(matchedCode)")
                 return ParsedOTP(service: customPattern.serviceName, code: matchedCode)
             }
         }
@@ -56,17 +56,17 @@ public class OTPParser: CoreOTPParser {
             for match in matches {
                 guard let code = match.firstCaptureGroupInString(lowercaseMessage) else { continue }
                 
-                print("Standard regex match. Service: \(service ?? "Unknown"), Code: \(code)")
+                Logger.core.info("Standard regex match. Service: \(service ?? "Unknown"), Code: \(code)")
                 
                 if isValidCodeInMessageContext(message: lowercaseMessage, code: code) {
                     return ParsedOTP(service: service, code: code.withNonDigitsRemoved ?? code)
                 } else {
-                    print("Invalid context for code: \(code)")
+                    Logger.core.info("Invalid context for code: \(code)")
                 }
             }
         }
         
-        print("No OTP detected.")
+        Logger.core.info("No OTP detected.")
         
         let matchedParser = CUSTOM_PARSERS.first { parser in
             if let requiredName = parser.requiredServiceName, requiredName != service {
@@ -108,22 +108,22 @@ public class OTPParser: CoreOTPParser {
         }
         
         if code.hasSuffix("am") || code.hasSuffix("pm") || code.hasSuffix("st") || code.hasSuffix("rd") || code.hasSuffix("th") || code.hasSuffix("nd") {
-                print("Invalid context for code: \(code)")
+                Logger.core.error("Invalid context for code: \(code)")
                 return false
             }
         
-        print("Prev Char: \(prevChar), Next Char: \(nextChar)")
+        Logger.core.error("Prev Char: \(prevChar), Next Char: \(nextChar)")
         
         guard !code.isEmpty, let codePosition = message.index(of: code), let afterCodePosition = message.endIndex(of: code) else { return false }
         
-        print("Code positions found.")
+        Logger.core.info("Code positions found.")
         
         // Allow codes starting with '-'
         if prevChar != "-" {
             if codePosition > message.startIndex {
                 let prev = message[message.index(before: codePosition)]
                 if prev == "/" || prev == "\\" || prev == "$" {
-                    print("Invalid context for code: \(code)")
+                    Logger.core.error("Invalid context for code: \(code)")
                     return false
                 }
             }
@@ -133,12 +133,12 @@ public class OTPParser: CoreOTPParser {
             let next = message[afterCodePosition]
             // make sure next character is whitespace or ending grammar
             if !OTPParserConstants.endingCharacters.contains(next) {
-                print("Invalid context for code: \(code)")
+                Logger.core.info("Invalid context for code: \(code)")
                 return false
             }
         }
         
-        print("Code is valid.")
+        Logger.core.info("Code is valid.")
         return true
     }
 

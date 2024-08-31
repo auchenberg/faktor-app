@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Defaults
+import OSLog
 
 struct BrowserExtensionOnboardingTask: View {
     @ObservedObject var appStateManager: AppStateManager
@@ -50,7 +51,7 @@ struct BrowserExtensionOnboardingTask: View {
             
             // Path to Chrome extensions directory
             guard let bookmarkData =  Defaults[.libraryFolderBookmark]  else {
-                print("No bookmark data found")
+                Logger.core.error("No bookmark data found")
                 return false
             }
             
@@ -59,7 +60,7 @@ struct BrowserExtensionOnboardingTask: View {
             var extensionsPath = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
             
             if bookmarkDataIsStale {
-                print("Bookmark data is stale")
+                Logger.core.error("Bookmark data is stale")
             }
             
             if extensionsPath.startAccessingSecurityScopedResource() {
@@ -72,7 +73,7 @@ struct BrowserExtensionOnboardingTask: View {
                 return status
             }
         } catch {
-            print("Error resolving bookmark: \(error)")
+            Logger.core.error("Error resolving bookmark: \(error)")
             return false
         }
         return false

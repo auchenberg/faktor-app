@@ -4,8 +4,7 @@ import Defaults
 import Combine
 import PostHog
 import LaunchAtLogin
-
-import Logging
+import OSLog
 
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
@@ -23,9 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var notificationManager: NotificationManager
     var browserManager: BrowserManager
     var cancellables = Set<AnyCancellable>()
-    
-    let logger = Logger(label: "com.auchenberg.faktor")
-        
+            
     override init() {
         notificationManager = NotificationManager(messageManager: messageManager)
         browserManager = BrowserManager(messageManager: messageManager)
@@ -57,20 +54,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appStateManager.$hasAllRequiredPermissions
             .sink { hasPermissions in
                 if hasPermissions {
-                    self.logger.info("Permissions have been granted.")
+                    Logger.core.info("Permissions have been granted.")
                     self.messageManager.startListening()
                     self.browserManager.startServer()
                     
                     // Set up observer for settings changes
                     Task {
                         for await value in Defaults.updates(.settingsShowInDock) {
-                            print("updateDockIconVisibility.update")
+                            Logger.core.info("updateDockIconVisibility.update")
                             self.appStateManager.updateDockIconVisibility(isVisible: value)
                         }
                     }
                     
                 } else {
-                    self.logger.info("Permissions are missing.")
+                    Logger.core.info("Permissions are missing.")
                     self.appStateManager.startOnboarding()
                 }
             }

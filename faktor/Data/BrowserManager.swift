@@ -12,6 +12,7 @@ import SwiftUI
 import Defaults
 import UserNotifications
 import Telegraph
+import OSLog
 
 class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     
@@ -29,7 +30,7 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
                 return
             }
             
-            print("NotificationManager.messageChanged")
+            Logger.core.info("NotificationManager.messageChanged")
             if let newMessage = messages.last {
                 if let latestMessage = self.latestMessage {
                     if newMessage != latestMessage {
@@ -45,33 +46,34 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     }
     
     /// Raised when the web socket client has connected to the server.
-    public func webSocketClient(_ client: WebSocketClient, didConnectToHost host: String) {
-      print("[CLIENT]", "WebSocket connected - host:", host)
-    }
+//    public func webSocketClient(_ client: WebSocketClient, didConnectToHost host: String) {
+//      Logger.core.info("[CLIENT]", "WebSocket connected - host=", host)
+//        
+//    }
 
-    /// Raised when the web socket client received data.
-    public func webSocketClient(_ client: WebSocketClient, didReceiveData data: Data) {
-      print("[CLIENT]", "WebSocket message received - data:", data as NSData)
-    }
+//    /// Raised when the web socket client received data.
+//    public func webSocketClient(_ client: WebSocketClient, didReceiveData data: Data) {
+//      Logger.core.info("[CLIENT]", "WebSocket message received - data:", data as NSData)
+//    }
 
-    /// Raised when the web socket client received text.
-    public func webSocketClient(_ client: WebSocketClient, didReceiveText text: String) {
-      print("[CLIENT]", "WebSocket message received - text:", text)
-    }
+//    /// Raised when the web socket client received text.
+//    public func webSocketClient(_ client: WebSocketClient, didReceiveText text: String) {
+//      Logger.core.info("[CLIENT]", "WebSocket message received - text:", text)
+//    }
 
     /// Raised when the web socket client disconnects. Provides an error if the disconnect was unexpected.
-    public func webSocketClient(_ client: WebSocketClient, didDisconnectWithError error: Error?) {
-      print("[CLIENT]", "WebSocket disconnected - error:", error?.localizedDescription ?? "no error")
-    }
-    
+//    public func webSocketClient(_ client: WebSocketClient, didDisconnectWithError error: Error?) {
+//      Logger.core.info("[CLIENT]", "WebSocket disconnected - error:", error?.localizedDescription ?? "no error")
+//    }
+//    
     
     func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
         guard handshake.headers["Host"] == "localhost" else {
-            print("Connection rejected - not from localhost")
+            Logger.core.info("Connection rejected - not from localhost")
             return
         }
         
-        print("webSocketDidConnect", handshake, webSocket)
+        Logger.core.info("webSocketDidConnect")
         let data: [String: Any] = [
             "event": "app.ready",
             "data": []
@@ -81,19 +83,19 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     }
     
     func server(_ server: Telegraph.Server, webSocketDidDisconnect webSocket: any Telegraph.WebSocket, error: (any Error)?) {
-        print("webSocketDidDisconnect")
+        Logger.core.info("webSocketDidDisconnect")
     }
     
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didReceiveMessage message: Telegraph.WebSocketMessage) {
-        print("didReceiveMessage")
+        Logger.core.info("didReceiveMessage")
     }
     
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
-        print("didSendMessage")
+        Logger.core.info("didSendMessage")
     }
     
     func serverDidDisconnect(_ server: Telegraph.Server) {
-        print("serverDidDisconnect")
+        Logger.core.info("serverDidDisconnect")
     }
         
     func startServer() {
@@ -104,20 +106,20 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
         
         try! server.start(port: 9234)
         
-        print("[SERVER]", "Server is running - url:")
+        Logger.core.info("[SERVER] Server is running - url:")
     }
 
     func stopServer() {
         if let server = server {
             server.stop()
-            print("[SERVER]", "Server has been stopped")
+            Logger.core.info("[SERVER] Server has been stopped")
         } else {
-            print("[SERVER]", "No server running to stop")
+            Logger.core.info("[SERVER] No server running to stop")
         }
     }
     
     func sendNotificationToBrowsers(message:MessageWithParsedOTP) {
-        print("sendNotificationToBrowsers", message)
+        Logger.core.info("sendNotificationToBrowsers")
 
         for socket in server.webSockets {
             
@@ -137,12 +139,11 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
             if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print(jsonString)
                 socket.send(text: jsonString)
                 
             }
         } catch {
-            print("Failed to encode JSON: \(error.localizedDescription)")
+            Logger.core.error("Failed to encode JSON: \(error.localizedDescription)")
         }
     
     }

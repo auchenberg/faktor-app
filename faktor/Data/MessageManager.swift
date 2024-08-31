@@ -8,6 +8,7 @@
 import Foundation
 import SQLite
 import Defaults
+import OSLog
 
 enum MessageManagerError: Error {
     case generic(message: String)
@@ -100,13 +101,13 @@ class MessageManager: ObservableObject, Identifiable {
                 throw MessageManagerError.permission(message:"Failed to start accessing security scoped resource")
             }
         } catch {
-            print("Error resolving bookmark: \(error)")
+            Logger.core.error("Error resolving bookmark: \(error)")
             return nil;
         }
     }
     
     func startListening() {
-        print("startListening")
+        Logger.core.info("startListening")
         syncMessages()
         
         timer = Timer.scheduledTimer(withTimeInterval: checkTimeInterval, repeats: true) { [weak self] _ in
@@ -141,7 +142,7 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     @objc func syncMessages() {
-        print("syncMessages")
+        Logger.core.info("syncMessages")
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -24, to: Date()) else { return }
         
         do {
@@ -150,7 +151,7 @@ class MessageManager: ObservableObject, Identifiable {
             messages.append(contentsOf: parsedOtps)
 
         } catch let err {
-            print("ERR: \(err)")
+            Logger.core.error("syncMessages.error: \(err)")
         }
     }
     
@@ -170,7 +171,7 @@ class MessageManager: ObservableObject, Identifiable {
                 return (message, parsedOTP)
             }
         } else {
-            print("No messages found or an error occurred.")
+            Logger.core.error("No messages found or an error occurred.")
             return []
         }
     }

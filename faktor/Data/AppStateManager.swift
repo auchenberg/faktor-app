@@ -13,7 +13,7 @@ import UserNotifications
 import UniformTypeIdentifiers
 import Defaults
 import PostHog
-import Logging
+import OSLog
 
 class AppStateManager: ObservableObject, Identifiable {
     
@@ -61,7 +61,7 @@ class AppStateManager: ObservableObject, Identifiable {
         if let url = URL(string: chromeExtensionURL) {
             NSWorkspace.shared.open(url)
         } else {
-            print("Failed to create URL for Chrome Web Store")
+            Logger.core.info("Failed to create URL for Chrome Web Store")
         }
     }
 
@@ -77,7 +77,7 @@ class AppStateManager: ObservableObject, Identifiable {
     
     func startOnboarding() {
         
-        print("startOnboarding")
+        Logger.core.info("startOnboarding")
         self.updateDockIconVisibility(isVisible: true)
         
         
@@ -114,7 +114,7 @@ class AppStateManager: ObservableObject, Identifiable {
             updatePermissionsStatus()
             return .authorized
         } catch {
-            print("Error requesting notification permission: \(error.localizedDescription)")
+            Logger.core.error("Error requesting notification permission: \(error.localizedDescription)")
             updatePermissionsStatus()
             return .notDetermined
         }
@@ -148,7 +148,7 @@ class AppStateManager: ObservableObject, Identifiable {
                     updatePermissionsStatus()
                     return true
                 } catch {
-                    print("Failed to create bookmark: \(error)")
+                    Logger.core.error("Failed to create bookmark: \(error)")
                 }
             }
         }
