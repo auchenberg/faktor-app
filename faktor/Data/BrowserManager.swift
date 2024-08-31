@@ -67,6 +67,11 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
 //    }
 //    
     
+    //    func serverDidDisconnect(_ server: Telegraph.Server) {
+    //        Logger.core.info("serverDidDisconnect")
+    //    }
+    
+    
     func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
         guard handshake.headers["Host"] == "localhost" else {
             Logger.core.info("Connection rejected - not from localhost")
@@ -93,13 +98,8 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
         Logger.core.info("didSendMessage")
     }
-    
-    func serverDidDisconnect(_ server: Telegraph.Server) {
-        Logger.core.info("serverDidDisconnect")
-    }
-        
+            
     func startServer() {
-        
         server = Server()
         server.webSocketDelegate = self
         server.webSocketConfig.pingInterval = 10
@@ -132,7 +132,6 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
             
             sendToSocket(socket: socket, data: data)
         }
-        
     }
     
     func sendToSocket(socket: WebSocket, data: Any) {
@@ -145,9 +144,6 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
         } catch {
             Logger.core.error("Failed to encode JSON: \(error.localizedDescription)")
         }
-    
     }
 
 }
-
-
