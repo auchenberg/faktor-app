@@ -15,16 +15,16 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "d8a954e69ff13b0f7805f3757c8f8d0c8ef5a8cb"
+        "revision" : "4c009d5c2496e7aa126e922c94dd3d6ae049efa2"
       }
     },
     {
-      "identity" : "fulldiskaccess",
+      "identity" : "fluid-menu-bar-extra",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:inket/FullDiskAccess.git",
+      "location" : "https://github.com/lfroms/fluid-menu-bar-extra",
       "state" : {
-        "revision" : "846e04ea2b84fce843f47d7e7f3421189221829c",
-        "version" : "1.0.0"
+        "revision" : "e152a3a1a25aca24906217f8d4d63afbb08d7f97",
+        "version" : "1.1.0"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
       "state" : {
-        "branch" : "main",
-        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc",
+        "version" : "1.1.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios.git",
       "state" : {
-        "revision" : "03cb01e4c3e4c4211d9ef832a56a864e487db830",
-        "version" : "3.5.2"
+        "revision" : "08b53e64abd503ca3e5f0eebd6b89a32fbe33850",
+        "version" : "3.6.1"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
       }
     },
     {

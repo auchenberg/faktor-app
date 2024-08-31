@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		E20005C12C28A31F00DB8615 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = E20005C02C28A31F00DB8615 /* PostHog */; };
 		E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E208F9712C3C2541000ACAE2 /* LaunchAtLogin */; };
-		E208F9742C3C255B000ACAE2 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E208F9732C3C255B000ACAE2 /* SQLite */; };
 		E20BA1C92C0164C90052B8FC /* SQLite.swift in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19B2C0164C90052B8FC /* SQLite.swift */; };
 		E20BA1CA2C0164C90052B8FC /* applypatch-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19D2C0164C90052B8FC /* applypatch-msg.sample */; };
 		E20BA1CB2C0164C90052B8FC /* commit-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19E2C0164C90052B8FC /* commit-msg.sample */; };
@@ -38,11 +37,21 @@
 		E20BA1E22C0164C90052B8FC /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C12C0164C90052B8FC /* AppMenu.swift */; };
 		E20BA1E32C0164C90052B8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C22C0164C90052B8FC /* Assets.xcassets */; };
 		E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* faktorApp.swift */; };
+		E22004EE2C7503C3003B17E1 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004ED2C7503C3003B17E1 /* GeneralView.swift */; };
+		E22004F12C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */; };
+		E22004F52C752A42003B17E1 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F42C752A42003B17E1 /* OnboardingView.swift */; };
+		E22004F72C752AA8003B17E1 /* OnboardingTaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F62C752AA8003B17E1 /* OnboardingTaskList.swift */; };
+		E22004FA2C75303F003B17E1 /* OnboardingItemLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F92C75303F003B17E1 /* OnboardingItemLayout.swift */; };
+		E22004FC2C753064003B17E1 /* DiskAccessOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004FB2C753064003B17E1 /* DiskAccessOnboardingTask.swift */; };
+		E22004FE2C75308A003B17E1 /* OnboardingPopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004FD2C75308A003B17E1 /* OnboardingPopoverContent.swift */; };
+		E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004FF2C7530A5003B17E1 /* OnboardingItemStatusIcon.swift */; };
+		E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */ = {isa = PBXBuildFile; productRef = E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */; };
 		E220407A2C06770000846029 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E22040792C06770000846029 /* Logging */; };
 		E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E220407B2C06BE2300846029 /* BrowserManager.swift */; };
 		E230C0942C1520F900C2BF61 /* testMessages.json in Resources */ = {isa = PBXBuildFile; fileRef = E230C0932C1520F800C2BF61 /* testMessages.json */; };
+		E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */; };
+		E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */; };
 		E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282AA612C03DC660016CDA8 /* NotificationManager.swift */; };
-		E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E299E09D2C026A0900F1BDB5 /* Defaults */; };
 		E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */; };
 		E299E0A92C02719A00F1BDB5 /* CustomOTPParsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */; };
 		E299E0AA2C02719A00F1BDB5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A32C02719A00F1BDB5 /* Extensions.swift */; };
@@ -54,12 +63,15 @@
 		E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */; };
 		E299E0B72C0280A200F1BDB5 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B62C0280A200F1BDB5 /* String.swift */; };
 		E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */; };
+		E29B43B32C7FE87D008FF25F /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29B43B22C7FE87D008FF25F /* PermissionsView.swift */; };
+		E29B43B52C82531F008FF25F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29B43B42C82531F008FF25F /* Logger.swift */; };
+		E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E2B96DA52C749ED200D435D8 /* Defaults */; };
 		E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527C62C39B1D90085ECC7 /* SettingsView.swift */; };
-		E2C527C92C39C2210085ECC7 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527C82C39C2210085ECC7 /* GeneralSettingsView.swift */; };
-		E2C527CB2C39C24A0085ECC7 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CA2C39C24A0085ECC7 /* AboutSettingsView.swift */; };
-		E2C527CD2C39E37E0085ECC7 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CC2C39E37E0085ECC7 /* Main.swift */; };
+		E2C527CB2C39C24A0085ECC7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CA2C39C24A0085ECC7 /* AboutView.swift */; };
 		E2C527CF2C3A00D80085ECC7 /* LogsViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CE2C3A00D80085ECC7 /* LogsViewer.swift */; };
 		E2C527E02C3B4F600085ECC7 /* FaktorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */; };
+		E2DE712C2C419551005D3019 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E2DE712B2C419551005D3019 /* SQLite */; };
+		E2DE712F2C419590005D3019 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E2DE712E2C419590005D3019 /* SQLite */; };
 		E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF8F892C04D3E100AC3652 /* Telegraph */; };
 /* End PBXBuildFile section */
 
@@ -103,9 +115,19 @@
 		E20BA1C22C0164C90052B8FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E20BA1C32C0164C90052B8FC /* faktor.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = faktor.entitlements; sourceTree = "<group>"; };
 		E20BA1C42C0164C90052B8FC /* faktorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = faktorApp.swift; sourceTree = "<group>"; };
+		E22004ED2C7503C3003B17E1 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
+		E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApplication+ShowSettingsWindow.swift"; sourceTree = "<group>"; };
+		E22004F42C752A42003B17E1 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		E22004F62C752AA8003B17E1 /* OnboardingTaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTaskList.swift; sourceTree = "<group>"; };
+		E22004F92C75303F003B17E1 /* OnboardingItemLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItemLayout.swift; sourceTree = "<group>"; };
+		E22004FB2C753064003B17E1 /* DiskAccessOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskAccessOnboardingTask.swift; sourceTree = "<group>"; };
+		E22004FD2C75308A003B17E1 /* OnboardingPopoverContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPopoverContent.swift; sourceTree = "<group>"; };
+		E22004FF2C7530A5003B17E1 /* OnboardingItemStatusIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItemStatusIcon.swift; sourceTree = "<group>"; };
 		E220407B2C06BE2300846029 /* BrowserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserManager.swift; sourceTree = "<group>"; };
 		E22C9B042C01517100D2984D /* Faktor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Faktor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E230C0932C1520F800C2BF61 /* testMessages.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = testMessages.json; sourceTree = "<group>"; };
+		E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserExtensionOnboardingTask.swift; sourceTree = "<group>"; };
+		E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsOnboardingTask.swift; sourceTree = "<group>"; };
 		E282AA612C03DC660016CDA8 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
 		E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParsers.swift; sourceTree = "<group>"; };
@@ -118,10 +140,10 @@
 		E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedOTP.swift; sourceTree = "<group>"; };
 		E299E0B62C0280A200F1BDB5 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
+		E29B43B22C7FE87D008FF25F /* PermissionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		E29B43B42C82531F008FF25F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E2C527C62C39B1D90085ECC7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E2C527C82C39C2210085ECC7 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
-		E2C527CA2C39C24A0085ECC7 /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
-		E2C527CC2C39E37E0085ECC7 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		E2C527CA2C39C24A0085ECC7 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		E2C527CE2C3A00D80085ECC7 /* LogsViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsViewer.swift; sourceTree = "<group>"; };
 		E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaktorTests.swift; sourceTree = SOURCE_ROOT; };
 		E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaktorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,11 +155,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E208F9742C3C255B000ACAE2 /* SQLite in Frameworks */,
+				E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */,
+				E2DE712F2C419590005D3019 /* SQLite in Frameworks */,
 				E220407A2C06770000846029 /* Logging in Frameworks */,
 				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
 				E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */,
-				E299E09E2C026A0900F1BDB5 /* Defaults in Frameworks */,
+				E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */,
 				E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DE712C2C419551005D3019 /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +320,7 @@
 		E20BA1C82C0164C90052B8FC /* Faktor */ = {
 			isa = PBXGroup;
 			children = (
+				E22004EF2C7508EB003B17E1 /* Extensions */,
 				E230C08E2C13A28B00C2BF61 /* UI */,
 				E299E0AF2C0271A100F1BDB5 /* Data */,
 				E299E0B12C0271A100F1BDB5 /* Models */,
@@ -309,6 +334,39 @@
 			);
 			name = Faktor;
 			path = faktor;
+			sourceTree = "<group>";
+		};
+		E22004EC2C7503B2003B17E1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E29B43B22C7FE87D008FF25F /* PermissionsView.swift */,
+				E2C527CA2C39C24A0085ECC7 /* AboutView.swift */,
+				E22004ED2C7503C3003B17E1 /* GeneralView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E22004EF2C7508EB003B17E1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E29B43B42C82531F008FF25F /* Logger.swift */,
+				E299E0A32C02719A00F1BDB5 /* Extensions.swift */,
+				E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E22004F82C752D79003B17E1 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				E233C6B92C77B451006DE68D /* Tasks */,
+				E22004F62C752AA8003B17E1 /* OnboardingTaskList.swift */,
+				E22004F42C752A42003B17E1 /* OnboardingView.swift */,
+				E22004F92C75303F003B17E1 /* OnboardingItemLayout.swift */,
+				E22004FD2C75308A003B17E1 /* OnboardingPopoverContent.swift */,
+				E22004FF2C7530A5003B17E1 /* OnboardingItemStatusIcon.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		E22C9AFB2C01517100D2984D = {
@@ -333,14 +391,23 @@
 		E230C08E2C13A28B00C2BF61 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				E22004F82C752D79003B17E1 /* Onboarding */,
+				E22004EC2C7503B2003B17E1 /* Settings */,
 				E20BA1C12C0164C90052B8FC /* AppMenu.swift */,
 				E2C527C62C39B1D90085ECC7 /* SettingsView.swift */,
-				E2C527C82C39C2210085ECC7 /* GeneralSettingsView.swift */,
-				E2C527CA2C39C24A0085ECC7 /* AboutSettingsView.swift */,
-				E2C527CC2C39E37E0085ECC7 /* Main.swift */,
 				E2C527CE2C3A00D80085ECC7 /* LogsViewer.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		E233C6B92C77B451006DE68D /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				E22004FB2C753064003B17E1 /* DiskAccessOnboardingTask.swift */,
+				E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */,
+				E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */,
+			);
+			path = Tasks;
 			sourceTree = "<group>";
 		};
 		E299E0A72C02719A00F1BDB5 /* OTPParser */ = {
@@ -348,7 +415,6 @@
 			children = (
 				E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */,
 				E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */,
-				E299E0A32C02719A00F1BDB5 /* Extensions.swift */,
 				E299E0A42C02719A00F1BDB5 /* OTPParser.swift */,
 				E299E0A52C02719A00F1BDB5 /* OTPParserConfiguration.swift */,
 				E299E0A62C02719A00F1BDB5 /* OTPParserContants.swift */,
@@ -405,12 +471,13 @@
 			);
 			name = faktor;
 			packageProductDependencies = (
-				E299E09D2C026A0900F1BDB5 /* Defaults */,
 				E2EF8F892C04D3E100AC3652 /* Telegraph */,
 				E22040792C06770000846029 /* Logging */,
 				E20005C02C28A31F00DB8615 /* PostHog */,
 				E208F9712C3C2541000ACAE2 /* LaunchAtLogin */,
-				E208F9732C3C255B000ACAE2 /* SQLite */,
+				E2DE712E2C419590005D3019 /* SQLite */,
+				E2B96DA52C749ED200D435D8 /* Defaults */,
+				E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
@@ -430,6 +497,9 @@
 				E2C527DC2C3B4F550085ECC7 /* PBXTargetDependency */,
 			);
 			name = FaktorTests;
+			packageProductDependencies = (
+				E2DE712B2C419551005D3019 /* SQLite */,
+			);
 			productName = FaktorTests;
 			productReference = E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -463,13 +533,13 @@
 			);
 			mainGroup = E22C9AFB2C01517100D2984D;
 			packageReferences = (
-				E299E0962C0232D500F1BDB5 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
-				E299E09C2C026A0900F1BDB5 /* XCRemoteSwiftPackageReference "Defaults" */,
 				E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */,
-				E22166A12C0657CA00D9FCF7 /* XCRemoteSwiftPackageReference "FullDiskAccess" */,
 				E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */,
 				E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+				E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */,
+				E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */,
+				E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
@@ -530,26 +600,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */,
 				E299E0AD2C02719A00F1BDB5 /* OTPParserContants.swift in Sources */,
 				E299E0AB2C02719A00F1BDB5 /* OTPParser.swift in Sources */,
 				E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */,
 				E299E0AA2C02719A00F1BDB5 /* Extensions.swift in Sources */,
 				E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */,
 				E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */,
+				E22004F72C752AA8003B17E1 /* OnboardingTaskList.swift in Sources */,
+				E22004F12C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift in Sources */,
 				E299E0B72C0280A200F1BDB5 /* String.swift in Sources */,
 				E20BA1E22C0164C90052B8FC /* AppMenu.swift in Sources */,
 				E299E0B22C0271A100F1BDB5 /* MessageManager.swift in Sources */,
-				E2C527CB2C39C24A0085ECC7 /* AboutSettingsView.swift in Sources */,
+				E2C527CB2C39C24A0085ECC7 /* AboutView.swift in Sources */,
+				E22004FE2C75308A003B17E1 /* OnboardingPopoverContent.swift in Sources */,
+				E22004EE2C7503C3003B17E1 /* GeneralView.swift in Sources */,
 				E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */,
-				E2C527C92C39C2210085ECC7 /* GeneralSettingsView.swift in Sources */,
-				E2C527CD2C39E37E0085ECC7 /* Main.swift in Sources */,
+				E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */,
 				E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */,
 				E2C527CF2C3A00D80085ECC7 /* LogsViewer.swift in Sources */,
 				E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */,
 				E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */,
 				E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */,
+				E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */,
+				E29B43B32C7FE87D008FF25F /* PermissionsView.swift in Sources */,
 				E299E0A92C02719A00F1BDB5 /* CustomOTPParsers.swift in Sources */,
+				E29B43B52C82531F008FF25F /* Logger.swift in Sources */,
+				E22004FC2C753064003B17E1 /* DiskAccessOnboardingTask.swift in Sources */,
+				E22004FA2C75303F003B17E1 /* OnboardingItemLayout.swift in Sources */,
 				E299E0B32C0271A100F1BDB5 /* Message.swift in Sources */,
+				E22004F52C752A42003B17E1 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,6 +790,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = faktor/faktor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -874,6 +955,14 @@
 				minimumVersion = 3.5.2;
 			};
 		};
+		E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lfroms/fluid-menu-bar-extra";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 		E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-log.git";
@@ -882,36 +971,28 @@
 				minimumVersion = 1.5.4;
 			};
 		};
-		E22166A12C0657CA00D9FCF7 /* XCRemoteSwiftPackageReference "FullDiskAccess" */ = {
+		E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:inket/FullDiskAccess.git";
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
 			};
 		};
-		E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		E299E0962C0232D500F1BDB5 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.15.3;
-			};
-		};
-		E299E09C2C026A0900F1BDB5 /* XCRemoteSwiftPackageReference "Defaults" */ = {
+		E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
 			requirement = {
 				branch = main;
 				kind = branch;
+			};
+		};
+		E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.15.3;
 			};
 		};
 		E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */ = {
@@ -935,24 +1016,33 @@
 			package = E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
 			productName = LaunchAtLogin;
 		};
-		E208F9732C3C255B000ACAE2 /* SQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E299E0962C0232D500F1BDB5 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
-			productName = SQLite;
-		};
 		E20BA1E82C0165D80052B8FC /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SQLite;
+		};
+		E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */;
+			productName = FluidMenuBarExtra;
 		};
 		E22040792C06770000846029 /* Logging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
 		};
-		E299E09D2C026A0900F1BDB5 /* Defaults */ = {
+		E2B96DA52C749ED200D435D8 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E299E09C2C026A0900F1BDB5 /* XCRemoteSwiftPackageReference "Defaults" */;
+			package = E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		E2DE712B2C419551005D3019 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SQLite;
+		};
+		E2DE712E2C419590005D3019 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLite;
 		};
 		E2EF8F892C04D3E100AC3652 /* Telegraph */ = {
 			isa = XCSwiftPackageProductDependency;
