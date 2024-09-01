@@ -18,24 +18,29 @@ import OSLog
 class AppStateManager: ObservableObject, Identifiable {
     
     @Published private(set) var hasAllRequiredPermissions: Bool = false
+    @Published private(set) var isOnboardingRunning: Bool = false
     
     private var onboardingWindow: NSWindow?
+    private var permissionCheckTimer: Timer?
             
     init() {
+        Logger.core.info("init")
         updatePermissionsStatus()
     }
     
     private func updatePermissionsStatus() {
+        Logger.core.info("updatePermissionsStatus")
         hasAllRequiredPermissions = hasRequiredPermissions()
     }
             
     func hasRequiredPermissions() -> Bool {
+        Logger.core.info("hasRequiredPermissions")
         let result = hasLibraryAccessPermissions() && hasNotificationPermissions()
         return result
     }
 
     func hasLibraryAccessPermissions() -> Bool {
-        
+        Logger.core.info("hasLibraryAccessPermissions")
         if Defaults[.libraryFolderBookmark] == nil {
             return false
         }
@@ -43,6 +48,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func hasNotificationPermissions() -> Bool {
+        Logger.core.info("hasNotificationPermissions")
         var hasPermission = false
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -56,6 +62,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
 
     func installBrowserExtension() {
+        Logger.core.info("installBrowserExtension")
         let chromeExtensionURL = "https://chrome.google.com/webstore/detail/faktor/lnbhbpdjedbjplopnkkimjenlhneekoc"
         
         if let url = URL(string: chromeExtensionURL) {
@@ -66,23 +73,25 @@ class AppStateManager: ObservableObject, Identifiable {
     }
 
     func markOnboardingAsCompleted() {
+        Logger.core.info("markOnboardingAsCompleted")
         closeOnboardingWindow()
         
         self.updateDockIconVisibility(isVisible: false)
 
-        // Update settings
-//        logger.info("Onboarding marked as completed")
         PostHogSDK.shared.capture("onboarding_completed")
     }
     
     func startOnboarding() {
-        
         Logger.core.info("startOnboarding")
+        isOnboardingRunning = true
+
         self.updateDockIconVisibility(isVisible: true)
-        
+
+        startPermissionCheck()
         
         if let existingWindow = onboardingWindow {
             existingWindow.makeKeyAndOrderFront(nil)
+            existingWindow.orderFrontRegardless()
         } else {
             let newOnboardingWindow = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 800, height: 650),
@@ -97,14 +106,22 @@ class AppStateManager: ObservableObject, Identifiable {
                     .environmentObject(self)
             )
             newOnboardingWindow.makeKeyAndOrderFront(nil)
+            newOnboardingWindow.orderFrontRegardless()
+            
             newOnboardingWindow.isReleasedWhenClosed = false
+            // newOnboardingWindow.level = .floating
             onboardingWindow = newOnboardingWindow
         }
+        
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     func closeOnboardingWindow() {
+        Logger.core.info("closeOnboardingWindow")
         onboardingWindow?.close()
         onboardingWindow = nil
+        isOnboardingRunning = false
+        stopPermissionCheck()
     }
     
     @MainActor
@@ -121,6 +138,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func requestLibraryFolderAccess() -> Bool {
+        Logger.core.info("requestLibraryFolderAccess")
         var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
         homeDirectory.appendPathComponent("/Library")
         
@@ -158,6 +176,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func resetStateAndQuit() {
+        Logger.core.info("resetStateAndQuit")
         Defaults.reset(.libraryFolderBookmark);
         Defaults.reset(.settingShowNotifications);
         Defaults.reset(.settingsShowInDock)
@@ -165,7 +184,6 @@ class AppStateManager: ObservableObject, Identifiable {
         
         NSApplication.shared.terminate(nil)
     }
-    
     
     func isDevelopmentMode() -> Bool {
         #if DEBUG
@@ -178,8 +196,27 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func updateDockIconVisibility(isVisible: Bool = false) {
+        Logger.core.info("updateDockIconVisibility: \(isVisible)")
         NSApp.setActivationPolicy(isVisible ? .regular : .accessory)
     }
 
+    private func startPermissionCheck() {
+        Logger.core.info("startPermissionCheck")
+        permissionCheckTimer?.invalidate()
+        permissionCheckTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+            self?.checkPermissions()
+        }
+    }
+    
+    private func stopPermissionCheck() {
+        Logger.core.info("stopPermissionCheck")
+        permissionCheckTimer?.invalidate()
+        permissionCheckTimer = nil
+    }
+    
+    private func checkPermissions() {
+        Logger.core.info("checkPermissions")
+        updatePermissionsStatus()
+    }
 }
 

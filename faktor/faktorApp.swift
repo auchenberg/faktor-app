@@ -31,13 +31,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillFinishLaunching(_ notification: Notification) {
         appStateManager.updateDockIconVisibility(isVisible: settingsShowIndock)
-        
-        // Set up observer for settings changes
-        Task {
-            for await value in Defaults.updates(.settingsShowInDock) {
-                appStateManager.updateDockIconVisibility(isVisible: value)
-            }
-        }
      }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -52,9 +45,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Permissions
         appStateManager.$hasAllRequiredPermissions
+            .removeDuplicates()
             .sink { hasPermissions in
+                Logger.core.info("permission.monitor: \(hasPermissions)")
                 if hasPermissions {
-                    Logger.core.info("Permissions have been granted.")
+                    
+                    // Let's go!
+                    Logger.core.info("permissions.granted.")
                     self.messageManager.startListening()
                     self.browserManager.startServer()
                     
@@ -67,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                     
                 } else {
-                    Logger.core.info("Permissions are missing.")
+                    Logger.core.info("permissions.missing.")
                     self.appStateManager.startOnboarding()
                 }
             }
@@ -82,7 +79,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
 }
-
 
 @main
 struct faktorApp: App {
