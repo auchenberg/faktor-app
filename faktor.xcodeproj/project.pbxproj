@@ -65,6 +65,7 @@
 		E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */; };
 		E29B43B32C7FE87D008FF25F /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29B43B22C7FE87D008FF25F /* PermissionsView.swift */; };
 		E29B43B52C82531F008FF25F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29B43B42C82531F008FF25F /* Logger.swift */; };
+		E29B43B82C865BD6008FF25F /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E29B43B72C865BD6008FF25F /* SettingsAccess */; };
 		E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = E2B96DA52C749ED200D435D8 /* Defaults */; };
 		E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527C62C39B1D90085ECC7 /* SettingsView.swift */; };
 		E2C527CB2C39C24A0085ECC7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527CA2C39C24A0085ECC7 /* AboutView.swift */; };
@@ -156,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */,
+				E29B43B82C865BD6008FF25F /* SettingsAccess in Frameworks */,
 				E2DE712F2C419590005D3019 /* SQLite in Frameworks */,
 				E220407A2C06770000846029 /* Logging in Frameworks */,
 				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
@@ -478,6 +480,7 @@
 				E2DE712E2C419590005D3019 /* SQLite */,
 				E2B96DA52C749ED200D435D8 /* Defaults */,
 				E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */,
+				E29B43B72C865BD6008FF25F /* SettingsAccess */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
@@ -540,6 +543,7 @@
 				E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */,
 				E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */,
 				E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */,
+				E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
@@ -979,6 +983,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/SettingsAccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -1029,6 +1041,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
+		};
+		E29B43B72C865BD6008FF25F /* SettingsAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */;
+			productName = SettingsAccess;
 		};
 		E2B96DA52C749ED200D435D8 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
