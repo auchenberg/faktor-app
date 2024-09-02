@@ -3,7 +3,6 @@ import LaunchAtLogin
 import Defaults
 
 struct GeneralSettingsView: View {
-    @Default(.settingsShowInDock) var showInDock
     @Default(.settingShowNotifications) var showNotifications
     @Default(.settingsEnableBrowserIntegration) var enableBrowserIntegration
     @EnvironmentObject var appStateManager: AppStateManager
@@ -14,14 +13,6 @@ struct GeneralSettingsView: View {
             Section("Application") {
                 LaunchAtLogin.Toggle("Launch on login")
                 .controlSize(.large)
-                
-                Toggle(isOn: $showInDock) {
-                    Text("Show in Dock")
-                }
-                .controlSize(.large)
-                .onChange(of: showInDock) { newValue in
-                    Defaults[.settingsShowInDock] = newValue
-                }
             
             }
             Section("Notifications") {

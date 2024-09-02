@@ -9,14 +9,12 @@ import OSLog
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
-    static let settingsShowInDock = Key<Bool>("showInDock", default: false)
     static let libraryFolderBookmark = Key<Data?>("libraryFolderBookmark")
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
     @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
-    @Default(.settingsShowInDock) var settingsShowIndock
     var messageManager = MessageManager()
     var appStateManager = AppStateManager()
     var notificationManager: NotificationManager
@@ -28,11 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         browserManager = BrowserManager(messageManager: messageManager)
         super.init()
     }
-    
-    func applicationWillFinishLaunching(_ notification: Notification) {
-        appStateManager.updateDockIconVisibility(isVisible: settingsShowIndock)
-     }
-    
+        
     func applicationDidFinishLaunching(_ notification: Notification) {
         
         // Analytics
@@ -54,14 +48,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     Logger.core.info("permissions.granted.")
                     self.messageManager.startListening()
                     self.browserManager.startServer()
-                    
-                    // Set up observer for settings changes
-                    Task {
-                        for await value in Defaults.updates(.settingsShowInDock) {
-                            Logger.core.info("updateDockIconVisibility.update")
-                            self.appStateManager.updateDockIconVisibility(isVisible: value)
-                        }
-                    }
+                                    
                     
                 } else {
                     Logger.core.info("permissions.missing.")
