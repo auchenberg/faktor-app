@@ -64,6 +64,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        // See https://www.hackingwithswift.com/forums/macos/how-to-open-settings-from-menu-bar-app-and-show-app-icon-in-dock/26267
+        NSApp.setActivationPolicy(.accessory)
+        NSApp.deactivate()
+        return false
+    }
 
 }
 
@@ -75,6 +82,11 @@ struct faktorApp: App {
         Settings {
             SettingsView()
                 .environmentObject(appDelegate.appStateManager)
+                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeMainNotification)) { newValue in
+                    NSApp.activate(ignoringOtherApps: true)
+                    NSApp.setActivationPolicy(.regular)
+                    NSApp.windows.first?.orderFrontRegardless()
+                }
         }
         MenuBarExtra {
             AppMenu(messageManager: appDelegate.messageManager,

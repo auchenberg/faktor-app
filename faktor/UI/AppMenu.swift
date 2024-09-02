@@ -11,6 +11,7 @@ import Foundation
 import LaunchAtLogin
 import Defaults
 import PostHog
+import SettingsAccess
 
 struct AppMenu: View {
     
@@ -54,23 +55,19 @@ struct AppMenu: View {
         
         Divider()
         
-        if #available(macOS 14, *) {
-            SettingsLink {
-                Text("Settings…")
-            }
-            .keyboardShortcut(",")
-        } else {
-            Button("Settings…") {
-                NSApp.showSettingsWindow()
-            }.keyboardShortcut(",")
+        SettingsLink {
+          Text("Settings")
+                .keyboardShortcut(",")
+        } preAction: {
+            NSApp.activate(ignoringOtherApps: true)
+        } postAction: {
+            NSApp.activate(ignoringOtherApps: true)
         }
         
         Divider()
         
-        
         Button("Faktor v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")") {
         }.disabled(true)
-        
         
         Divider()
         

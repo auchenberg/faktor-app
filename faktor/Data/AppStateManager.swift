@@ -74,8 +74,8 @@ class AppStateManager: ObservableObject, Identifiable {
 
     func markOnboardingAsCompleted() {
         Logger.core.info("markOnboardingAsCompleted")
-        closeOnboardingWindow()
         
+        self.closeOnboardingWindow()
         self.updateDockIconVisibility(isVisible: false)
 
         PostHogSDK.shared.capture("onboarding_completed")
@@ -90,8 +90,9 @@ class AppStateManager: ObservableObject, Identifiable {
         startPermissionCheck()
         
         if let existingWindow = onboardingWindow {
-            existingWindow.makeKeyAndOrderFront(nil)
             existingWindow.orderFrontRegardless()
+            existingWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
         } else {
             let newOnboardingWindow = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 800, height: 650),
@@ -179,7 +180,6 @@ class AppStateManager: ObservableObject, Identifiable {
         Logger.core.info("resetStateAndQuit")
         Defaults.reset(.libraryFolderBookmark);
         Defaults.reset(.settingShowNotifications);
-        Defaults.reset(.settingsShowInDock)
         Defaults.reset(.settingsEnableBrowserIntegration)
         
         NSApplication.shared.terminate(nil)
@@ -202,9 +202,10 @@ class AppStateManager: ObservableObject, Identifiable {
 
     private func startPermissionCheck() {
         Logger.core.info("startPermissionCheck")
-        permissionCheckTimer?.invalidate()
-        permissionCheckTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
-            self?.checkPermissions()
+        if permissionCheckTimer == nil {
+            permissionCheckTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+                self?.checkPermissions()
+            }
         }
     }
     
