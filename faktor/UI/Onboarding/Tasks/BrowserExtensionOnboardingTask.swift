@@ -57,7 +57,7 @@ struct BrowserExtensionOnboardingTask: View {
             
             // Path to extensions directory
             guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
-                Logger.core.error("No bookmark data found")
+                Logger.core.error("browserExtensionOnboardingTask.error: No bookmark data found")
                 return false
             }
             
@@ -65,7 +65,7 @@ struct BrowserExtensionOnboardingTask: View {
             var libraryPath = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
             
             if bookmarkDataIsStale {
-                Logger.core.error("Bookmark data is stale")
+                Logger.core.error("browserExtensionOnboardingTask.error: Bookmark data is stale")
             }
             
             if libraryPath.startAccessingSecurityScopedResource() {
@@ -92,7 +92,7 @@ struct BrowserExtensionOnboardingTask: View {
                 }
             }
         } catch {
-            Logger.core.error("Error checking for browser extensions: \(error)")
+            Logger.core.error("browserExtensionOnboardingTask.error: Error checking for browser extensions: \(error)")
         }
         return false
     }
