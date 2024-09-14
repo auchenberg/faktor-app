@@ -72,7 +72,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         if let messageID = userInfo["messageID"] as? String {
             if let message = messageManager.messages.first(where: { $0.0.guid == messageID }) {
                 Logger.core.info("User tapped on notification with message ID: \(messageID)")
-                message.1.copyToClipboard()
+                messageManager.copyOTPToClipboard(message: message)
             }
         }
         completionHandler()

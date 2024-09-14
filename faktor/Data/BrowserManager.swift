@@ -36,7 +36,8 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
                     if newMessage != latestMessage {
                         if self.settingsEnableBrowserIntegration {
                             // Send message to web server
-                            sendNotificationToBrowsers(message:newMessage)
+                            sendNotificationToBrowsers(message: newMessage)
+                            try! messageManager.markMessageAsRead(message: newMessage)
                         }
                     }
                 }

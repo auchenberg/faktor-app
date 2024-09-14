@@ -8,12 +8,14 @@
 import Foundation
 import SQLite
 
-struct Message: Equatable {
+struct Message: Equatable, Identifiable {
+    let id = UUID()
     let guid: String
     let text: String
     let handle: String
     let group: String?
     let fromMe: Bool
+    var isRead: Bool
 }
 
 typealias MessageWithParsedOTP = (Message, ParsedOTP)

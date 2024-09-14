@@ -21,8 +21,9 @@ struct AppMenu: View {
     
     func onCodeClicked(message: MessageWithParsedOTP) {
         PostHogSDK.shared.capture("faktor.copyToClipboard")
-        message.1.copyToClipboard()
-        browserManager.sendNotificationToBrowsers(message: message)
+        try! browserManager.sendNotificationToBrowsers(message: message)
+        try! messageManager.copyOTPToClipboard(message: message)
+        try! messageManager.markMessageAsRead(message: message)
     }
     
     var body: some View {

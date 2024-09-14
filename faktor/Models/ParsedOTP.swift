@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AppKit
 
 public struct ParsedOTP {
     public init(service: String?, code: String) {
@@ -16,15 +15,6 @@ public struct ParsedOTP {
     
     public let service: String?
     public let code: String
-    
-    func copyToClipboard() -> String?  {
-        let originalContents = NSPasteboard.general.string(forType: .string)
-        
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(code, forType: .string)
-        
-        return originalContents;
-    }
 }
 
 extension ParsedOTP: Equatable {
