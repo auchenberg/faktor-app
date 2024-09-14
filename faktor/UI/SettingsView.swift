@@ -10,6 +10,7 @@ import SwiftUI
 enum SettingsTab: Int {
     case general = 0
     case permissions = 1
+    case logs = 2
     case about = 3
 }
 
@@ -31,6 +32,11 @@ struct SettingsView: View {
                 }
                 .tag(SettingsTab.permissions)
                 .environmentObject(appStateManager)
+            LogsView()
+                .tabItem {
+                    Label("Logs", systemImage: "doc.text")
+                }
+                .tag(SettingsTab.logs)
             AboutSettingsView()
                 .tabItem {
                     Label("About", systemImage: "info.circle")
