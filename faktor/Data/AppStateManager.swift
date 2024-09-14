@@ -41,10 +41,44 @@ class AppStateManager: ObservableObject, Identifiable {
 
     func hasLibraryAccessPermissions() -> Bool {
         Logger.core.info("appStateManager.hasLibraryAccessPermissions")
-        if Defaults[.libraryFolderBookmark] == nil {
+
+        guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
+            Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: No bookmark data found")
             return false
         }
-        return true;
+        
+        do {
+            var bookmarkDataIsStale = false
+            let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+            
+            if bookmarkDataIsStale {
+                Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: Bookmark data is stale. Resetting bookmark.")
+                Defaults.reset(.libraryFolderBookmark)
+                return false
+            }
+            
+            let dbUrl = url.appendingPathComponent("Messages/chat.db")
+            
+            if url.startAccessingSecurityScopedResource() {
+                defer { url.stopAccessingSecurityScopedResource() }
+                
+                let fileExists = FileManager.default.fileExists(atPath: dbUrl.path)
+                
+                if fileExists {
+                    Logger.core.info("appStateManager.hasLibraryAccessPermissions.success: Access granted")
+                } else {
+                    Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: Database not found: path=\(dbUrl.path)")
+                }
+                
+                return fileExists
+            } else {
+                Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: Failed to access security scoped resource: path=\(dbUrl.path)")
+                return false
+            }
+        } catch {
+            Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: \(error.localizedDescription)")
+            return false
+        }
     }
     
     func hasNotificationPermissions() -> Bool {
