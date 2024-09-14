@@ -9,6 +9,7 @@ import Foundation
 import SQLite
 import Defaults
 import OSLog
+import AppKit 
 
 enum MessageManagerError: Error {
     case generic(message: String)
@@ -40,69 +41,45 @@ class MessageManager: ObservableObject, Identifiable {
         
         return appleOffsetForDate
     }
-        
+
     private func loadMessagesAfterDate(_ date: Date) throws -> [Message]? {
-        
-        do {
-            guard let bookmarkData =  Defaults[.libraryFolderBookmark]  else {
-                throw MessageManagerError.permission(message: "No bookmark data found")
-            }
-                    
-            var bookmarkDataIsStale = false
-            var url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
-                        
-            if bookmarkDataIsStale {
-                throw MessageManagerError.permission(message: "Bookmark data is stale")
+        return try performDatabaseOperation { db in
+            let textColumn = Expression<String?>("text")
+            let guidColumn = Expression<String>("guid")
+            let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
+            let fromMeColumn = Expression<Bool>("is_from_me")
+            let dateColumn = Expression<Int>("date")
+            let serviceColumn = Expression<String>("service")
+            let isReadColumn = Expression<Bool>("is_read")
+            
+            let ROWID = Expression<Int>("ROWID")
+
+            let handleTable = Table("handle")
+            let handleFrom = handleTable[Expression<String?>("id")]
+            let messageTable = Table("message")
+            let messageHandleId = messageTable[Expression<Int>("handle_id")]
+            
+            let query = messageTable
+                .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], messageTable[isReadColumn], handleFrom, messageTable[serviceColumn])
+                .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
+                .where(messageTable[dateColumn] > self.timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
+                .order(messageTable[dateColumn].asc)
+
+            let mapRowIterator = try db.prepareRowIterator(query)
+            let messages = try mapRowIterator.map { messageRow -> Message? in
+                guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
+                
+                return Message(
+                    guid: messageRow[guidColumn],
+                    text: text,
+                    handle: handle,
+                    group: messageRow[cacheRoomnamesColumn],
+                    fromMe: messageRow[fromMeColumn],
+                    isRead: messageRow[isReadColumn]
+                )
             }
             
-            if url.startAccessingSecurityScopedResource() {
-                // Build path for databsse
-                url.appendPathComponent("/Messages/chat.db")
-                
-                let db = try Connection(url.absoluteString)
-                
-                let textColumn = Expression<String?>("text")
-                let guidColumn = Expression<String>("guid")
-                let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
-                let fromMeColumn = Expression<Bool>("is_from_me")
-                let dateColumn = Expression<Int>("date")
-                let serviceColumn = Expression<String>("service")
-                
-                let ROWID = Expression<Int>("ROWID")
-
-                let handleTable = Table("handle")
-                let handleFrom = handleTable[Expression<String?>("id")]
-                let messageTable = Table("message")
-                let messageHandleId = messageTable[Expression<Int>("handle_id")]
-                
-                let query = messageTable
-                    .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
-                    .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-                    .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
-                    .order(messageTable[dateColumn].asc)
-
-                let mapRowIterator = try db.prepareRowIterator(query)
-                let messages = try mapRowIterator.map { messageRow -> Message? in
-                    guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
-                    
-                    return Message(
-                        guid: messageRow[guidColumn],
-                        text: text,
-                        handle: handle,
-                        group: messageRow[cacheRoomnamesColumn],
-                        fromMe: messageRow[fromMeColumn])
-                }
-                
-                // After you're done, don't forget to stop accessing the resource
-                url.stopAccessingSecurityScopedResource()
-                
-                return messages.compactMap { $0 }
-            } else {
-                throw MessageManagerError.permission(message:"Failed to start accessing security scoped resource")
-            }
-        } catch {
-            Logger.core.error("Error resolving bookmark: \(error)")
-            return nil;
+            return messages.compactMap { $0 }
         }
     }
     
@@ -135,14 +112,15 @@ class MessageManager: ObservableObject, Identifiable {
             text: "Your code is \(Int.random(in: 1000...9999)) from Auchenberg Bank",
             handle: "random",
             group: nil, 
-            fromMe: false
+            fromMe: false,
+            isRead: false
         )
 
         messages.append((randomMessage , ParsedOTP(service: "Auchenberg Bank", code: "\(Int.random(in: 1000...9999))")))
     }
     
     @objc func syncMessages() {
-        Logger.core.info("syncMessages")
+        Logger.core.info("messageManager.syncMessages")
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -24, to: Date()) else { return }
         
         do {
@@ -151,7 +129,7 @@ class MessageManager: ObservableObject, Identifiable {
             messages.append(contentsOf: parsedOtps)
 
         } catch let err {
-            Logger.core.error("syncMessages.error: \(err)")
+            Logger.core.error("messageManager.syncMessages.error: \(err)")
         }
     }
     
@@ -171,7 +149,7 @@ class MessageManager: ObservableObject, Identifiable {
                 return (message, parsedOTP)
             }
         } else {
-            Logger.core.error("No messages found or an error occurred.")
+            Logger.core.error("messageManager.findPossibleOTPMessagesAfterDate.error: No messages found or an error occurred.")
             return []
         }
     }
@@ -185,6 +163,66 @@ class MessageManager: ObservableObject, Identifiable {
             messageBody.contains("₹") ||
             messageBody.contains("¥")
         )
+    }
+    
+    private func performDatabaseOperation<T>(_ operation: (Connection) throws -> T) throws -> T {
+
+        Logger.core.info("messageManager.performDatabaseOperation")
+        
+        guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
+            Logger.core.error("messageManager.performDatabaseOperation.error: No bookmark data found")
+            throw MessageManagerError.permission(message: "No bookmark data found")
+        }
+        
+        var bookmarkDataIsStale = false
+        let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+        
+        if bookmarkDataIsStale {
+            Logger.core.error("messageManager.performDatabaseOperation.error: Bookmark data is stale")
+            throw MessageManagerError.permission(message: "Bookmark data is stale")
+        }
+        
+        if url.startAccessingSecurityScopedResource() {
+            defer {
+                url.stopAccessingSecurityScopedResource()
+            }
+            
+            let dbUrl = url.appendingPathComponent("/Messages/chat.db")
+            let db = try Connection(dbUrl.absoluteString)
+            
+            Logger.core.info("messageManager.performDatabaseOperation.success")
+            return try operation(db)
+        } else {
+            Logger.core.error("messageManager.performDatabaseOperation.error: Failed to start accessing security scoped resource")
+            throw MessageManagerError.permission(message: "Failed to start accessing security scoped resource")
+        }
+    }
+
+    func markMessageAsRead(message: MessageWithParsedOTP) throws {
+//        try performDatabaseOperation { db in
+//            let messageTable = Table("message")
+//            let guidColumn = Expression<String>("guid")
+//            let isReadColumn = Expression<Bool>("is_read")
+//
+//            let guid = message.0.guid
+//            
+//            let updateStatement = messageTable.filter(guidColumn == guid).update(isReadColumn <- true)
+//            try db.run(updateStatement)
+//            
+//            // Update the local messages array
+//            if let index = self.messages.firstIndex(where: { $0.0.guid == guid }) {
+//                self.messages[index].0.isRead = true
+//            }
+//            
+//            Logger.core.info("Message with GUID \(guid) marked as read")
+//        }
+    }
+    
+    func copyOTPToClipboard(message: MessageWithParsedOTP) {
+        let originalContents = NSPasteboard.general.string(forType: .string)
+        
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(message.1.code, forType: .string)
     }
 }
 
