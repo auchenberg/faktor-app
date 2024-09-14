@@ -84,7 +84,7 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     func startListening() {
-        Logger.core.info("startListening")
+        Logger.core.info("messageManager.startListening")
         syncMessages()
         
         timer = Timer.scheduledTimer(withTimeInterval: checkTimeInterval, repeats: true) { [weak self] _ in
@@ -166,7 +166,6 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     private func performDatabaseOperation<T>(_ operation: (Connection) throws -> T) throws -> T {
-
         Logger.core.info("messageManager.performDatabaseOperation")
         
         guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
@@ -219,8 +218,6 @@ class MessageManager: ObservableObject, Identifiable {
     }
     
     func copyOTPToClipboard(message: MessageWithParsedOTP) {
-        let originalContents = NSPasteboard.general.string(forType: .string)
-        
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(message.1.code, forType: .string)
     }

@@ -44,35 +44,35 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     }
     
     private func showNotification(for message: MessageWithParsedOTP) {
-        Logger.core.info("Show notification to the user. \(message.0.guid)")
+        Logger.core.info("NotificationManager.showNotification.messageID: \(message.0.guid)")
                 
-        let content = UNMutableNotificationContent()
+        let content: UNMutableNotificationContent = UNMutableNotificationContent()
         content.title = "New authentication code received"
         content.body = message.1.code
         content.sound = .default
         content.userInfo = ["messageID": message.0.guid] 
 
         // Create a trigger to show the notification immediately
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let trigger: UNTimeIntervalNotificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         
         // Create a request with a unique identifier
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let request: UNNotificationRequest = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
         // Add the notification request to the notification center
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                Logger.core.error("Error showing notification: \(error.localizedDescription)")
+                Logger.core.error("NotificationManager.showNotification.error: \(error.localizedDescription)")
             }
         }
     }
         
     // Handle notification interactions
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
-        if let messageID = userInfo["messageID"] as? String {
+        let userInfo: [AnyHashable : Any] = response.notification.request.content.userInfo
+        if let messageID: String = userInfo["messageID"] as? String {
             if let message = messageManager.messages.first(where: { $0.0.guid == messageID }) {
-                Logger.core.info("User tapped on notification with message ID: \(messageID)")
-                messageManager.copyOTPToClipboard(message: message)
+                Logger.core.info("NotificationManager.userNotificationCenter.didReceive.messageID: \(messageID)")
+                try! messageManager.copyOTPToClipboard(message: message)
             }
         }
         completionHandler()

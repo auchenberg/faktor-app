@@ -45,7 +45,86 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
             self.latestMessage = messages.last
         }
     }
+        
+    func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
+        guard handshake.headers["Host"] == "localhost" else {
+            Logger.core.info("browserManager.webSocketDidConnect.error: Connection rejected - not from localhost")
+            return
+        }
+        
+        Logger.core.info("browserManager.webSocketDidConnect")
+        let data: [String: Any] = [
+            "event": "app.ready",
+            "data": []
+        ]
+        
+        sendToSocket(socket: webSocket, data: data)
+    }
     
+    func server(_ server: Telegraph.Server, webSocketDidDisconnect webSocket: any Telegraph.WebSocket, error: (any Error)?) {
+        Logger.core.info("browserManager.webSocketDidDisconnect")
+    }
+    
+    func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didReceiveMessage message: Telegraph.WebSocketMessage) {
+        Logger.core.info("browserManager.didReceiveMessage")
+    }
+    
+    func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
+        Logger.core.info("browserManager.didSendMessage")
+    }
+            
+    func startServer() {
+        Logger.core.info("browserManager.startServer")
+        server = Server()
+        server.webSocketDelegate = self
+        server.webSocketConfig.pingInterval = 10
+        
+        do {
+            try server.start(port: 9234)
+            Logger.core.info("browserManager.startServer.success, port=9234")
+        } catch {
+            Logger.core.error("browserManager.startServer.error: Failed to start server - \(error.localizedDescription)")
+        }
+    }
+
+    func stopServer() {
+        if let server = server {
+            server.stop()
+            Logger.core.info("browserManager.stopServer.success")
+        } else {
+            Logger.core.info("browserManager.stopServer.error: No server running to stop")
+        }
+    }
+    
+    func sendNotificationToBrowsers(message:MessageWithParsedOTP) {
+        Logger.core.info("browserManager.sendNotificationToBrowsers")
+
+        for socket in server.webSockets {
+            
+            let data: [String: Any] = [
+                "event": "code.received",
+                "data": [
+                    "code": message.1.code
+                ]
+            ]
+            
+            sendToSocket(socket: socket, data: data)
+        }
+    }
+    
+    func sendToSocket(socket: WebSocket, data: Any) {
+        Logger.core.info("browserManager.sendToSocket")
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                socket.send(text: jsonString)
+                Logger.core.info("browserManager.sendToSocket.success")
+            }
+        } catch {
+            Logger.core.error("browserManager.sendToSocket.error: Failed to encode JSON: \(error.localizedDescription)")
+        }
+    }
+
     /// Raised when the web socket client has connected to the server.
 //    public func webSocketClient(_ client: WebSocketClient, didConnectToHost host: String) {
 //      Logger.core.info("[CLIENT]", "WebSocket connected - host=", host)
@@ -71,80 +150,6 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     //    func serverDidDisconnect(_ server: Telegraph.Server) {
     //        Logger.core.info("serverDidDisconnect")
     //    }
-    
-    
-    func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
-        guard handshake.headers["Host"] == "localhost" else {
-            Logger.core.info("Connection rejected - not from localhost")
-            return
-        }
         
-        Logger.core.info("webSocketDidConnect")
-        let data: [String: Any] = [
-            "event": "app.ready",
-            "data": []
-        ]
-        
-        sendToSocket(socket: webSocket, data: data)
-    }
-    
-    func server(_ server: Telegraph.Server, webSocketDidDisconnect webSocket: any Telegraph.WebSocket, error: (any Error)?) {
-        Logger.core.info("webSocketDidDisconnect")
-    }
-    
-    func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didReceiveMessage message: Telegraph.WebSocketMessage) {
-        Logger.core.info("didReceiveMessage")
-    }
-    
-    func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
-        Logger.core.info("didSendMessage")
-    }
-            
-    func startServer() {
-        server = Server()
-        server.webSocketDelegate = self
-        server.webSocketConfig.pingInterval = 10
-        
-        try! server.start(port: 9234)
-        
-        Logger.core.info("[SERVER] Server is running - url:")
-    }
-
-    func stopServer() {
-        if let server = server {
-            server.stop()
-            Logger.core.info("[SERVER] Server has been stopped")
-        } else {
-            Logger.core.info("[SERVER] No server running to stop")
-        }
-    }
-    
-    func sendNotificationToBrowsers(message:MessageWithParsedOTP) {
-        Logger.core.info("sendNotificationToBrowsers")
-
-        for socket in server.webSockets {
-            
-            let data: [String: Any] = [
-                "event": "code.received",
-                "data": [
-                    "code": message.1.code
-                ]
-            ]
-            
-            sendToSocket(socket: socket, data: data)
-        }
-    }
-    
-    func sendToSocket(socket: WebSocket, data: Any) {
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                socket.send(text: jsonString)
-                
-            }
-        } catch {
-            Logger.core.error("Failed to encode JSON: \(error.localizedDescription)")
-        }
-    }
 
 }

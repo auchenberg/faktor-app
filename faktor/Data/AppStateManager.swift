@@ -24,23 +24,23 @@ class AppStateManager: ObservableObject, Identifiable {
     private var permissionCheckTimer: Timer?
             
     init() {
-        Logger.core.info("init")
+        Logger.core.info("appStateManager.init")
         updatePermissionsStatus()
     }
     
     private func updatePermissionsStatus() {
-        Logger.core.info("updatePermissionsStatus")
+        Logger.core.info("appStateManager.updatePermissionsStatus")
         hasAllRequiredPermissions = hasRequiredPermissions()
     }
             
     func hasRequiredPermissions() -> Bool {
-        Logger.core.info("hasRequiredPermissions")
+        Logger.core.info("appStateManager.hasRequiredPermissions")
         let result = hasLibraryAccessPermissions() && hasNotificationPermissions()
         return result
     }
 
     func hasLibraryAccessPermissions() -> Bool {
-        Logger.core.info("hasLibraryAccessPermissions")
+        Logger.core.info("appStateManager.hasLibraryAccessPermissions")
         if Defaults[.libraryFolderBookmark] == nil {
             return false
         }
@@ -48,7 +48,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func hasNotificationPermissions() -> Bool {
-        Logger.core.info("hasNotificationPermissions")
+        Logger.core.info("appStateManager.hasNotificationPermissions")
         var hasPermission = false
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -62,18 +62,18 @@ class AppStateManager: ObservableObject, Identifiable {
     }
 
     func installBrowserExtension() {
-        Logger.core.info("installBrowserExtension")
-        let chromeExtensionURL = "https://chrome.google.com/webstore/detail/faktor/lnbhbpdjedbjplopnkkimjenlhneekoc"
+        Logger.core.info("appStateManager.installBrowserExtension")
+        let chromeExtensionURL: String = "https://chrome.google.com/webstore/detail/faktor/lnbhbpdjedbjplopnkkimjenlhneekoc"
         
-        if let url = URL(string: chromeExtensionURL) {
+        if let url: URL = URL(string: chromeExtensionURL) {
             NSWorkspace.shared.open(url)
         } else {
-            Logger.core.info("Failed to create URL for Chrome Web Store")
+            Logger.core.info("appStateManager.installBrowserExtension.error: Failed to open URL for Chrome Web Store")
         }
     }
 
     func markOnboardingAsCompleted() {
-        Logger.core.info("markOnboardingAsCompleted")
+        Logger.core.info("appStateManager.markOnboardingAsCompleted")
         
         self.closeOnboardingWindow()
         self.updateDockIconVisibility(isVisible: false)
@@ -82,7 +82,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func startOnboarding() {
-        Logger.core.info("startOnboarding")
+        Logger.core.info("appStateManager.startOnboarding")
         isOnboardingRunning = true
 
         self.updateDockIconVisibility(isVisible: true)
@@ -118,7 +118,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
 
     func closeOnboardingWindow() {
-        Logger.core.info("closeOnboardingWindow")
+        Logger.core.info("appStateManager.closeOnboardingWindow")
         onboardingWindow?.close()
         onboardingWindow = nil
         isOnboardingRunning = false
@@ -127,20 +127,21 @@ class AppStateManager: ObservableObject, Identifiable {
     
     @MainActor
     func requestNotificationPermission() async -> UNAuthorizationStatus {
+        Logger.core.info("appStateManager.requestNotificationPermission")
         do {
             _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
             updatePermissionsStatus()
             return .authorized
         } catch {
-            Logger.core.error("Error requesting notification permission: \(error.localizedDescription)")
+            Logger.core.error("appStateManager.requestNotificationPermission.error: \(error.localizedDescription)")
             updatePermissionsStatus()
             return .notDetermined
         }
     }
     
     func requestLibraryFolderAccess() -> Bool {
-        Logger.core.info("requestLibraryFolderAccess")
-        var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+        Logger.core.info("appStateManager.requestLibraryFolderAccess")
+        var homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
         homeDirectory.appendPathComponent("/Library")
         
         let openPanel = NSOpenPanel()
@@ -160,14 +161,14 @@ class AppStateManager: ObservableObject, Identifiable {
         let result = openPanel.runModal()
         
         if result == NSApplication.ModalResponse.OK {
-            if let url = openPanel.url {
+            if let url: URL = openPanel.url {
                 do {
-                    let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+                    let bookmarkData: Data = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
                     Defaults[.libraryFolderBookmark] = bookmarkData
                     updatePermissionsStatus()
                     return true
                 } catch {
-                    Logger.core.error("Failed to create bookmark: \(error)")
+                    Logger.core.error("appStateManager.requestLibraryFolderAccess.error: \(error)")
                 }
             }
         }
@@ -177,7 +178,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func resetStateAndQuit() {
-        Logger.core.info("resetStateAndQuit")
+        Logger.core.info("appStateManager.resetStateAndQuit")
         Defaults.reset(.libraryFolderBookmark);
         Defaults.reset(.settingShowNotifications);
         Defaults.reset(.settingsEnableBrowserIntegration)
@@ -196,12 +197,12 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     func updateDockIconVisibility(isVisible: Bool = false) {
-        Logger.core.info("updateDockIconVisibility: \(isVisible)")
+        Logger.core.info("appStateManager.updateDockIconVisibility: \(isVisible)")
         NSApp.setActivationPolicy(isVisible ? .regular : .accessory)
     }
 
     private func startPermissionCheck() {
-        Logger.core.info("startPermissionCheck")
+        Logger.core.info("appStateManager.startPermissionCheck")
         if permissionCheckTimer == nil {
             permissionCheckTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
                 self?.checkPermissions()
@@ -210,13 +211,13 @@ class AppStateManager: ObservableObject, Identifiable {
     }
     
     private func stopPermissionCheck() {
-        Logger.core.info("stopPermissionCheck")
+        Logger.core.info("appStateManager.stopPermissionCheck")
         permissionCheckTimer?.invalidate()
         permissionCheckTimer = nil
     }
     
     private func checkPermissions() {
-        Logger.core.info("checkPermissions")
+        Logger.core.info("appStateManager.checkPermissions")
         updatePermissionsStatus()
     }
 }
