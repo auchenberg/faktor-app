@@ -43,43 +43,56 @@ class MessageManager: ObservableObject, Identifiable {
     }
 
     private func loadMessagesAfterDate(_ date: Date) throws -> [Message]? {
-        return try performDatabaseOperation { db in
-            let textColumn = Expression<String?>("text")
-            let guidColumn = Expression<String>("guid")
-            let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
-            let fromMeColumn = Expression<Bool>("is_from_me")
-            let dateColumn = Expression<Int>("date")
-            let serviceColumn = Expression<String>("service")
-            let isReadColumn = Expression<Bool>("is_read")
-            
-            let ROWID = Expression<Int>("ROWID")
-
-            let handleTable = Table("handle")
-            let handleFrom = handleTable[Expression<String?>("id")]
-            let messageTable = Table("message")
-            let messageHandleId = messageTable[Expression<Int>("handle_id")]
-            
-            let query = messageTable
-                .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], messageTable[isReadColumn], handleFrom, messageTable[serviceColumn])
-                .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-                .where(messageTable[dateColumn] > self.timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
-                .order(messageTable[dateColumn].asc)
-
-            let mapRowIterator = try db.prepareRowIterator(query)
-            let messages = try mapRowIterator.map { messageRow -> Message? in
-                guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
+        Logger.core.info("messageManager.loadMessagesAfterDate: Attempting to load messages after \(date)")
+        
+        do {
+            return try performDatabaseOperation { db in
+                let textColumn = Expression<String?>("text")
+                let guidColumn = Expression<String>("guid")
+                let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
+                let fromMeColumn = Expression<Bool>("is_from_me")
+                let dateColumn = Expression<Int>("date")
+                let serviceColumn = Expression<String>("service")
+                let isReadColumn = Expression<Bool>("is_read")
                 
-                return Message(
-                    guid: messageRow[guidColumn],
-                    text: text,
-                    handle: handle,
-                    group: messageRow[cacheRoomnamesColumn],
-                    fromMe: messageRow[fromMeColumn],
-                    isRead: messageRow[isReadColumn]
-                )
+                let ROWID = Expression<Int>("ROWID")
+
+                let handleTable = Table("handle")
+                let handleFrom = handleTable[Expression<String?>("id")]
+                let messageTable = Table("message")
+                let messageHandleId = messageTable[Expression<Int>("handle_id")]
+                
+                let query = messageTable
+                    .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], messageTable[isReadColumn], handleFrom, messageTable[serviceColumn])
+                    .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
+                    .where(messageTable[dateColumn] > self.timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
+                    .order(messageTable[dateColumn].asc)
+                
+                Logger.core.debug("messageManager.loadMessagesAfterDate: Executing query")
+                
+                let mapRowIterator = try db.prepareRowIterator(query)
+                let messages = try mapRowIterator.compactMap { messageRow -> Message? in
+                    guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
+                    
+                    return Message(
+                        guid: messageRow[guidColumn],
+                        text: text,
+                        handle: handle,
+                        group: messageRow[cacheRoomnamesColumn],
+                        fromMe: messageRow[fromMeColumn],
+                        isRead: messageRow[isReadColumn]
+                    )
+                }
+                
+                Logger.core.info("messageManager.loadMessagesAfterDate: Successfully loaded \(messages.count) messages")
+                return messages
             }
-            
-            return messages.compactMap { $0 }
+        } catch let error as MessageManagerError {
+            Logger.core.error("messageManager.loadMessagesAfterDate: MessageManagerError - \(error.localizedDescription)")
+            throw error
+        } catch {
+            Logger.core.error("messageManager.loadMessagesAfterDate: Unexpected error - \(error.localizedDescription)")
+            throw MessageManagerError.generic(message: "Failed to load messages: \(error.localizedDescription)")
         }
     }
     
