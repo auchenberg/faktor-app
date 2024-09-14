@@ -15,7 +15,7 @@ struct BrowserExtensionOnboardingTask: View {
 
     var body: some View {
         OnboardingItemLayout(
-            title: "Install browser extension",
+            title: "Install browser extension in Chrome, Arc or Brave",
             description: "Faktor uses a browser extension to provide the autocomplete experience"
         ) {
             Image("Xcode")
@@ -30,7 +30,7 @@ struct BrowserExtensionOnboardingTask: View {
         } content: {
             OnboardingItemStatusIcon(state: isComplete ? .complete : .warning) {
                 OnboardingPopoverContent(title: "Needs Setup") {
-                    Text("Faktor requires disk access to your library folder to search for new 2fa codes")
+                    Text("Faktor uses a browser extension to provide the autocomplete experience")
                         .lineLimit(2, reservesSpace: true)
                 }
             }
@@ -38,43 +38,61 @@ struct BrowserExtensionOnboardingTask: View {
     }
 
     private var isComplete: Bool {
-        
         do {
-            // Check if Chrome is installed
-            let chromeURL = URL(fileURLWithPath: "/Applications/Google Chrome.app")
-            guard FileManager.default.fileExists(atPath: chromeURL.path) else {
+            // Check if any supported browser is installed
+            let browsers: [String : String] = [
+                "Google Chrome": "/Applications/Google Chrome.app",
+                "Arc": "/Applications/Arc.app",
+                "Brave": "/Applications/Brave Browser.app"
+            ]
+            
+            let installedBrowsers: [String : String] = browsers.filter { FileManager.default.fileExists(atPath: $0.value) }
+            
+            guard !installedBrowsers.isEmpty else {
                 return false
             }
-        
+
             // Chrome extension ID for Faktor (replace with actual ID)
-            let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
+            let extensionID: String = "lnbhbpdjedbjplopnkkimjenlhneekoc"
             
-            // Path to Chrome extensions directory
-            guard let bookmarkData =  Defaults[.libraryFolderBookmark]  else {
+            // Path to extensions directory
+            guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
                 Logger.core.error("No bookmark data found")
                 return false
             }
             
-            var bookmarkDataIsStale = false
-            
-            var extensionsPath = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+            var bookmarkDataIsStale: Bool = false
+            var libraryPath = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
             
             if bookmarkDataIsStale {
                 Logger.core.error("Bookmark data is stale")
             }
             
-            if extensionsPath.startAccessingSecurityScopedResource() {
-                // Build path for databsse
-                extensionsPath.appendPathComponent("/Application Support/Google/Chrome/Default/Extensions")
-                extensionsPath.appendPathComponent(extensionID)
+            if libraryPath.startAccessingSecurityScopedResource() {
+                defer { libraryPath.stopAccessingSecurityScopedResource() }
                 
-                // Check if the extension directory exists
-                let status = FileManager.default.fileExists(atPath: extensionsPath.path)
-                return status
+                for (browser, _) in installedBrowsers {
+                    var extensionsPath = libraryPath
+                    switch browser {
+                    case "Google Chrome":
+                        extensionsPath.appendPathComponent("Application Support/Google/Chrome/Default/Extensions")
+                    case "Arc":
+                        extensionsPath.appendPathComponent("Application Support/Arc/User Data/Default/Extensions")
+                    case "Brave":
+                        extensionsPath.appendPathComponent("Application Support/BraveSoftware/Brave-Browser/Default/Extensions")
+                    default:
+                        continue
+                    }
+                    
+                    extensionsPath.appendPathComponent(extensionID)
+                    
+                    if FileManager.default.fileExists(atPath: extensionsPath.path) {
+                        return true
+                    }
+                }
             }
         } catch {
-            Logger.core.error("Error resolving bookmark: \(error)")
-            return false
+            Logger.core.error("Error checking for browser extensions: \(error)")
         }
         return false
     }
