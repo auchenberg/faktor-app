@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "fulldiskaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:inket/FullDiskAccess.git",
+      "state" : {
+        "revision" : "846e04ea2b84fce843f47d7e7f3421189221829c",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "httpparserc",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Building42/HTTPParserC.git",

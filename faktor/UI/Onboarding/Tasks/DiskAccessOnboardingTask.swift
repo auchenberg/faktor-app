@@ -21,9 +21,16 @@ struct DiskAccessOnboardingTask: View {
                 .interpolation(.high)
         } actionView: {
             if !isComplete {
-                Button("Grant") {
-                    self.appStateManager.requestLibraryFolderAccess()
-                }.buttonStyle(.borderedProminent)
+
+                VStack(alignment: .trailing, spacing: 10) {
+                        Button("Grant") {
+                            self.appStateManager.requestLibraryFolderAccess()
+                        }.buttonStyle(.borderedProminent)
+                        
+                        Button("Grant full disk access") {
+                            self.appStateManager.requestFullDiskAccess()
+                        }.buttonStyle(.borderless).controlSize(.small)
+                    }
             }
         } infoPopoverContent: {
             OnboardingPopoverContent(title: "Disk access") {

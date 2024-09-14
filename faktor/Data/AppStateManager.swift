@@ -11,6 +11,7 @@ import SwiftUI
 import ApplicationServices
 import UserNotifications
 import UniformTypeIdentifiers
+import FullDiskAccess
 import Defaults
 import PostHog
 import OSLog
@@ -171,6 +172,11 @@ class AppStateManager: ObservableObject, Identifiable {
             updatePermissionsStatus()
             return .notDetermined
         }
+    }
+
+    func requestFullDiskAccess() {
+        Logger.core.info("appStateManager.requestFullDiskAccess FullDiskAccess.isGranted=\(FullDiskAccess.isGranted)")
+        FullDiskAccess.openSystemSettings()
     }
     
     func requestLibraryFolderAccess() -> Bool {

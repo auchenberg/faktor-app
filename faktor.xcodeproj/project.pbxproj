@@ -52,6 +52,7 @@
 		E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */; };
 		E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */; };
 		E2716F1A2C9633C70031CA1A /* LogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2716F192C9633C70031CA1A /* LogsView.swift */; };
+		E2716F1D2C963C870031CA1A /* FullDiskAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2716F1C2C963C870031CA1A /* FullDiskAccess */; };
 		E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282AA612C03DC660016CDA8 /* NotificationManager.swift */; };
 		E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */; };
 		E299E0A92C02719A00F1BDB5 /* CustomOTPParsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */; };
@@ -156,6 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2716F1D2C963C870031CA1A /* FullDiskAccess in Frameworks */,
 				E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */,
 				E29B43B82C865BD6008FF25F /* SettingsAccess in Frameworks */,
 				E2DE712F2C419590005D3019 /* SQLite in Frameworks */,
@@ -481,6 +483,7 @@
 				E2B96DA52C749ED200D435D8 /* Defaults */,
 				E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */,
 				E29B43B72C865BD6008FF25F /* SettingsAccess */,
+				E2716F1C2C963C870031CA1A /* FullDiskAccess */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
@@ -544,6 +547,7 @@
 				E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */,
 				E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */,
 				E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */,
+				E2716F1B2C963C870031CA1A /* XCRemoteSwiftPackageReference "FullDiskAccess" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
@@ -983,6 +987,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		E2716F1B2C963C870031CA1A /* XCRemoteSwiftPackageReference "FullDiskAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:inket/FullDiskAccess.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/SettingsAccess";
@@ -1041,6 +1053,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
+		};
+		E2716F1C2C963C870031CA1A /* FullDiskAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E2716F1B2C963C870031CA1A /* XCRemoteSwiftPackageReference "FullDiskAccess" */;
+			productName = FullDiskAccess;
 		};
 		E29B43B72C865BD6008FF25F /* SettingsAccess */ = {
 			isa = XCSwiftPackageProductDependency;
