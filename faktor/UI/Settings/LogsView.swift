@@ -114,7 +114,7 @@ struct LogEntryRow: View {
             Text(logTypeString(for: log.level))
                 .font(.caption)
                 .foregroundColor(logTypeColor(for: log.level))
-                .frame(width: 30, alignment: .leading)
+                .frame(width: 40, alignment: .leading)
             
             Text(log.composedMessage)
                 .font(.body)
