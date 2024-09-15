@@ -47,8 +47,14 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     }
         
     func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
-        guard handshake.headers["Host"] == "localhost" else {
-            Logger.core.info("browserManager.webSocketDidConnect.error: Connection rejected - not from localhost")
+         Logger.core.info("browserManager.webSocketDidConnect")
+         guard handshake.headers["Origin"] == "chrome-extension://lnbhbpdjedbjplopnkkimjenlhneekoc" else {
+             Logger.core.error("browserManager.webSocketDidConnect.error: Connection rejected - not from chrome extension")
+             return
+         }
+        
+        guard let remoteEndpoint: Telegraph.Endpoint = webSocket.remoteEndpoint else {
+            Logger.core.error("browserManager.webSocketDidConnect.error: No remote endpoint")
             return
         }
         
