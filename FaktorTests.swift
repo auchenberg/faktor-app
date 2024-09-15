@@ -22,7 +22,7 @@ final class faktorTests: XCTestCase {
     func testResyCode() throws {
         let parser = OTPParser()
         
-        XCTAssertEqual(parser.parseMessage(#"123-456 is your Resy account verification code. This is not a booking confirmation."#), ParsedOTP(service: "resy", code: "123456"))
+        XCTAssertEqual(parser.parseMessage(#"123-456 is your Resy account verification code. This is not a booking confirmation."#), ParsedOTP(service: "resy", code: "123-456"))
     }
 
     func testValuesFromOldRepo() throws {
