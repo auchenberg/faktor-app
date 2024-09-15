@@ -29,7 +29,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
                 return
             }
             
-            Logger.core.info("NotificationManager.messageChanged")
+            Logger.core.info("notificationManager.messageChanged")
             if let newMessage = messages.last {
                 if let latestMessage = self.latestMessage {
                     if newMessage != latestMessage {
@@ -44,7 +44,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     }
     
     private func showNotification(for message: MessageWithParsedOTP) {
-        Logger.core.info("NotificationManager.showNotification.messageID: \(message.0.guid)")
+        Logger.core.info("notificationManager.showNotification.messageID: \(message.0.guid)")
                 
         let content: UNMutableNotificationContent = UNMutableNotificationContent()
         content.title = "New authentication code received"
@@ -71,7 +71,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         let userInfo: [AnyHashable : Any] = response.notification.request.content.userInfo
         if let messageID: String = userInfo["messageID"] as? String {
             if let message = messageManager.messages.first(where: { $0.0.guid == messageID }) {
-                Logger.core.info("NotificationManager.userNotificationCenter.didReceive.messageID: \(messageID)")
+                Logger.core.info("notificationManager.userNotificationCenter.didReceive.messageID: \(messageID)")
                 try! messageManager.copyOTPToClipboard(message: message)
             }
         }

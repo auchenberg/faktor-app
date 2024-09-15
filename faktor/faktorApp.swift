@@ -41,17 +41,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appStateManager.$hasAllRequiredPermissions
             .removeDuplicates()
             .sink { hasPermissions in
-                Logger.core.info("permission.monitor: \(hasPermissions)")
+                Logger.core.info("appDelegate.applicationDidFinishLaunching: permission.monitor: \(hasPermissions)")
                 if hasPermissions {
-                    
                     // Let's go!
-                    Logger.core.info("permissions.granted.")
                     self.messageManager.startListening()
                     self.browserManager.startServer()
-                                    
-                    
                 } else {
-                    Logger.core.info("permissions.missing.")
                     self.appStateManager.startOnboarding()
                 }
             }
