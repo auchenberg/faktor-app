@@ -84,9 +84,10 @@ struct faktorApp: App {
                 }
         }
         MenuBarExtra {
-            AppMenu(messageManager: appDelegate.messageManager,
-                    appStateManager: appDelegate.appStateManager,
-                    browserManager: appDelegate.browserManager)
+            AppMenu()
+             .environmentObject(appDelegate.appStateManager)
+             .environmentObject(appDelegate.browserManager)
+             .environmentObject(appDelegate.messageManager)
         } label: {
             let image: NSImage = {
                 let ratio = $0.size.height / $0.size.width

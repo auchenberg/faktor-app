@@ -210,7 +210,7 @@ class MessageManager: ObservableObject, Identifiable {
         }
     }
 
-    func markMessageAsRead(message: MessageWithParsedOTP) throws {
+    func markMessageAsRead(message: MessageWithParsedOTP) {
 //        try performDatabaseOperation { db in
 //            let messageTable = Table("message")
 //            let guidColumn = Expression<String>("guid")

@@ -12,18 +12,19 @@ import LaunchAtLogin
 import Defaults
 import PostHog
 import SettingsAccess
+import OSLog
 
 struct AppMenu: View {
     
-    @ObservedObject var messageManager: MessageManager
-    @ObservedObject var appStateManager: AppStateManager
-    @ObservedObject var browserManager: BrowserManager
+    @EnvironmentObject var messageManager: MessageManager
+    @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var browserManager: BrowserManager
     
     func onCodeClicked(message: MessageWithParsedOTP) {
         PostHogSDK.shared.capture("faktor.copyToClipboard")
-        try! browserManager.sendNotificationToBrowsers(message: message)
-        try! messageManager.copyOTPToClipboard(message: message)
-        try! messageManager.markMessageAsRead(message: message)
+        browserManager.sendNotificationToBrowsers(message: message)
+        messageManager.copyOTPToClipboard(message: message)
+        messageManager.markMessageAsRead(message: message)
     }
     
     var body: some View {
