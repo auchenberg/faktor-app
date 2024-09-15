@@ -13,25 +13,37 @@ import Defaults
 import UserNotifications
 import Telegraph
 import OSLog
+import ObjectiveC
+
+private var clientNameKey: UInt8 = 0
+
+extension Telegraph.WebSocket {
+    var clientName: String? {
+        get {
+            return objc_getAssociatedObject(self, &clientNameKey) as? String
+        }
+        set {
+            objc_setAssociatedObject(self, &clientNameKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+}
 
 class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     
     @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
     @ObservedObject var messageManager: MessageManager
     @Published private var latestMessage: MessageWithParsedOTP?
-    @Published private var connectedClients: Set<String> = []
+    @Published var connectedWebSockets: [WebSocket] = []
     private var cancellable: AnyCancellable?
     var server: Server!    
     
     init(messageManager: MessageManager) {
-        self.messageManager = messageManager
+        self.messageManager = messageManager    
                 
         cancellable = messageManager.$messages.sink { [weak self] messages in
-            guard let self = self else {
-                return
-            }
+            guard let self = self else { return }
             
-            Logger.core.info("NotificationManager.messageChanged")
+            Logger.core.info("browserManager.messageChanged")
             if let newMessage = messages.last {
                 if let latestMessage = self.latestMessage {
                     if newMessage != latestMessage {
@@ -55,9 +67,9 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
             return
         }
         
-        let clientName = inferClientName(from: handshake)
-        connectedClients.insert(clientName)
-        Logger.core.info("browserManager.webSocketDidConnect: Client \(clientName) connected")
+        connectedWebSockets.append(webSocket)
+        webSocket.clientName = inferClientName(from: handshake)
+        Logger.core.info("browserManager.webSocketDidConnect: Client \(webSocket.clientName ?? "Unknown") connected")
         
         let data: [String: Any] = [
             "event": "app.ready",
@@ -68,17 +80,18 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     }
     
     func server(_ server: Telegraph.Server, webSocketDidDisconnect webSocket: any Telegraph.WebSocket, error: (any Error)?) {
-        // let clientName = inferClientName(from: webSocket.request)
-        // connectedClients.remove(clientName)
-        Logger.core.info("browserManager.webSocketDidDisconnect")
+        if let index = connectedWebSockets.firstIndex(where: { $0 === webSocket }) {
+            connectedWebSockets.remove(at: index)
+        }
+        Logger.core.info("browserManager.webSocketDidDisconnect: Client \(webSocket.clientName ?? "Unknown") disconnected")
     }
     
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didReceiveMessage message: Telegraph.WebSocketMessage) {
-        Logger.core.info("browserManager.didReceiveMessage")
+        Logger.core.info("browserManager.didReceiveMessage from client \(webSocket.clientName ?? "Unknown")")
     }
     
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
-        Logger.core.info("browserManager.didSendMessage")
+        Logger.core.info("browserManager.didSendMessage to client \(webSocket.clientName ?? "Unknown")")
     }
             
     func startServer() {
@@ -98,7 +111,7 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     func stopServer() {
         if let server = server {
             server.stop()
-            connectedClients.removeAll()
+            connectedWebSockets.removeAll()
             Logger.core.info("browserManager.stopServer.success")
         } else {
             Logger.core.info("browserManager.stopServer.error: No server running to stop")
@@ -108,7 +121,7 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     func sendNotificationToBrowsers(message: MessageWithParsedOTP) {
         Logger.core.info("browserManager.sendNotificationToBrowsers")
 
-        for socket in server.webSockets {
+        for socket in connectedWebSockets {
             let data: [String: Any] = [
                 "event": "code.received",
                 "data": [
@@ -121,7 +134,7 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     }
     
     func sendToSocket(socket: WebSocket, data: Any) {
-        Logger.core.info("browserManager.sendToSocket")
+        Logger.core.info("browserManager.sendToSocket to client \(socket.clientName ?? "Unknown")")
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
             if let jsonString = String(data: jsonData, encoding: .utf8) {
@@ -133,7 +146,7 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
         }
     }
 
-    private func inferClientName(from request: HTTPRequest) -> String {
+    private func inferClientName(from request: Telegraph.HTTPRequest) -> String {
         if let userAgent = request.headers["User-Agent"] {
             if userAgent.contains("Chrome") {
                 return "Chrome"
@@ -149,10 +162,10 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     }
 
     func getConnectedClientsSummary() -> String {
-        let count = connectedClients.count
+        let count = connectedWebSockets.count
         if count > 0 {
-            let clientNames = connectedClients.joined(separator: ", ")
-            return "(\(clientNames) connected)"
+            let clientNames = connectedWebSockets.compactMap { $0.clientName }.joined(separator: ", ")
+            return "\(clientNames) connected"
         } else {
             return ""
         }
