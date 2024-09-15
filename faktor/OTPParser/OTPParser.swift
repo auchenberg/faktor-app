@@ -8,6 +8,7 @@ protocol CoreOTPParser {
 
 public class OTPParser: CoreOTPParser {
     var config: OTPParserConfiguration
+    private let logger = Logger.core
     
     public init() {
         let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
@@ -24,19 +25,19 @@ public class OTPParser: CoreOTPParser {
 
         // If a phone number pattern is found, return nil to ignore the message
         if !phoneNumberMatches.isEmpty {
-            Logger.core.info("Message contains a phone number, ignoring...")
+            logger.info("otpParser.parseMessage: Message contains a phone number, ignoring")
             return nil
         }
         
-        Logger.core.info("Lowercase Message: \(lowercaseMessage)")
+        logger.debug("otpParser.parseMessage: Parsing message: \(lowercaseMessage)")
         
         if let googleOTP = OTPParserConstants.googleOTPRegex.firstCaptureGroupInString(message) {
-            Logger.core.info("Google OTP found: \(googleOTP)")
+            logger.info("otpParser.parseMessage: Google OTP found: \(googleOTP)")
             return ParsedOTP(service: "google", code: googleOTP)
         }
         
         let service = inferServiceFromMessage(message)
-        Logger.core.info("Inferred Service: \(service ?? "Unknown")")
+        logger.debug("otpParser.parseMessage: Inferred Service: \(service ?? "Unknown")")
         
         let standardRegExps: [NSRegularExpression] = [
             OTPParserConstants.CodeMatchingRegularExpressions.standardFourToEight,
@@ -46,7 +47,7 @@ public class OTPParser: CoreOTPParser {
         
         for customPattern in config.customPatterns {
             if let matchedCode = customPattern.matcherPattern.firstCaptureGroupInString(lowercaseMessage) {
-                Logger.core.info("Custom pattern matched. Service: \(customPattern.serviceName ?? "Unknown"), Code: \(matchedCode)")
+                logger.info("otpParser.parseMessage: Custom pattern matched. Service: \(customPattern.serviceName ?? "Unknown"), Code: \(matchedCode)")
                 return ParsedOTP(service: customPattern.serviceName, code: matchedCode)
             }
         }
@@ -56,17 +57,17 @@ public class OTPParser: CoreOTPParser {
             for match in matches {
                 guard let code = match.firstCaptureGroupInString(lowercaseMessage) else { continue }
                 
-                Logger.core.info("Standard regex match. Service: \(service ?? "Unknown"), Code: \(code)")
+                logger.debug("otpParser.parseMessage: Standard regex match. Service: \(service ?? "Unknown"), Code: \(code)")
                 
                 if isValidCodeInMessageContext(message: lowercaseMessage, code: code) {
                     return ParsedOTP(service: service, code: code.withNonDigitsRemoved ?? code)
                 } else {
-                    Logger.core.info("Invalid context for code: \(code)")
+                    logger.debug("otpParser.parseMessage: Invalid context for code: \(code)")
                 }
             }
         }
         
-        Logger.core.info("No OTP detected.")
+        logger.info("otpParser.parseMessage: No OTP detected")
         
         let matchedParser = CUSTOM_PARSERS.first { parser in
             if let requiredName = parser.requiredServiceName, requiredName != service {
@@ -108,22 +109,22 @@ public class OTPParser: CoreOTPParser {
         }
         
         if code.hasSuffix("am") || code.hasSuffix("pm") || code.hasSuffix("st") || code.hasSuffix("rd") || code.hasSuffix("th") || code.hasSuffix("nd") {
-                Logger.core.error("Invalid context for code: \(code)")
-                return false
-            }
+            logger.debug("otpParser.isValidCodeInMessageContext: Invalid context for code: \(code)")
+            return false
+        }
         
-        Logger.core.error("Prev Char: \(prevChar), Next Char: \(nextChar)")
+        logger.debug("otpParser.isValidCodeInMessageContext: Prev Char: \(prevChar), Next Char: \(nextChar)")
         
         guard !code.isEmpty, let codePosition = message.index(of: code), let afterCodePosition = message.endIndex(of: code) else { return false }
         
-        Logger.core.info("Code positions found.")
+        logger.debug("otpParser.isValidCodeInMessageContext: Code positions found")
         
         // Allow codes starting with '-'
         if prevChar != "-" {
             if codePosition > message.startIndex {
                 let prev = message[message.index(before: codePosition)]
                 if prev == "/" || prev == "\\" || prev == "$" {
-                    Logger.core.error("Invalid context for code: \(code)")
+                    logger.debug("otpParser.isValidCodeInMessageContext: Invalid context for code: \(code)")
                     return false
                 }
             }
@@ -133,16 +134,15 @@ public class OTPParser: CoreOTPParser {
             let next = message[afterCodePosition]
             // make sure next character is whitespace or ending grammar
             if !OTPParserConstants.endingCharacters.contains(next) {
-                Logger.core.info("Invalid context for code: \(code)")
+                logger.debug("otpParser.isValidCodeInMessageContext: Invalid context for code: \(code)")
                 return false
             }
         }
         
-        Logger.core.info("Code is valid.")
+        logger.debug("otpParser.isValidCodeInMessageContext: Code is valid")
         return true
     }
 
-    
     private func inferServiceFromMessage(_ message: String) -> String? {
         let lowercaseMessage = message.lowercased()
         for servicePattern in config.servicePatterns {
@@ -152,15 +152,18 @@ public class OTPParser: CoreOTPParser {
                 continue
             }
             
+            logger.debug("otpParser.inferServiceFromMessage: Inferred service: \(possibleServiceName)")
             return possibleServiceName
         }
         
         for knownService in config.knownServices {
             if lowercaseMessage.contains(knownService) {
+                logger.debug("otpParser.inferServiceFromMessage: Found known service: \(knownService)")
                 return knownService
             }
         }
         
+        logger.debug("otpParser.inferServiceFromMessage: No service inferred")
         return nil
     }
 }
