@@ -14,14 +14,12 @@ struct AboutSettingsView: View {
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         
         VStack() {
-            
             Image(.icon)
                 .resizable()
                 .frame(width: 128, height: 128)
             
             Form {
                 Section() {
-                    
                     List() {
                         HStack() {
                             Text("Version")
@@ -41,28 +39,21 @@ struct AboutSettingsView: View {
                             Link("@auchenberg", destination: URL(string: "https://x.com/auchenberg")!)
                         }.padding(10)
                     }
-                    
-                    
                 }
                 
                 Section("Reset") {
-
-                        HStack {
-                            Spacer()
-                            Button("Reset data and quit") {
-                                appStateManager.resetStateAndQuit()
-                            }
-                            .controlSize(.large)
-                            Spacer()
+                    HStack {
+                        Spacer()
+                        Button("Reset data and quit") {
+                            appStateManager.resetStateAndQuit()
                         }
-                        .padding(.vertical)
-                
+                        .controlSize(.large)
+                        Spacer()
+                    }
+                    .padding(.vertical)
                 }
-                
             }
             .formStyle(.grouped)
-            
-            
         }
         .padding(40)
     }

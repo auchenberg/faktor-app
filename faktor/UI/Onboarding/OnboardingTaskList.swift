@@ -28,13 +28,6 @@ struct OnboardingTaskList: View {
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
-        .onChange(of: controlActiveState) { newValue in
-            if newValue == .key {
-                // Tells UtilityPathPreferences to notify subscribers
-                // that it has changed so that they can update accordingly.
-//                utilityPathPreferences.refresh()
-            }
-        }
     }
 }
 

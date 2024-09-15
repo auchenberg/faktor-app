@@ -4,10 +4,8 @@ struct PermissionsView: View {
     @EnvironmentObject var appStateManager: AppStateManager
     
     var body: some View {
-        
         OnboardingTaskList()
             .padding(40)
-        
     }
 }
 
