@@ -15,7 +15,7 @@ struct BrowserExtensionOnboardingTask: View {
 
     var body: some View {
         OnboardingItemLayout(
-            title: "Install browser extension in Chrome, Arc or Brave",
+            title: "Install browser extension in Chrome, Arc, Edge or Brave",
             description: "Faktor uses a browser extension to provide the autocomplete experience"
         ) {
             Image("Xcode")
@@ -43,7 +43,8 @@ struct BrowserExtensionOnboardingTask: View {
             let browsers: [String : String] = [
                 "Google Chrome": "/Applications/Google Chrome.app",
                 "Arc": "/Applications/Arc.app",
-                "Brave": "/Applications/Brave Browser.app"
+                "Brave": "/Applications/Brave Browser.app",
+                "Microsoft Edge": "/Applications/Microsoft Edge.app"
             ]
             
             let installedBrowsers: [String : String] = browsers.filter { FileManager.default.fileExists(atPath: $0.value) }
@@ -80,6 +81,8 @@ struct BrowserExtensionOnboardingTask: View {
                         extensionsPath.appendPathComponent("Application Support/Arc/User Data/Default/Extensions")
                     case "Brave":
                         extensionsPath.appendPathComponent("Application Support/BraveSoftware/Brave-Browser/Default/Extensions")
+                    case "Microsoft Edge":
+                        extensionsPath.appendPathComponent("Application Support/Microsoft Edge/Default/Extensions")
                     default:
                         continue
                     }
