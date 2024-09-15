@@ -67,9 +67,9 @@ struct AppMenu: View {
         
         Divider()
         
-        Button("Faktor v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")") {
+        Button("Faktor v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") \(browserManager.getConnectedClientsSummary())") {
         }.disabled(true)
-        
+
         Divider()
         
         Button("Quit") {
