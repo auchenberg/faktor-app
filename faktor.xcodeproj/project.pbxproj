@@ -357,6 +357,7 @@
 				E29B43B42C82531F008FF25F /* Logger.swift */,
 				E299E0A32C02719A00F1BDB5 /* Extensions.swift */,
 				E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */,
+				E299E0B62C0280A200F1BDB5 /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -442,7 +443,6 @@
 			children = (
 				E299E0B02C0271A100F1BDB5 /* Message.swift */,
 				E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */,
-				E299E0B62C0280A200F1BDB5 /* String.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
