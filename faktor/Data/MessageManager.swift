@@ -47,20 +47,20 @@ class MessageManager: ObservableObject, Identifiable {
         
         do {
             return try performDatabaseOperation { db in
-                let textColumn = Expression<String?>("text")
-                let guidColumn = Expression<String>("guid")
-                let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
-                let fromMeColumn = Expression<Bool>("is_from_me")
-                let dateColumn = Expression<Int>("date")
-                let serviceColumn = Expression<String>("service")
-                let isReadColumn = Expression<Bool>("is_read")
+                let textColumn = SQLite.Expression<String?>("text")
+                let guidColumn = SQLite.Expression<String>("guid")
+                let cacheRoomnamesColumn = SQLite.Expression<String?>("cache_roomnames")
+                let fromMeColumn = SQLite.Expression<Bool>("is_from_me")
+                let dateColumn = SQLite.Expression<Int>("date")
+                let serviceColumn = SQLite.Expression<String>("service")
+                let isReadColumn = SQLite.Expression<Bool>("is_read")
                 
-                let ROWID = Expression<Int>("ROWID")
+                let ROWID = SQLite.Expression<Int>("ROWID")
 
                 let handleTable = Table("handle")
-                let handleFrom = handleTable[Expression<String?>("id")]
+                let handleFrom = handleTable[SQLite.Expression<String?>("id")]
                 let messageTable = Table("message")
-                let messageHandleId = messageTable[Expression<Int>("handle_id")]
+                let messageHandleId = messageTable[SQLite.Expression<Int>("handle_id")]
                 
                 let query = messageTable
                     .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], messageTable[isReadColumn], handleFrom, messageTable[serviceColumn])
