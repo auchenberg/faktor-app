@@ -5,12 +5,32 @@ import Combine
 import PostHog
 import LaunchAtLogin
 import OSLog
+import FluidMenuBarExtra
+import SettingsAccess
 
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
     static let libraryFolderBookmark = Key<Data?>("libraryFolderBookmark")
 }
+
+@main
+struct faktorApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
+    var body: some Scene {
+        Settings {
+            SettingsView()
+                .environmentObject(appDelegate.appStateManager)
+               .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeMainNotification)) { newValue in
+                   NSApp.activate(ignoringOtherApps: true)
+                   NSApp.setActivationPolicy(.regular)
+                   NSApp.windows.first?.orderFrontRegardless()
+               }
+        }
+    }
+}
+
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     @Default(.settingShowNotifications) var settingShowNotifications
@@ -20,7 +40,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var notificationManager: NotificationManager
     var browserManager: BrowserManager
     var cancellables = Set<AnyCancellable>()
-            
+    private var menuBarExtra: FluidMenuBarExtra?
+    @State var isMenuPresented: Bool = false
+
     override init() {
         notificationManager = NotificationManager(messageManager: messageManager)
         browserManager = BrowserManager(messageManager: messageManager)
@@ -37,18 +59,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         PostHogSDK.shared.setup(config)
         PostHogSDK.shared.capture("faktor.init")
         
+        // Menubar
+        menuBarExtra = FluidMenuBarExtra(title: "Faktor",  systemImage: "cloud.fill") {
+            AppMenu()
+                .environmentObject(self.appStateManager)
+                .environmentObject(self.browserManager)
+                .environmentObject(self.messageManager)
+                .openSettingsAccess()
+        }
+
+        
+        
         // Permissions
         appStateManager.$hasAllRequiredPermissions
             .removeDuplicates()
             .sink { hasPermissions in
                 Logger.core.info("appDelegate.applicationDidFinishLaunching: permission.monitor: \(hasPermissions)")
-                if hasPermissions {
-                    // Let's go!
-                    self.messageManager.startListening()
-                    self.browserManager.startServer()
-                } else {
-                    self.appStateManager.startOnboarding()
-                }
+               if hasPermissions {
+                   // Let's go!
+                   self.messageManager.startListening()
+                   self.browserManager.startServer()
+               } else {
+                   self.appStateManager.startOnboarding()
+               }
             }
             .store(in: &cancellables)
         
@@ -61,43 +94,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        // See https://www.hackingwithswift.com/forums/macos/how-to-open-settings-from-menu-bar-app-and-show-app-icon-in-dock/26267
-        NSApp.setActivationPolicy(.accessory)
-        NSApp.deactivate()
+       // See https://www.hackingwithswift.com/forums/macos/how-to-open-settings-from-menu-bar-app-and-show-app-icon-in-dock/26267
+       NSApp.setActivationPolicy(.accessory)
+       NSApp.deactivate()
         return false
     }
 
-}
-
-@main
-struct faktorApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
-    var body: some Scene {
-        Settings {
-            SettingsView()
-                .environmentObject(appDelegate.appStateManager)
-                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeMainNotification)) { newValue in
-                    NSApp.activate(ignoringOtherApps: true)
-                    NSApp.setActivationPolicy(.regular)
-                    NSApp.windows.first?.orderFrontRegardless()
-                }
-        }
-        MenuBarExtra {
-            AppMenu()
-             .environmentObject(appDelegate.appStateManager)
-             .environmentObject(appDelegate.browserManager)
-             .environmentObject(appDelegate.messageManager)
-        } label: {
-            let image: NSImage = {
-                let ratio = $0.size.height / $0.size.width
-                $0.size.height = 14
-                $0.size.width = 14 / ratio
-                $0.isTemplate = true
-                return $0
-            }(NSImage(named: "menuIcon")!)
-
-            Image(nsImage: image)
-        }
-    }
 }
