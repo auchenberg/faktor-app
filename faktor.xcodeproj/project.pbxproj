@@ -36,7 +36,6 @@
 		E20BA1E12C0164C90052B8FC /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C02C0164C90052B8FC /* .gitignore */; };
 		E20BA1E32C0164C90052B8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C22C0164C90052B8FC /* Assets.xcassets */; };
 		E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* faktorApp.swift */; };
-		E218A79D2C9F772F00A93776 /* MacControlCenterUI in Frameworks */ = {isa = PBXBuildFile; productRef = E218A79C2C9F772F00A93776 /* MacControlCenterUI */; };
 		E218A7A12C9F7F3100A93776 /* View+OnTrackingHover.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift.swift */; };
 		E22004EE2C7503C3003B17E1 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004ED2C7503C3003B17E1 /* GeneralView.swift */; };
 		E22004F12C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */; };
@@ -47,7 +46,6 @@
 		E22004FE2C75308A003B17E1 /* OnboardingPopoverContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004FD2C75308A003B17E1 /* OnboardingPopoverContent.swift */; };
 		E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004FF2C7530A5003B17E1 /* OnboardingItemStatusIcon.swift */; };
 		E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */ = {isa = PBXBuildFile; productRef = E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */; };
-		E220407A2C06770000846029 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E22040792C06770000846029 /* Logging */; };
 		E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E220407B2C06BE2300846029 /* BrowserManager.swift */; };
 		E230C0942C1520F900C2BF61 /* testMessages.json in Resources */ = {isa = PBXBuildFile; fileRef = E230C0932C1520F800C2BF61 /* testMessages.json */; };
 		E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */; };
@@ -163,11 +161,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2716F1D2C963C870031CA1A /* FullDiskAccess in Frameworks */,
-				E218A79D2C9F772F00A93776 /* MacControlCenterUI in Frameworks */,
 				E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */,
 				E29B43B82C865BD6008FF25F /* SettingsAccess in Frameworks */,
 				E2DE712F2C419590005D3019 /* SQLite in Frameworks */,
-				E220407A2C06770000846029 /* Logging in Frameworks */,
 				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
 				E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */,
 				E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */,
@@ -486,7 +482,6 @@
 			name = faktor;
 			packageProductDependencies = (
 				E2EF8F892C04D3E100AC3652 /* Telegraph */,
-				E22040792C06770000846029 /* Logging */,
 				E20005C02C28A31F00DB8615 /* PostHog */,
 				E208F9712C3C2541000ACAE2 /* LaunchAtLogin */,
 				E2DE712E2C419590005D3019 /* SQLite */,
@@ -494,7 +489,6 @@
 				E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */,
 				E29B43B72C865BD6008FF25F /* SettingsAccess */,
 				E2716F1C2C963C870031CA1A /* FullDiskAccess */,
-				E218A79C2C9F772F00A93776 /* MacControlCenterUI */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
@@ -551,7 +545,6 @@
 			mainGroup = E22C9AFB2C01517100D2984D;
 			packageReferences = (
 				E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */,
-				E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */,
 				E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 				E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */,
@@ -559,7 +552,6 @@
 				E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */,
 				E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 				E2716F1B2C963C870031CA1A /* XCRemoteSwiftPackageReference "FullDiskAccess" */,
-				E218A79B2C9F772F00A93776 /* XCRemoteSwiftPackageReference "MacControlCenterUI" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
@@ -975,28 +967,12 @@
 				minimumVersion = 3.5.2;
 			};
 		};
-		E218A79B2C9F772F00A93776 /* XCRemoteSwiftPackageReference "MacControlCenterUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MacControlCenterUI";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.9;
-			};
-		};
 		E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lfroms/fluid-menu-bar-extra";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.1.0;
-			};
-		};
-		E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-log.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.4;
 			};
 		};
 		E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
@@ -1064,20 +1040,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SQLite;
 		};
-		E218A79C2C9F772F00A93776 /* MacControlCenterUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E218A79B2C9F772F00A93776 /* XCRemoteSwiftPackageReference "MacControlCenterUI" */;
-			productName = MacControlCenterUI;
-		};
 		E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */;
 			productName = FluidMenuBarExtra;
-		};
-		E22040792C06770000846029 /* Logging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E22040782C06770000846029 /* XCRemoteSwiftPackageReference "swift-log" */;
-			productName = Logging;
 		};
 		E2716F1C2C963C870031CA1A /* FullDiskAccess */ = {
 			isa = XCSwiftPackageProductDependency;
