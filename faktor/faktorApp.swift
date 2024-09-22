@@ -60,16 +60,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         PostHogSDK.shared.capture("faktor.init")
         
         // Menubar
-        menuBarExtra = FluidMenuBarExtra(title: "Faktor",  systemImage: "cloud.fill") {
+        menuBarExtra = FluidMenuBarExtra(title: "Faktor",  image: "menu.icon") {
             AppMenu()
                 .environmentObject(self.appStateManager)
                 .environmentObject(self.browserManager)
                 .environmentObject(self.messageManager)
                 .openSettingsAccess()
+        
         }
 
-        
-        
         // Permissions
         appStateManager.$hasAllRequiredPermissions
             .removeDuplicates()
