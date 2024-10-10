@@ -18,17 +18,12 @@ final class faktorTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-//
-    func testResyCode() throws {
+    func testEnglishMessages() throws {
         let parser = OTPParser()
-        
+
         XCTAssertEqual(parser.parseMessage(#"123-456 is your Resy account verification code. This is not a booking confirmation."#), ParsedOTP(service: "resy", code: "123-456"))
-    }
 
-    func testValuesFromOldRepo() throws {
-        let parser = OTPParser()
-
-//        XCTAssertEqual(parser.parseMessage(#"G-412157 is your Google verification code."#), ParsedOTP(service: "google", code: "412157"))
+        XCTAssertEqual(parser.parseMessage(#"G-412157 is your Google verification code."#), ParsedOTP(service: "google", code: "412157"))
 
         XCTAssertEqual(parser.parseMessage(#"469538 is your verification code for your Sony Entertainment Network account."#), ParsedOTP(service: "sony entertainment network", code: "469538"))
 
@@ -42,7 +37,7 @@ final class faktorTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Auth code: 2607 Please enter this code in your app."#), ParsedOTP(service: nil, code: "2607"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Welcome to ClickSend, for your first login you'll need the activation PIN: 464120"#), ParsedOTP(service: "clicksend", code: "464120"))
+        XCTAssertEqual(parser.parseMessage(#"Welcome to ClickSend, for your first login you'll need the activation PIN: 464120"#), ParsedOTP(service: "clicksend", code: "464120"))
 
         XCTAssertEqual(parser.parseMessage(#"Here is your ofo verification code: 2226"#), ParsedOTP(service: "ofo", code: "2226"))
 
@@ -63,18 +58,9 @@ final class faktorTests: XCTestCase {
         XCTAssertEqual(parser.parseMessage(#"Your one-time eBay pin is 3190"#), ParsedOTP(service: "ebay", code: "3190"))
 
         XCTAssertEqual(parser.parseMessage(#"Telegram code 65847"#), ParsedOTP(service: "telegram", code: "65847"))
-
-
-
         XCTAssertEqual(parser.parseMessage(#"858365 is your 98point6 security code."#), ParsedOTP(service: "98point6", code: "858365"))
-
         XCTAssertEqual(parser.parseMessage(#"0013 is your verification code for HQ Trivia"#), ParsedOTP(service: "hq trivia", code: "0013"))
-
         XCTAssertEqual(parser.parseMessage(#"750963 is your Google Voice verification code"#), ParsedOTP(service: "google voice", code: "750963"))
-
-        XCTAssertEqual(parser.parseMessage(#"Пароль: 1752 (никому не говорите) Доступ к информации"#), ParsedOTP(service: nil, code: "1752"))
-
-
 
         XCTAssertEqual(parser.parseMessage(#"2715"#), ParsedOTP(service: nil, code: "2715"))
 
@@ -86,17 +72,15 @@ final class faktorTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Humaniq code: 167-262"#), ParsedOTP(service: "humaniq", code: "167262"))
 
-//        XCTAssertEqual(parser.parseMessage(#"373473(Weibo login verification code) This code is for user authentication, please do not send it to anyone else."#), ParsedOTP(service: "weibo", code: "373473"))
+         XCTAssertEqual(parser.parseMessage(#"373473(Weibo login verification code) This code is for user authentication, please do not send it to anyone else."#), ParsedOTP(service: "weibo", code: "373473"))
 
         XCTAssertEqual(parser.parseMessage(#"[zcool]Your verification code is 991533"#), ParsedOTP(service: "zcool", code: "991533"))
 
-//        XCTAssertEqual(parser.parseMessage(#"G-830829"#), ParsedOTP(service: "google", code: "G-830829"))
+        XCTAssertEqual(parser.parseMessage(#"G-830829"#), ParsedOTP(service: "google", code: "G-830829"))
 
         XCTAssertEqual(parser.parseMessage(#"117740 ist dein Verifizierungscode für dein Sony Entertainment Network-Konto."#), ParsedOTP(service: "sony", code: "117740"))
 
         XCTAssertEqual(parser.parseMessage(#"Your Lyft code is 744444"#), ParsedOTP(service: "lyft", code: "744444"))
-
-//        XCTAssertEqual(parser.parseMessage(#"Cash Show - 賞金クイズ の確認コードは 764972 です。"#), ParsedOTP(service: nil, code: "764972"))
 
         XCTAssertEqual(parser.parseMessage(#"[SwiftCall]Your verification code: 6049"#), ParsedOTP(service: "swiftcall", code: "6049"))
 
@@ -114,15 +98,11 @@ final class faktorTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Your CloudSigma verification code for MEL is 880936"#), ParsedOTP(service: "cloudsigma", code: "880936"))
 
-//        XCTAssertEqual(parser.parseMessage(#"G-718356() Google ."#), ParsedOTP(service: "google", code: "G-718356"))
-
-//        XCTAssertEqual(parser.parseMessage(#"G-723210(이)가 Google 인증 코드입니다."#), ParsedOTP(service: "google", code: "G-723210"))
+        XCTAssertEqual(parser.parseMessage(#"G-718356() Google ."#), ParsedOTP(service: "google", code: "G-718356"))
 
         XCTAssertEqual(parser.parseMessage(#"You requested a secure one-time password to log in to your USCIS Account. Please enter this secure one-time password: 04352398"#), ParsedOTP(service: "uscis", code: "04352398"))
 
         XCTAssertEqual(parser.parseMessage(#"Your Stairlin verification code is 815671"#), ParsedOTP(service: "stairlin", code: "815671"))
-
-
 
         XCTAssertEqual(parser.parseMessage(#"Your mCent confirmation code is: 6920"#), ParsedOTP(service: "mcent", code: "6920"))
 
@@ -132,34 +112,61 @@ final class faktorTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"WhatsApp code 569-485. You can also tap on this link to verify your phone: v.whatsapp.com/569485"#), ParsedOTP(service: "whatsapp", code: "569485"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Use the code (7744) on WeChat to log in to your account. Don't forward the code!"#), ParsedOTP(service: "wechat", code: "7744"))
+        XCTAssertEqual(parser.parseMessage(#"Use the code (7744) on WeChat to log in to your account. Don't forward the code!"#), ParsedOTP(service: "wechat", code: "7744"))
 
         XCTAssertEqual(parser.parseMessage(#"grubhub order 771332"#), ParsedOTP(service: "grubhub", code: "771332"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Your boa code is "521992""#), ParsedOTP(service: "boa", code: "521992"))
+        XCTAssertEqual(parser.parseMessage(#"Your boa code is "521992""#), ParsedOTP(service: "boa", code: "521992"))
 
         XCTAssertEqual(parser.parseMessage(#"Your Twilio verification code is: 9508"#), ParsedOTP(service: "twilio", code: "9508"))
-
         XCTAssertEqual(parser.parseMessage(#"Your Twitter confirmation coce is 180298"#), ParsedOTP(service: "twitter", code: "180298"))
-
         XCTAssertEqual(parser.parseMessage(#"Use 003407 as your password for Facebook for iPhone."#), ParsedOTP(service: "facebook", code: "003407"))
-
-//        XCTAssertEqual(parser.parseMessage(#"Reasy. Set. Get. Your new glasses are ready for pick up at LensCrafters! Stop in any time to see th enew you. Questions? 718-858-7036"#), nil)
+        XCTAssertEqual(parser.parseMessage(#"Reasy. Set. Get. Your new glasses are ready for pick up at LensCrafters! Stop in any time to see th enew you. Questions? 718-858-7036"#), nil)
 
         XCTAssertEqual(parser.parseMessage(#"6635 is your Postmates verification code."#), ParsedOTP(service: "postmates", code: "6635"))
-
-
-
         XCTAssertEqual(parser.parseMessage(#"388-941-4444 your code is 333222"#), ParsedOTP(service: nil, code: "333222"))
-
         XCTAssertEqual(parser.parseMessage(#"+1-388-941-4444 your code is 333-222"#), ParsedOTP(service: nil, code: "333222"))
-
         XCTAssertEqual(parser.parseMessage(#"Microsoft access code: 6907"#), ParsedOTP(service: "microsoft", code: "6907"))
-
-//        XCTAssertEqual(parser.parseMessage(#"<#> Your ExampleApp code is: 123ABC78 FA+9qCX9VSu"#), ParsedOTP(service: "exampleapp", code: "123ABC78"))
-
+        XCTAssertEqual(parser.parseMessage(#"Hi Kenneth, your Lemonade one-time passcode is 764631"#), ParsedOTP(service: "Lemonade", code: "764631"))
+        XCTAssertEqual(parser.parseMessage(#"Your Intuit Code is 097074. Do not share this code. We’ll never call or text you for it."#), ParsedOTP(service: "Intuit", code: "097074"))
+        XCTAssertEqual(parser.parseMessage(#"Your Uber code is 0137. Never share this code. Reply STOP ALL to unsubscribe."#), ParsedOTP(service: "Uber", code: "0137"))
+        XCTAssertEqual(parser.parseMessage(#"Schwab\n394630 is your security code for online login. Do not share this code with anyone, even if they claim to be from Schwab."#), ParsedOTP(service: "Schwab", code: "394630"))
+        XCTAssertEqual(parser.parseMessage(#"Use verification code 627612 for CHUBB 2-step authentication."#), ParsedOTP(service: "CHUBB", code: "627612"))
+        XCTAssertEqual(parser.parseMessage(#"Your Hotels secure code is: 953365"#), ParsedOTP(service: "Hotels", code: "953365"))
+        
+        XCTAssertEqual(parser.parseMessage(#"<#> Your ExampleApp code is: 123ABC78 FA+9qCX9VSu"#), ParsedOTP(service: "exampleapp", code: "123ABC78"))
     }
     
+    func testInternationalMessages() throws {
+        let parser = OTPParser()
+
+        // Czech
+        XCTAssertEqual(parser.parseMessage(#"J&T BANKA: Vas autentizacni kod pro prihlaseni do aplikace ePortal je: 7708-5790"#), ParsedOTP(service: "J&T BANKA", code: "7708-5790"))
+        XCTAssertEqual(parser.parseMessage(#"Vas overovaci kod do SPARTA iD je RW9X0E."#), ParsedOTP(service: "SPARTA", code: "RW9X0E"))
+        XCTAssertEqual(parser.parseMessage(#"Prihlasovaci kod na portal http://moje.partners.cz: ragepr Platnost kodu: 10 minut"#), ParsedOTP(service: "moje.partners.cz", code: "ragepr"))        
+
+        // Russian
+        XCTAssertEqual(parser.parseMessage(#"Пароль: 1752 (никому не говорите) Доступ к информации"#), ParsedOTP(service: nil, code: "1752"))
+
+        // Spanish
+        XCTAssertEqual(parser.parseMessage(#"Su código de verificación para tu cuenta de Google es 1234567890."#), ParsedOTP(service: "google", code: "1234567890"))
+
+        // French
+        XCTAssertEqual(parser.parseMessage(#"Votre code de vérification pour votre compte Google est 1234567890."#), ParsedOTP(service: "google", code: "1234567890"))
+
+        // German
+        XCTAssertEqual(parser.parseMessage(#"Ihr Code für die Google-Konten-Verifizierung ist 1234567890."#), ParsedOTP(service: "google", code: "1234567890"))
+        
+        // Italian
+        XCTAssertEqual(parser.parseMessage(#"Il codice di verifica per il tuo account Google è 1234567890."#), ParsedOTP(service: "google", code: "1234567890"))
+        
+        // Korean
+        XCTAssertEqual(parser.parseMessage(#"G-723210(이)가 Google 인증 코드입니다."#), ParsedOTP(service: "google", code: "G-723210"))
+
+        // Japanese
+       XCTAssertEqual(parser.parseMessage(#"Cash Show - 賞金クイズ の確認コードは 764972 です。"#), ParsedOTP(service: nil, code: "764972"))
+    }
+
     func testShouldNotParseAPhoneNumber() throws {
         let parser = OTPParser()
 
