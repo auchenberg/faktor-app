@@ -109,7 +109,7 @@ struct LogEntryRow: View {
             Text(log.date, style: .time)
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .frame(width: 40, alignment: .leading)
+                .frame(width: 50, alignment: .leading)
             
             Text(logTypeString(for: log.level))
                 .font(.caption)
