@@ -203,7 +203,8 @@ class AppStateManager: ObservableObject, Identifiable {
         if result == NSApplication.ModalResponse.OK {
             if let url: URL = openPanel.url {
                 do {
-                    let bookmarkData: Data = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+                    let bookmarkData: Data = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess], includingResourceValuesForKeys: nil, relativeTo: nil)
+                    
                     Defaults[.libraryFolderBookmark] = bookmarkData
                     updatePermissionsStatus()
                     return true

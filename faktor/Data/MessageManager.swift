@@ -187,7 +187,8 @@ class MessageManager: ObservableObject, Identifiable {
         }
         
         var bookmarkDataIsStale = false
-        let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+                
+        let url = try URL(resolvingBookmarkData: bookmarkData, options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
         
         if bookmarkDataIsStale {
             Logger.core.error("messageManager.performDatabaseOperation.error: Bookmark data is stale")
