@@ -73,6 +73,8 @@
 		E2C527E02C3B4F600085ECC7 /* FaktorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */; };
 		E2DE712C2C419551005D3019 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E2DE712B2C419551005D3019 /* SQLite */; };
 		E2DE712F2C419590005D3019 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E2DE712E2C419590005D3019 /* SQLite */; };
+		E2EB28902D18E2B40087A919 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB288F2D18E2B40087A919 /* AppState.swift */; };
+		E2EB28942D18E8F00087A919 /* StatusSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */; };
 		E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF8F892C04D3E100AC3652 /* Telegraph */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +151,8 @@
 		E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaktorTests.swift; sourceTree = SOURCE_ROOT; };
 		E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaktorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2C527E32C3B4F830085ECC7 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
+		E2EB288F2D18E2B40087A919 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -345,6 +349,7 @@
 		E22004EC2C7503B2003B17E1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */,
 				E2C527C62C39B1D90085ECC7 /* SettingsView.swift */,
 				E2716F192C9633C70031CA1A /* LogsView.swift */,
 				E29B43B22C7FE87D008FF25F /* PermissionsView.swift */,
@@ -433,6 +438,7 @@
 		E299E0AF2C0271A100F1BDB5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				E2EB288F2D18E2B40087A919 /* AppState.swift */,
 				E299E0AE2C0271A100F1BDB5 /* MessageManager.swift */,
 				E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */,
 				E282AA612C03DC660016CDA8 /* NotificationManager.swift */,
@@ -615,8 +621,10 @@
 				E218A7A12C9F7F3100A93776 /* View+OnTrackingHover.swift.swift in Sources */,
 				E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */,
 				E299E0AD2C02719A00F1BDB5 /* OTPParserContants.swift in Sources */,
+				E2EB28902D18E2B40087A919 /* AppState.swift in Sources */,
 				E299E0AB2C02719A00F1BDB5 /* OTPParser.swift in Sources */,
 				E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */,
+				E2EB28942D18E8F00087A919 /* StatusSettingsView.swift in Sources */,
 				E299E0AA2C02719A00F1BDB5 /* Extensions.swift in Sources */,
 				E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */,
 				E299E0B92C02827E00F1BDB5 /* AppStateManager.swift in Sources */,
@@ -708,6 +716,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -775,6 +784,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -809,7 +819,7 @@
 				CURRENT_PROJECT_VERSION = 1.5;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -847,7 +857,7 @@
 				CURRENT_PROJECT_VERSION = 1.5;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -880,7 +890,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -908,7 +918,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
