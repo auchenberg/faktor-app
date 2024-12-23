@@ -22,6 +22,7 @@ struct faktorApp: App {
         Settings {
             SettingsView()
                 .environmentObject(appDelegate.appStateManager)
+                .environmentObject(appDelegate.browserManager)
                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeMainNotification)) { newValue in
                    NSApp.activate(ignoringOtherApps: true)
                    NSApp.setActivationPolicy(.regular)

@@ -20,6 +20,8 @@ class AppStateManager: ObservableObject, Identifiable {
     
     @Published private(set) var hasAllRequiredPermissions: Bool = false
     @Published private(set) var isOnboardingRunning: Bool = false
+    @Published private(set) var diskAccessState: DiskAccessState = .needsPermission
+    @Published private(set) var notificationState: Bool = false
     
     private var onboardingWindow: NSWindow?
     private var permissionCheckTimer: Timer?
@@ -31,7 +33,15 @@ class AppStateManager: ObservableObject, Identifiable {
     
     private func updatePermissionsStatus() {
         Logger.core.info("appStateManager.updatePermissionsStatus")
-        hasAllRequiredPermissions = hasRequiredPermissions()
+        
+        // Update disk access state
+        diskAccessState = checkDiskAccess()
+        
+        // Update notification state
+        notificationState = hasNotificationPermissions()
+        
+        // Update overall permissions state
+        hasAllRequiredPermissions = !diskAccessState.requiresAction && notificationState
     }
             
     func hasRequiredPermissions() -> Bool {
@@ -260,6 +270,53 @@ class AppStateManager: ObservableObject, Identifiable {
     private func checkPermissions() {
         Logger.core.info("appStateManager.checkPermissions")
         updatePermissionsStatus()
+    }
+    
+    private func checkDiskAccess() -> DiskAccessState {
+        Logger.core.info("appStateManager.checkDiskAccess")
+        
+        guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
+            Logger.core.error("appStateManager.checkDiskAccess.error: No bookmark data found")
+            return .needsPermission
+        }
+        
+        do {
+            var bookmarkDataIsStale = false
+            let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+            
+            if bookmarkDataIsStale {
+                Logger.core.error("appStateManager.checkDiskAccess.error: Bookmark data is stale. Renewing.")
+                
+                // Try to renew bookmark
+                let bookmark = try url.bookmarkData()
+                Defaults[.libraryFolderBookmark] = bookmark
+                
+                return .staleBookmark
+            }
+            
+            if url.startAccessingSecurityScopedResource() {
+                defer {
+                    url.stopAccessingSecurityScopedResource()
+                }
+                
+                let dbUrl = url.appendingPathComponent("Messages/chat.db")
+                let fileExists = FileManager.default.fileExists(atPath: dbUrl.path)
+                
+                if fileExists {
+                    Logger.core.info("appStateManager.checkDiskAccess.success")
+                    return .hasDiskAccess
+                } else {
+                    Logger.core.error("appStateManager.checkDiskAccess.error: Database not found")
+                    return .databaseNotFound
+                }
+            } else {
+                Logger.core.error("appStateManager.checkDiskAccess.error: Failed to access security scoped resource")
+                return .needsPermission
+            }
+        } catch {
+            Logger.core.error("appStateManager.checkDiskAccess.error: \(error.localizedDescription)")
+            return .error(error.localizedDescription)
+        }
     }
 }
 

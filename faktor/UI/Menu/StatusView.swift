@@ -30,12 +30,11 @@ struct StatusView: View {
     private var mainStatusText: String {
         let summary = browserManager.getConnectedClientsSummary()
         
-        if !appStateManager.hasRequiredPermissions() {
-            return "Onboarding required"
-        } else if !summary.isEmpty {
-            return summary
-        } else {
-            return "Ready"
-        }
+        switch appStateManager.diskAccessState {
+            case .hasDiskAccess:
+                return summary.isEmpty ? "Ready" : summary
+            default:
+                return appStateManager.diskAccessState.displayMessage
+            }
     }
 }
