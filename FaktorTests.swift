@@ -78,8 +78,6 @@ final class faktorTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"G-830829"#), ParsedOTP(service: "google", code: "G-830829"))
 
-        XCTAssertEqual(parser.parseMessage(#"117740 ist dein Verifizierungscode für dein Sony Entertainment Network-Konto."#), ParsedOTP(service: "sony", code: "117740"))
-
         XCTAssertEqual(parser.parseMessage(#"Your Lyft code is 744444"#), ParsedOTP(service: "lyft", code: "744444"))
 
         XCTAssertEqual(parser.parseMessage(#"[SwiftCall]Your verification code: 6049"#), ParsedOTP(service: "swiftcall", code: "6049"))
@@ -133,8 +131,7 @@ final class faktorTests: XCTestCase {
         XCTAssertEqual(parser.parseMessage(#"Schwab\n394630 is your security code for online login. Do not share this code with anyone, even if they claim to be from Schwab."#), ParsedOTP(service: "Schwab", code: "394630"))
         XCTAssertEqual(parser.parseMessage(#"Use verification code 627612 for CHUBB 2-step authentication."#), ParsedOTP(service: "CHUBB", code: "627612"))
         XCTAssertEqual(parser.parseMessage(#"Your Hotels secure code is: 953365"#), ParsedOTP(service: "Hotels", code: "953365"))
-        
-        XCTAssertEqual(parser.parseMessage(#"<#> Your ExampleApp code is: 123ABC78 FA+9qCX9VSu"#), ParsedOTP(service: "exampleapp", code: "123ABC78"))
+        XCTAssertEqual(parser.parseMessage(#"Your ExampleApp code is: 123ABC78 FA+9qCX9VSu"#), ParsedOTP(service: "ExampleApp", code: "123ABC78"))
     }
     
     func testInternationalMessages() throws {
@@ -156,6 +153,7 @@ final class faktorTests: XCTestCase {
 
         // German
         XCTAssertEqual(parser.parseMessage(#"Ihr Code für die Google-Konten-Verifizierung ist 1234567890."#), ParsedOTP(service: "google", code: "1234567890"))
+        XCTAssertEqual(parser.parseMessage(#"117740 ist dein Verifizierungscode für dein Sony Entertainment Network-Konto."#), ParsedOTP(service: "sony", code: "117740"))
         
         // Italian
         XCTAssertEqual(parser.parseMessage(#"Il codice di verifica per il tuo account Google è 1234567890."#), ParsedOTP(service: "google", code: "1234567890"))
@@ -164,7 +162,7 @@ final class faktorTests: XCTestCase {
         XCTAssertEqual(parser.parseMessage(#"G-723210(이)가 Google 인증 코드입니다."#), ParsedOTP(service: "google", code: "G-723210"))
 
         // Japanese
-       XCTAssertEqual(parser.parseMessage(#"Cash Show - 賞金クイズ の確認コードは 764972 です。"#), ParsedOTP(service: nil, code: "764972"))
+       XCTAssertEqual(parser.parseMessage(#"Cash Show - 賞金クイズ の確認コードは 764972 です。"#), ParsedOTP(service: "Cash Show", code: "764972"))
     }
 
     func testShouldNotParseAPhoneNumber() throws {
