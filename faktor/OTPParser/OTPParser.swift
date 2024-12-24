@@ -2,11 +2,7 @@ import Foundation
 import AppKit
 import OSLog
 
-protocol CoreOTPParser {
-    func parseMessage(_ message: String) -> ParsedOTP?
-}
-
-public class OTPParser: CoreOTPParser {
+public class OTPParser: OTPParserProtocol {
     var config: OTPParserConfiguration
     private let logger = Logger.core
     
@@ -15,7 +11,11 @@ public class OTPParser: CoreOTPParser {
         self.config = DEFAULT_CONFIG
     }
     
-    public func parseMessage(_ message: String) -> ParsedOTP? {
+    public func parseMessage(_ message: String) async throws -> ParsedOTP? {
+        return parseMessageSync(message)
+    }
+    
+    private func parseMessageSync(_ message: String) -> ParsedOTP? {
         let lowercaseMessage = message.lowercased()
         
         // Check if the message contains a phone number pattern

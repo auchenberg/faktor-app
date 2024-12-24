@@ -22,10 +22,10 @@ class MessageManager: ObservableObject, Identifiable {
     private let checkTimeInterval: TimeInterval = 1
     private var processedGuids: Set<String> = []
     
-    var otpParser: OTPParser
+    private let otpParser: OTPParserProtocol
     
-    init() {    
-        self.otpParser = OTPParser()
+    init() {
+        self.otpParser = OTPParserFactory.createParser()
     }
     
     var timer: Timer?
@@ -136,17 +136,22 @@ class MessageManager: ObservableObject, Identifiable {
         Logger.core.info("messageManager.syncMessages")
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -24, to: Date()) else { return }
         
-        do {
-            let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
-            guard parsedOtps.count > 0 else { return }
-            messages.append(contentsOf: parsedOtps)
-
-        } catch let err {
-            Logger.core.error("messageManager.syncMessages.error: \(err)")
+        Task {
+            do {
+                let parsedOtps = try await findPossibleOTPMessagesAfterDate(modifiedDate)
+                guard parsedOtps.count > 0 else { return }
+                
+                // Update UI on main thread
+                await MainActor.run {
+                    messages.append(contentsOf: parsedOtps)
+                }
+            } catch let err {
+                Logger.core.error("messageManager.syncMessages.error: \(err)")
+            }
         }
     }
     
-    private func findPossibleOTPMessagesAfterDate(_ date: Date) throws -> [MessageWithParsedOTP] {
+    private func findPossibleOTPMessagesAfterDate(_ date: Date) async throws -> [MessageWithParsedOTP] {
         if let messagesFromDB = (try loadMessagesAfterDate(date)) {
             let filteredMessages = messagesFromDB
                 .filter { !$0.fromMe }
@@ -156,11 +161,14 @@ class MessageManager: ObservableObject, Identifiable {
             filteredMessages.forEach { message in
                 processedGuids.insert(message.guid)
             }
-                    
-            return filteredMessages.compactMap { message in
-                guard let parsedOTP = otpParser.parseMessage(message.text) else { return nil }
-                return (message, parsedOTP)
+                
+            var results: [MessageWithParsedOTP] = []
+            for message in filteredMessages {
+                if let parsedOTP = try? await otpParser.parseMessage(message.text) {
+                    results.append((message, parsedOTP))
+                }
             }
+            return results
         } else {
             Logger.core.error("messageManager.findPossibleOTPMessagesAfterDate.error: No messages found or an error occurred.")
             return []
