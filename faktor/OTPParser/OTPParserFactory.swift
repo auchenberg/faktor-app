@@ -7,11 +7,11 @@ class OTPParserFactory {
         Logger.core.info("OTPParserFactory.createParser: Creating parser type=\(Defaults[.settingsUseAIForParsing])")
         
         switch Defaults[.settingsUseAIForParsing] {
-
             case true:
                 Logger.core.info("OTPParserFactory.createParser: Creating AI parser")
                 return AIOTPParser()
             default:
+                Logger.core.info("OTPParserFactory.createParser: Creating regular parser")
                 return OTPParser()
         }
     }

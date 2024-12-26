@@ -3,24 +3,38 @@ import OSLog
 
 enum AIOTPParserError: Error {
     case invalidMessage
-    case openAIError(String)
+    case apiError(String)
     case parsingError(String)
+    case noCodeFound
 }
 
 class AIOTPParser: OTPParserProtocol {
-    private let client: OpenAIClient
+    private let client: APIClient
     private let logger = Logger.core
-    private let apiKey: String = "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"
     
-    // Internal struct to match OpenAI's JSON response
-    private struct AIResponse: Codable {
-        let code: String
+    private struct ExtractCodeRequest: Codable {
+        let message: String
+    }
+    
+    private struct ExtractCodeResponse: Codable {
+        let code: String?
         let service: String
+        
+        enum CodingKeys: String, CodingKey {
+            case code
+            case service
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            code = try container.decodeIfPresent(String.self, forKey: .code)
+            service = try container.decode(String.self, forKey: .service)
+        }
     }
     
     init() {
-        self.client = OpenAIClient(apiKey: apiKey)
-        logger.info("AIOTPParser.init: Initialized with API key")
+        self.client = APIClient(baseURL: "https://getfaktor.com")
+        logger.info("AIOTPParser.init: Initialized with API client")
     }
     
     func parseMessage(_ message: String) async throws -> ParsedOTP? {
@@ -31,59 +45,32 @@ class AIOTPParser: OTPParserProtocol {
         
         logger.debug("AIOTPParser.parseMessage: Processing message of length \(message.count)")
         
-        let messages = [
-            OpenAIClient.ChatMessage(
-                role: "system",
-                content: """
-                Extract the 2FA code and provider name from the provided messages. If no valid provider is found return Unknown, and if no code is found return null values.
-                """
-            ),
-            OpenAIClient.ChatMessage(
-                role: "user",
-                content: message
-            )
-        ]
-        
-        let responseFormat = OpenAIClient.ResponseFormat(
-            type: "json_schema",
-            json_schema: OpenAIClient.ResponseFormatJsonSchema(
-                name: "code_response",
-                schema: OpenAIClient.Schema(
-                    type: "object",
-                    properties: [
-                        "code": OpenAIClient.Property(type: "string", description: "The 2FA verification code"),
-                        "service": OpenAIClient.Property(type: "string", description: "The service or company name")
-                    ],
-                    required: ["code", "service"]
-                )
-            )
-        )
-        
         do {
-            logger.debug("AIOTPParser.parseMessage: Sending message to OpenAI")
-            let result = try await client.chat(
-                messages: messages,
-                response_format: responseFormat,
-                responseType: AIResponse.self
+            let request = ExtractCodeRequest(message: message)
+            let response: ExtractCodeResponse = try await client.post(
+                to: "/api/extract-code",
+                body: request
             )
             
-            guard let aiResponse = result else {
-                logger.error("AIOTPParser.parseMessage: No valid response from OpenAI")
-                throw AIOTPParserError.openAIError("No valid response from OpenAI")
+            guard let code = response.code, !code.isEmpty else {
+                logger.info("AIOTPParser.parseMessage: No code found in message")
+                return nil
             }
-
-            logger.debug("AIOTPParser.parseMessage: Received response from OpenAI")
             
-            // Map AIResponse to ParsedOTP
-            let parsedOTP = ParsedOTP(service: aiResponse.service, code: aiResponse.code)
+            let parsedOTP = ParsedOTP(
+                service: response.service,
+                code: code
+            )
+            
+            logger.debug("AIOTPParser.parseMessage: Successfully parsed message")
             return parsedOTP
             
-        } catch let error as OpenAIError {
-            logger.error("AIOTPParser.parseMessage: OpenAI error - \(error)")
-            throw AIOTPParserError.openAIError(error.localizedDescription)
+        } catch let error as APIError {
+            logger.error("AIOTPParser.parseMessage: API error - \(error)")
+            throw AIOTPParserError.apiError(error.localizedDescription)
         } catch {
             logger.error("AIOTPParser.parseMessage: Unexpected error - \(error.localizedDescription)")
-            throw AIOTPParserError.openAIError(error.localizedDescription)
+            throw AIOTPParserError.apiError(error.localizedDescription)
         }
     }
 } 
