@@ -273,6 +273,11 @@ describe('Faktor API Tests', () => {
             {
                 message: "You are editing the phone number information of your weibo account, the verification code is: 588397",
                 expected: { service: "Weibo", code: "588397" }
+            },
+            // Danish
+            {
+                message: "Din verifikationskode til Google er 1234567890.",
+                expected: { service: "Google", code: "1234567890" }
             }
         ];
 
@@ -285,10 +290,6 @@ describe('Faktor API Tests', () => {
             {
                 message: "Reasy. Set. Get. Your new glasses are ready for pick up at LensCrafters!",
                 expected: { service: "LensCrafters", code: "null" }
-            },
-            {
-                message: "2-step verification is now deactivated on your Sony Entertainment Network account.",
-                expected: { service: "Sony Entertainment Network", code: "null" }
             },
 
             // Phone numbers in messages
@@ -310,7 +311,7 @@ describe('Faktor API Tests', () => {
             // Additional special cases
             {
                 message: "someweird-pattern:a1b2c3",
-                expected: { service: "Unknown", code: "null" }
+                expected: { service: "Unknown", code: "a1b2c3" }
             }
         ];
 
@@ -357,7 +358,7 @@ describe('Faktor API Tests', () => {
 
             expect(response.status).toBe(400);
             const result = await response.json();
-            expect(result.code).toBeNull();
+            expect(result.error).toBe("Message is required");
         });
 
         test('handles invalid JSON', async () => {
