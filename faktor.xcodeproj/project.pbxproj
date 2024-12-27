@@ -78,7 +78,6 @@
 		E2EB28962D1922E20087A919 /* AIOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28952D1922E20087A919 /* AIOTPParser.swift */; };
 		E2EB28982D1922E80087A919 /* OTPParserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28972D1922E80087A919 /* OTPParserFactory.swift */; };
 		E2EB289B2D19235A0087A919 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = E2EB289A2D19235A0087A919 /* OpenAI */; };
-		E2EB289D2D1925080087A919 /* ParserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB289C2D1925080087A919 /* ParserType.swift */; };
 		E2EB28A12D1A652C0087A919 /* AIOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28A02D1A65240087A919 /* AIOnboardingTask.swift */; };
 		E2EB28C72D1E02B50087A919 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28C62D1E02B50087A919 /* APIClient.swift */; };
 		E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF8F892C04D3E100AC3652 /* Telegraph */; };
@@ -161,7 +160,6 @@
 		E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusSettingsView.swift; sourceTree = "<group>"; };
 		E2EB28952D1922E20087A919 /* AIOTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOTPParser.swift; sourceTree = "<group>"; };
 		E2EB28972D1922E80087A919 /* OTPParserFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPParserFactory.swift; sourceTree = "<group>"; };
-		E2EB289C2D1925080087A919 /* ParserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserType.swift; sourceTree = "<group>"; };
 		E2EB28A02D1A65240087A919 /* AIOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOnboardingTask.swift; sourceTree = "<group>"; };
 		E2EB28C62D1E02B50087A919 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -454,8 +452,6 @@
 		E299E0AF2C0271A100F1BDB5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				E2EB289C2D1925080087A919 /* ParserType.swift */,
-				E2EB288F2D18E2B40087A919 /* AppState.swift */,
 				E299E0AE2C0271A100F1BDB5 /* MessageManager.swift */,
 				E299E0B82C02827E00F1BDB5 /* AppStateManager.swift */,
 				E282AA612C03DC660016CDA8 /* NotificationManager.swift */,
@@ -467,6 +463,7 @@
 		E299E0B12C0271A100F1BDB5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E2EB288F2D18E2B40087A919 /* AppState.swift */,
 				E299E0B02C0271A100F1BDB5 /* Message.swift */,
 				E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */,
 			);
@@ -660,7 +657,6 @@
 				E2716F1A2C9633C70031CA1A /* LogsView.swift in Sources */,
 				E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */,
 				E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */,
-				E2EB289D2D1925080087A919 /* ParserType.swift in Sources */,
 				E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */,
 				E2EB28962D1922E20087A919 /* AIOTPParser.swift in Sources */,
 				E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */,
