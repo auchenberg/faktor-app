@@ -50,7 +50,13 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
                         if self.settingsEnableBrowserIntegration {
                             // Send message to web server
                             sendNotificationToBrowsers(message: newMessage)
-                            try! messageManager.markMessageAsRead(message: newMessage)
+                            Task {
+                                do {
+                                    await messageManager.markMessageAsRead(message: newMessage)
+                                } catch {
+                                    Logger.core.error("browserManager.error: Failed to mark message as read - \(error)")
+                                }
+                            }
                         }
                     }
                 }

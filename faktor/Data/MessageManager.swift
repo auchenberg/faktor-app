@@ -42,11 +42,11 @@ class MessageManager: ObservableObject, Identifiable {
         return appleOffsetForDate
     }
 
-    private func loadMessagesAfterDate(_ date: Date) throws -> [Message]? {
+    private func loadMessagesAfterDate(_ date: Date) async throws -> [Message]? {
         Logger.core.info("messageManager.loadMessagesAfterDate: Attempting to load messages after \(date)")
         
         do {
-            return try performDatabaseOperation { db in
+            return try await performDatabaseOperation { db in
                 let textColumn = SQLite.Expression<String?>("text")
                 let guidColumn = SQLite.Expression<String>("guid")
                 let cacheRoomnamesColumn = SQLite.Expression<String?>("cache_roomnames")
@@ -139,20 +139,19 @@ class MessageManager: ObservableObject, Identifiable {
         Task {
             do {
                 let parsedOtps = try await findPossibleOTPMessagesAfterDate(modifiedDate)
-                guard parsedOtps.count > 0 else { return }
-                
-                // Update UI on main thread
-                await MainActor.run {
-                    messages.append(contentsOf: parsedOtps)
+                if parsedOtps.count > 0 {
+                    await MainActor.run {
+                        messages.append(contentsOf: parsedOtps)
+                    }
                 }
-            } catch let err {
-                Logger.core.error("messageManager.syncMessages.error: \(err)")
+            } catch {
+                Logger.core.error("messageManager.syncMessages.error: \(error)")
             }
         }
     }
     
     private func findPossibleOTPMessagesAfterDate(_ date: Date) async throws -> [MessageWithParsedOTP] {
-        if let messagesFromDB = (try loadMessagesAfterDate(date)) {
+        if let messagesFromDB = try await loadMessagesAfterDate(date) {
             let filteredMessages = messagesFromDB
                 .filter { !$0.fromMe }
                 .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
@@ -186,7 +185,7 @@ class MessageManager: ObservableObject, Identifiable {
         )
     }
     
-    private func performDatabaseOperation<T>(_ operation: (Connection) throws -> T) throws -> T {
+    private func performDatabaseOperation<T>(_ operation: (Connection) async throws -> T) async throws -> T {
         Logger.core.info("messageManager.performDatabaseOperation")
         
         do {
@@ -196,10 +195,10 @@ class MessageManager: ObservableObject, Identifiable {
             let db = try Connection(dbUrl.absoluteString)
             
             Logger.core.info("messageManager.performDatabaseOperation.success")
-            return try operation(db)
+            return try await operation(db)
         } catch {
-            Logger.core.error("messageManager.performDatabaseOperation.error: Failed to read database")
-            throw MessageManagerError.permission(message: "Failed to read database")
+            Logger.core.error("messageManager.performDatabaseOperation.error: Failed to read database - \(error)")
+            throw MessageManagerError.permission(message: "Failed to read database: \(error.localizedDescription)")
         }
     }
 
