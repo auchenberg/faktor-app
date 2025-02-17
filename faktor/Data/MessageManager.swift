@@ -202,25 +202,33 @@ class MessageManager: ObservableObject, Identifiable {
         }
     }
 
-    func markMessageAsRead(message: MessageWithParsedOTP) {
-//        try performDatabaseOperation { db in
-//            let messageTable = Table("message")
-//            let guidColumn = Expression<String>("guid")
-//            let isReadColumn = Expression<Bool>("is_read")
-//
-//            let guid = message.0.guid
-//            
-//            let updateStatement = messageTable.filter(guidColumn == guid).update(isReadColumn <- true)
-//            try db.run(updateStatement)
-//            
-//            // Update the local messages array
-//            if let index = self.messages.firstIndex(where: { $0.0.guid == guid }) {
-//                self.messages[index].0.isRead = true
-//            }
-//            
-//            Logger.core.info("Message with GUID \(guid) marked as read")
-//        }
-    }
+    func markMessageAsRead(message: MessageWithParsedOTP) async {
+        // Logger.core.info("messageManager.markMessageAsRead: Starting for message \(message.0.guid)")
+        
+        // do {
+        //     try await performDatabaseOperation { db in
+        //         let messageTable = Table("message")
+        //         let guidColumn = SQLite.Expression<String>("guid")
+        //         let isReadColumn = SQLite.Expression<Bool>("is_read")
+
+        //         let guid = message.0.guid
+                
+        //         let updateStatement = messageTable.filter(guidColumn == guid).update(isReadColumn <- true)
+        //         try db.run(updateStatement)
+                
+        //         // Update the local messages array on the main thread
+        //         Task { @MainActor in
+        //             if let index = self.messages.firstIndex(where: { $0.0.guid == guid }) {
+        //                 self.messages[index].0.isRead = true
+        //             }
+        //         }
+           
+        //         Logger.core.info("messageManager.markMessageAsRead: Successfully marked message \(guid) as read")
+        //     }
+        // } catch {
+        //    Logger.core.error("messageManager.markMessageAsRead.error: Failed to mark message as read - \(error)")
+        // }
+    }   
     
     func copyOTPToClipboard(message: MessageWithParsedOTP) {
         NSPasteboard.general.clearContents()
