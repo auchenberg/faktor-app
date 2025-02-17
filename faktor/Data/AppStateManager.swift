@@ -51,45 +51,7 @@ class AppStateManager: ObservableObject, Identifiable {
     }
 
     func hasLibraryAccessPermissions() -> Bool {
-        Logger.core.info("appStateManager.hasLibraryAccessPermissions")
-
-        guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
-            Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: No bookmark data found")
-            return false
-        }
-        
-        do {
-            var bookmarkDataIsStale = false
-            let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
-            
-            if bookmarkDataIsStale {
-                Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: Bookmark data is stale. Resetting bookmark.")
-                Defaults.reset(.libraryFolderBookmark)
-                return false
-            }
-            
-            let dbUrl = url.appendingPathComponent("Messages/chat.db")
-            
-            if url.startAccessingSecurityScopedResource() {
-                defer { url.stopAccessingSecurityScopedResource() }
-                
-                let fileExists = FileManager.default.fileExists(atPath: dbUrl.path)
-                
-                if fileExists {
-                    Logger.core.info("appStateManager.hasLibraryAccessPermissions.success: Access granted")
-                } else {
-                    Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: Database not found: path=\(dbUrl.path)")
-                }
-                
-                return fileExists
-            } else {
-                Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: Failed to access security scoped resource: path=\(dbUrl.path)")
-                return false
-            }
-        } catch {
-            Logger.core.error("appStateManager.hasLibraryAccessPermissions.error: \(error.localizedDescription)")
-            return false
-        }
+        return diskAccessState.requiresAction == false
     }
     
     func hasNotificationPermissions() -> Bool {
@@ -188,46 +150,7 @@ class AppStateManager: ObservableObject, Identifiable {
         Logger.core.info("appStateManager.requestFullDiskAccess FullDiskAccess.isGranted=\(FullDiskAccess.isGranted)")
         FullDiskAccess.openSystemSettings()
     }
-    
-    func requestLibraryFolderAccess() -> Bool {
-        Logger.core.info("appStateManager.requestLibraryFolderAccess")
-        var homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
-        homeDirectory.appendPathComponent("/Library")
         
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.allowsMultipleSelection = false
-        openPanel.showsHiddenFiles = true
-        openPanel.directoryURL = URL(string: homeDirectory.absoluteString)
-        
-        if let dbType = UTType(filenameExtension: "db") {
-            openPanel.allowedContentTypes = [dbType]
-        }
-        
-        openPanel.message = "Please grant access to the Library folder. It should already be selected for you."
-        openPanel.prompt = "Grant Access"
-        
-        let result = openPanel.runModal()
-        
-        if result == NSApplication.ModalResponse.OK {
-            if let url: URL = openPanel.url {
-                do {
-                    let bookmarkData: Data = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess], includingResourceValuesForKeys: nil, relativeTo: nil)
-                    
-                    Defaults[.libraryFolderBookmark] = bookmarkData
-                    updatePermissionsStatus()
-                    return true
-                } catch {
-                    Logger.core.error("appStateManager.requestLibraryFolderAccess.error: \(error)")
-                }
-            }
-        }
-        
-        updatePermissionsStatus()
-        return false
-    }
-    
     func resetStateAndQuit() {
         Logger.core.info("appStateManager.resetStateAndQuit")
         Defaults.reset(.libraryFolderBookmark);
@@ -276,43 +199,19 @@ class AppStateManager: ObservableObject, Identifiable {
     private func checkDiskAccess() -> DiskAccessState {
         Logger.core.info("appStateManager.checkDiskAccess")
         
-        guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
-            Logger.core.error("appStateManager.checkDiskAccess.error: No bookmark data found")
-            return .needsPermission
-        }
-        
         do {
-            var bookmarkDataIsStale = false
-            let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
+            let homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
+            let libraryPath: URL = homeDirectory.appending(path: "/Library")
+            let dbUrl = libraryPath.appending(path: "Messages/chat.db")
+                        
+            let fileExists = FileManager.default.fileExists(atPath: dbUrl.path)
             
-            if bookmarkDataIsStale {
-                Logger.core.error("appStateManager.checkDiskAccess.error: Bookmark data is stale. Renewing.")
-                
-                // Try to renew bookmark
-                let bookmark = try url.bookmarkData()
-                Defaults[.libraryFolderBookmark] = bookmark
-                
-                return .staleBookmark
-            }
-            
-            if url.startAccessingSecurityScopedResource() {
-                defer {
-                    url.stopAccessingSecurityScopedResource()
-                }
-                
-                let dbUrl = url.appendingPathComponent("Messages/chat.db")
-                let fileExists = FileManager.default.fileExists(atPath: dbUrl.path)
-                
-                if fileExists {
-                    Logger.core.info("appStateManager.checkDiskAccess.success")
-                    return .hasDiskAccess
-                } else {
-                    Logger.core.error("appStateManager.checkDiskAccess.error: Database not found")
-                    return .databaseNotFound
-                }
+            if fileExists {
+                Logger.core.info("appStateManager.checkDiskAccess.success")
+                return .hasDiskAccess
             } else {
-                Logger.core.error("appStateManager.checkDiskAccess.error: Failed to access security scoped resource")
-                return .needsPermission
+                Logger.core.error("appStateManager.checkDiskAccess.error: Database not found")
+                return .databaseNotFound
             }
         } catch {
             Logger.core.error("appStateManager.checkDiskAccess.error: \(error.localizedDescription)")

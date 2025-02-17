@@ -189,33 +189,17 @@ class MessageManager: ObservableObject, Identifiable {
     private func performDatabaseOperation<T>(_ operation: (Connection) throws -> T) throws -> T {
         Logger.core.info("messageManager.performDatabaseOperation")
         
-        guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
-            Logger.core.error("messageManager.performDatabaseOperation.error: No bookmark data found")
-            throw MessageManagerError.permission(message: "No bookmark data found")
-        }
-        
-        var bookmarkDataIsStale = false
-                
-        let url = try URL(resolvingBookmarkData: bookmarkData, options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
-        
-        if bookmarkDataIsStale {
-            Logger.core.error("messageManager.performDatabaseOperation.warning: Bookmark data is stale.")
-            throw MessageManagerError.permission(message: "Bookmark data was stale. Try again.")
-        }
-        
-        if url.startAccessingSecurityScopedResource() {
-            defer {
-                url.stopAccessingSecurityScopedResource()
-            }
-            
-            let dbUrl = url.appendingPathComponent("/Messages/chat.db")
+        do {
+            let homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
+            let libraryPath: URL = homeDirectory.appending(path: "/Library")
+            let dbUrl = libraryPath.appending(path: "Messages/chat.db")
             let db = try Connection(dbUrl.absoluteString)
             
             Logger.core.info("messageManager.performDatabaseOperation.success")
             return try operation(db)
-        } else {
-            Logger.core.error("messageManager.performDatabaseOperation.error: Failed to start accessing security scoped resource")
-            throw MessageManagerError.permission(message: "Failed to start accessing security scoped resource")
+        } catch {
+            Logger.core.error("messageManager.performDatabaseOperation.error: Failed to read database")
+            throw MessageManagerError.permission(message: "Failed to read database")
         }
     }
 

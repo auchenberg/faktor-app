@@ -56,44 +56,31 @@ struct BrowserExtensionOnboardingTask: View {
             // Chrome extension ID for Faktor (replace with actual ID)
             let extensionID: String = "lnbhbpdjedbjplopnkkimjenlhneekoc"
             
-            // Path to extensions directory
-            guard let bookmarkData = Defaults[.libraryFolderBookmark] else {
-                Logger.core.error("browserExtensionOnboardingTask.error: No bookmark data found")
-                return false
-            }
+            var homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
+            let libraryPath: URL = homeDirectory.appending(path: "/Library")
             
-            var bookmarkDataIsStale: Bool = false
-            var libraryPath = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &bookmarkDataIsStale)
-            
-            if bookmarkDataIsStale {
-                Logger.core.error("browserExtensionOnboardingTask.error: Bookmark data is stale")
-            }
-            
-            if libraryPath.startAccessingSecurityScopedResource() {
-                defer { libraryPath.stopAccessingSecurityScopedResource() }
+            for (browser, _) in installedBrowsers {
+                var extensionsPath = libraryPath
+                switch browser {
+                case "Google Chrome":
+                    extensionsPath.appendPathComponent("Application Support/Google/Chrome/Default/Extensions")
+                case "Arc":
+                    extensionsPath.appendPathComponent("Application Support/Arc/User Data/Default/Extensions")
+                case "Brave":
+                    extensionsPath.appendPathComponent("Application Support/BraveSoftware/Brave-Browser/Default/Extensions")
+                case "Microsoft Edge":
+                    extensionsPath.appendPathComponent("Application Support/Microsoft Edge/Default/Extensions")
+                default:
+                    continue
+                }
                 
-                for (browser, _) in installedBrowsers {
-                    var extensionsPath = libraryPath
-                    switch browser {
-                    case "Google Chrome":
-                        extensionsPath.appendPathComponent("Application Support/Google/Chrome/Default/Extensions")
-                    case "Arc":
-                        extensionsPath.appendPathComponent("Application Support/Arc/User Data/Default/Extensions")
-                    case "Brave":
-                        extensionsPath.appendPathComponent("Application Support/BraveSoftware/Brave-Browser/Default/Extensions")
-                    case "Microsoft Edge":
-                        extensionsPath.appendPathComponent("Application Support/Microsoft Edge/Default/Extensions")
-                    default:
-                        continue
-                    }
-                    
-                    extensionsPath.appendPathComponent(extensionID)
-                    
-                    if FileManager.default.fileExists(atPath: extensionsPath.path) {
-                        return true
-                    }
+                extensionsPath.appendPathComponent(extensionID)
+                
+                if FileManager.default.fileExists(atPath: extensionsPath.path) {
+                    return true
                 }
             }
+      
         } catch {
             Logger.core.error("browserExtensionOnboardingTask.error: Error checking for browser extensions: \(error)")
         }

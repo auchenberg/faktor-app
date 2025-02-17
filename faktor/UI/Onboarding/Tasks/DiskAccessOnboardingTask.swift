@@ -21,21 +21,11 @@ struct DiskAccessOnboardingTask: View {
                 .interpolation(.high)
         } actionView: {
             if !isComplete {
-
                 VStack(alignment: .trailing, spacing: 10) {
-                        Button("Grant") {
-                            self.appStateManager.requestLibraryFolderAccess()
-                        }.buttonStyle(.borderedProminent)
-                        
                         Button("Grant full disk access") {
                             self.appStateManager.requestFullDiskAccess()
-                        }.buttonStyle(.borderless).controlSize(.small)
+                        }.buttonStyle(.borderedProminent)
                     }
-            }
-        } infoPopoverContent: {
-            OnboardingPopoverContent(title: "Disk access") {
-                Text("In order for Faktor to search for new 2FA Codes, we need access to your library folder, where iMesssage stores it's messages.")
-                    .lineLimit(3, reservesSpace: true)
             }
         } content: {
             OnboardingItemStatusIcon(state: isComplete ? .complete : .warning) {
