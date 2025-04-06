@@ -15,7 +15,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "4c009d5c2496e7aa126e922c94dd3d6ae049efa2"
+        "revision" : "00c82eff4550c87cf9c547d7e5493a6a97837061"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MacPaw/OpenAI.git",
       "state" : {
-        "revision" : "843e087929aa806adb611dbca93f9a4a7f28be04",
-        "version" : "0.3.0"
+        "revision" : "f5b55e19b5a634d1c86ca4f77e614ffd19d5fc1d",
+        "version" : "0.3.9"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios.git",
       "state" : {
-        "revision" : "08b53e64abd503ca3e5f0eebd6b89a32fbe33850",
-        "version" : "3.6.1"
+        "revision" : "889f89a0da78544df735674d6bd1cb18481817c9",
+        "version" : "3.21.0"
       }
     },
     {
@@ -77,8 +77,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/SettingsAccess",
       "state" : {
-        "revision" : "f0b57b4c4c0de66b9f4d6c41d39f1d6ede0c9891",
-        "version" : "2.0.0"
+        "revision" : "08e80c35501f273afa2f5d6f737429bbe395ff81",
+        "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
       }
     },
     {
