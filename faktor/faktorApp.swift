@@ -11,7 +11,6 @@ import SettingsAccess
 extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
-    static let settingsUseAIForParsing = Key<Bool>("useAIForParsing", default: false)
     static let libraryFolderBookmark = Key<Data?>("libraryFolderBookmark")
 }
 

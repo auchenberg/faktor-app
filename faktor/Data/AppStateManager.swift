@@ -156,7 +156,6 @@ class AppStateManager: ObservableObject, Identifiable {
         Defaults.reset(.libraryFolderBookmark);
         Defaults.reset(.settingShowNotifications);
         Defaults.reset(.settingsEnableBrowserIntegration)
-        Defaults.reset(.settingsUseAIForParsing)
         
         NSApplication.shared.terminate(nil)
     }

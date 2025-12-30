@@ -1,24 +1,8 @@
 import Foundation
-import Defaults
-import OSLog
 
 class OTPParserFactory {
     static func createParser() -> OTPParserProtocol {
-        Logger.core.info("OTPParserFactory.createParser: Creating parser type=\(Defaults[.settingsUseAIForParsing])")
-        
-        switch Defaults[.settingsUseAIForParsing] {
-            case true:
-                Logger.core.info("OTPParserFactory.createParser: Creating AI parser")
-                return AIOTPParser()
-            default:
-                Logger.core.info("OTPParserFactory.createParser: Creating regular parser")
-                return OTPParser()
-        }
-    }
-    
-    static func resetToOffline() {
-        Logger.core.info("OTPParserFactory.resetToOffline: Resetting parser to offline mode")
-        Defaults[.settingsUseAIForParsing] = false
+        return OTPParser()
     }
 }
 

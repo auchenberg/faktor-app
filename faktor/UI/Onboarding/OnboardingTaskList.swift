@@ -25,10 +25,6 @@ struct OnboardingTaskList: View {
             Section {
                 BrowserExtensionOnboardingTask(appStateManager: appStateManager)
             }
-//            
-//            Section {
-//                AIOnboardingTask(appStateManager: appStateManager)
-//            }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)

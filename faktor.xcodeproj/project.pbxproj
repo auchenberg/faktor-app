@@ -75,11 +75,7 @@
 		E2DE712F2C419590005D3019 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = E2DE712E2C419590005D3019 /* SQLite */; };
 		E2EB28902D18E2B40087A919 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB288F2D18E2B40087A919 /* AppState.swift */; };
 		E2EB28942D18E8F00087A919 /* StatusSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */; };
-		E2EB28962D1922E20087A919 /* AIOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28952D1922E20087A919 /* AIOTPParser.swift */; };
 		E2EB28982D1922E80087A919 /* OTPParserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28972D1922E80087A919 /* OTPParserFactory.swift */; };
-		E2EB289B2D19235A0087A919 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = E2EB289A2D19235A0087A919 /* OpenAI */; };
-		E2EB28A12D1A652C0087A919 /* AIOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28A02D1A65240087A919 /* AIOnboardingTask.swift */; };
-		E2EB28C72D1E02B50087A919 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28C62D1E02B50087A919 /* APIClient.swift */; };
 		E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF8F892C04D3E100AC3652 /* Telegraph */; };
 /* End PBXBuildFile section */
 
@@ -158,10 +154,7 @@
 		E2C527E32C3B4F830085ECC7 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		E2EB288F2D18E2B40087A919 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusSettingsView.swift; sourceTree = "<group>"; };
-		E2EB28952D1922E20087A919 /* AIOTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOTPParser.swift; sourceTree = "<group>"; };
 		E2EB28972D1922E80087A919 /* OTPParserFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPParserFactory.swift; sourceTree = "<group>"; };
-		E2EB28A02D1A65240087A919 /* AIOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOnboardingTask.swift; sourceTree = "<group>"; };
-		E2EB28C62D1E02B50087A919 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -180,7 +173,6 @@
 				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
 				E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */,
 				E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */,
-				E2EB289B2D19235A0087A919 /* OpenAI in Frameworks */,
 				E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -426,7 +418,6 @@
 		E233C6B92C77B451006DE68D /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				E2EB28A02D1A65240087A919 /* AIOnboardingTask.swift */,
 				E22004FB2C753064003B17E1 /* DiskAccessOnboardingTask.swift */,
 				E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */,
 				E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */,
@@ -437,9 +428,7 @@
 		E299E0A72C02719A00F1BDB5 /* OTPParser */ = {
 			isa = PBXGroup;
 			children = (
-				E2EB28C62D1E02B50087A919 /* APIClient.swift */,
 				E2EB28972D1922E80087A919 /* OTPParserFactory.swift */,
-				E2EB28952D1922E20087A919 /* AIOTPParser.swift */,
 				E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */,
 				E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */,
 				E299E0A42C02719A00F1BDB5 /* OTPParser.swift */,
@@ -509,7 +498,6 @@
 				E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */,
 				E29B43B72C865BD6008FF25F /* SettingsAccess */,
 				E2716F1C2C963C870031CA1A /* FullDiskAccess */,
-				E2EB289A2D19235A0087A919 /* OpenAI */,
 			);
 			productName = faktor;
 			productReference = E22C9B042C01517100D2984D /* Faktor.app */;
@@ -573,7 +561,6 @@
 				E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */,
 				E29B43B62C865BD6008FF25F /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 				E2716F1B2C963C870031CA1A /* XCRemoteSwiftPackageReference "FullDiskAccess" */,
-				E2EB28992D19235A0087A919 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = E22C9B052C01517100D2984D /* Products */;
 			projectDirPath = "";
@@ -638,7 +625,6 @@
 				E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */,
 				E299E0AD2C02719A00F1BDB5 /* OTPParserContants.swift in Sources */,
 				E2EB28902D18E2B40087A919 /* AppState.swift in Sources */,
-				E2EB28C72D1E02B50087A919 /* APIClient.swift in Sources */,
 				E299E0AB2C02719A00F1BDB5 /* OTPParser.swift in Sources */,
 				E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */,
 				E2EB28942D18E8F00087A919 /* StatusSettingsView.swift in Sources */,
@@ -649,7 +635,6 @@
 				E2EB28982D1922E80087A919 /* OTPParserFactory.swift in Sources */,
 				E22004F12C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift in Sources */,
 				E299E0B72C0280A200F1BDB5 /* String.swift in Sources */,
-				E2EB28A12D1A652C0087A919 /* AIOnboardingTask.swift in Sources */,
 				E299E0B22C0271A100F1BDB5 /* MessageManager.swift in Sources */,
 				E2C527CB2C39C24A0085ECC7 /* AboutView.swift in Sources */,
 				E22004FE2C75308A003B17E1 /* OnboardingPopoverContent.swift in Sources */,
@@ -658,7 +643,6 @@
 				E2C527C72C39B1D90085ECC7 /* SettingsView.swift in Sources */,
 				E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */,
 				E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */,
-				E2EB28962D1922E20087A919 /* AIOTPParser.swift in Sources */,
 				E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */,
 				E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */,
 				E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */,
@@ -1049,14 +1033,6 @@
 				minimumVersion = 0.15.3;
 			};
 		};
-		E2EB28992D19235A0087A919 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.0;
-			};
-		};
 		E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Building42/Telegraph.git";
@@ -1110,11 +1086,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */;
 			productName = SQLite;
-		};
-		E2EB289A2D19235A0087A919 /* OpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E2EB28992D19235A0087A919 /* XCRemoteSwiftPackageReference "OpenAI" */;
-			productName = OpenAI;
 		};
 		E2EF8F892C04D3E100AC3652 /* Telegraph */ = {
 			isa = XCSwiftPackageProductDependency;
