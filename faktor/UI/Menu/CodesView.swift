@@ -12,9 +12,7 @@ struct CodesView: View {
         PostHogSDK.shared.capture("faktor.copyToClipboard")
         browserManager.sendNotificationToBrowsers(message: message)
         messageManager.copyOTPToClipboard(message: message)
-        Task {
-            await messageManager.markMessageAsRead(message: message)
-        }
+        messageManager.markMessageAsRead(message: message)
         
         // Find and close the "Faktor" window
         // TODO: Find better way as this is hacky
