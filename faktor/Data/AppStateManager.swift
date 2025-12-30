@@ -199,23 +199,10 @@ class AppStateManager: ObservableObject, Identifiable {
     private func checkDiskAccess() -> DiskAccessState {
         Logger.core.info("appStateManager.checkDiskAccess")
         
-        do {
-            let homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
-            let libraryPath: URL = homeDirectory.appending(path: "/Library")
-            let dbUrl = libraryPath.appending(path: "Messages/chat.db")
-                        
-            let fileExists = FileManager.default.fileExists(atPath: dbUrl.path)
-            
-            if fileExists {
-                Logger.core.info("appStateManager.checkDiskAccess.success")
-                return .hasDiskAccess
-            } else {
-                Logger.core.error("appStateManager.checkDiskAccess.error: Database not found")
-                return .databaseNotFound
-            }
-        } catch {
-            Logger.core.error("appStateManager.checkDiskAccess.error: \(error.localizedDescription)")
-            return .error(error.localizedDescription)
+        if FullDiskAccess.isGranted {
+            return .hasDiskAccess
+        } else {
+            return .needsPermission
         }
     }
 }
