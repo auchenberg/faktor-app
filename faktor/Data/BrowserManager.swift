@@ -50,13 +50,6 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
                         if self.settingsEnableBrowserIntegration {
                             // Send message to web server
                             sendNotificationToBrowsers(message: newMessage)
-                            Task {
-                                do {
-                                    await messageManager.markMessageAsRead(message: newMessage)
-                                } catch {
-                                    Logger.core.error("browserManager.error: Failed to mark message as read - \(error)")
-                                }
-                            }
                         }
                     }
                 }
@@ -94,6 +87,33 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
     
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didReceiveMessage message: Telegraph.WebSocketMessage) {
         Logger.core.info("browserManager.didReceiveMessage from client \(webSocket.clientName ?? "Unknown")")
+
+        // Try to parse the message as JSON
+        guard case .text(let text) = message.payload,
+              let data = text.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let event = json["event"] as? String else {
+            Logger.core.warning("browserManager.didReceiveMessage: Could not parse message")
+            return
+        }
+
+        Logger.core.info("browserManager.didReceiveMessage: Event = \(event)")
+
+        // Handle "code.used" event from browser extension
+        if event == "code.used" {
+            if let eventData = json["data"] as? [String: Any],
+               let messageId = eventData["id"] as? String {
+                Logger.core.info("browserManager.didReceiveMessage: Code used, message id = \(messageId)")
+
+                // Find the message by ID and mark it as read
+                if let messageToMark = messageManager.messages.first(where: { $0.0.guid == messageId }) {
+                    let success = messageManager.markMessageAsRead(message: messageToMark)
+                    Logger.core.info("browserManager.didReceiveMessage: markMessageAsRead = \(success)")
+                } else {
+                    Logger.core.warning("browserManager.didReceiveMessage: Could not find message with id \(messageId)")
+                }
+            }
+        }
     }
     
     func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
@@ -131,10 +151,11 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
             let data: [String: Any] = [
                 "event": "code.received",
                 "data": [
+                    "id": message.0.guid,
                     "code": message.1.code
                 ]
             ]
-            
+
             sendToSocket(socket: socket, data: data)
         }
     }
