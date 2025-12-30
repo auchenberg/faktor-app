@@ -9,97 +9,90 @@ import Foundation
 import SQLite
 import Defaults
 import OSLog
-import AppKit 
+import AppKit
 
-enum MessageManagerError: Error {
-    case generic(message: String)
-    case permission(message: String)
+struct MessageManagerError: Error {
+    let message: String
 }
 
-class MessageManager: ObservableObject, Identifiable {
+// Static column definitions for Messages database
+private enum MessageColumns {
+    static let text = SQLite.Expression<String?>("text")
+    static let guid = SQLite.Expression<String>("guid")
+    static let cacheRoomnames = SQLite.Expression<String?>("cache_roomnames")
+    static let fromMe = SQLite.Expression<Bool>("is_from_me")
+    static let date = SQLite.Expression<Int>("date")
+    static let service = SQLite.Expression<String>("service")
+    static let isRead = SQLite.Expression<Bool>("is_read")
+    static let rowId = SQLite.Expression<Int>("ROWID")
+    static let handleId = SQLite.Expression<Int>("handle_id")
+    static let handleIdentifier = SQLite.Expression<String?>("id")
+
+    static let messageTable = Table("message")
+    static let handleTable = Table("handle")
+}
+
+class MessageManager: ObservableObject {
     @Published var messages: [MessageWithParsedOTP] = []
-    
+
     private let checkTimeInterval: TimeInterval = 1
     private var processedGuids: Set<String> = []
-    
     private let otpParser: OTPParserProtocol
-    
+    private let databaseQueue = DispatchQueue(label: "app.faktor.database", qos: .userInitiated)
+    private var dbConnection: Connection?
+
     init() {
         self.otpParser = OTPParserFactory.createParser()
+        self.dbConnection = try? createConnection()
     }
-    
+
+    private func createConnection() throws -> Connection {
+        let dbUrl = getDatabaseURL()
+        let db = try Connection(dbUrl.absoluteString, readonly: true)
+        try db.execute("PRAGMA busy_timeout = 1000")
+        return db
+    }
+
     var timer: Timer?
     
     private func timeOffsetForDate(_ date: Date) -> Int {
-        var appleOffsetForDate = Int(date.timeIntervalSinceReferenceDate)
-        
-        if #available(macOS 10.13, *) {
-            // Check if the macOS version is 10.13 or later
-            let factor = Int(pow(10.0, 9)) // Calculate 10^9 and convert it to an integer
-            appleOffsetForDate *= factor   // Multiply appleOffsetForDate by the factor
-        }
-        
-        return appleOffsetForDate
+        return Int(date.timeIntervalSinceReferenceDate * 1_000_000_000)
     }
 
     private func loadMessagesAfterDate(_ date: Date) async throws -> [Message]? {
-        Logger.core.info("messageManager.loadMessagesAfterDate: Attempting to load messages after \(date)")
-        
-        do {
-            return try await performDatabaseOperation { db in
-                let textColumn = SQLite.Expression<String?>("text")
-                let guidColumn = SQLite.Expression<String>("guid")
-                let cacheRoomnamesColumn = SQLite.Expression<String?>("cache_roomnames")
-                let fromMeColumn = SQLite.Expression<Bool>("is_from_me")
-                let dateColumn = SQLite.Expression<Int>("date")
-                let serviceColumn = SQLite.Expression<String>("service")
-                let isReadColumn = SQLite.Expression<Bool>("is_read")
-                
-                let ROWID = SQLite.Expression<Int>("ROWID")
+        let dateOffset = self.timeOffsetForDate(date)
 
-                let handleTable = Table("handle")
-                let handleFrom = handleTable[SQLite.Expression<String?>("id")]
-                let messageTable = Table("message")
-                let messageHandleId = messageTable[SQLite.Expression<Int>("handle_id")]
-                
-                let query = messageTable
-                    .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], messageTable[isReadColumn], handleFrom, messageTable[serviceColumn])
-                    .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-                    .where(messageTable[dateColumn] > self.timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
-                    .order(messageTable[dateColumn].asc)
-                
-                Logger.core.debug("messageManager.loadMessagesAfterDate: Executing query")
-                
-                let mapRowIterator = try db.prepareRowIterator(query)
-                let messages = try mapRowIterator.compactMap { messageRow -> Message? in
-                    guard let text = messageRow[textColumn], let handle = messageRow[handleFrom] else { return nil }
-                    
-                    return Message(
-                        guid: messageRow[guidColumn],
-                        text: text,
-                        handle: handle,
-                        group: messageRow[cacheRoomnamesColumn],
-                        fromMe: messageRow[fromMeColumn],
-                        isRead: messageRow[isReadColumn]
-                    )
-                }
-                
-                Logger.core.info("messageManager.loadMessagesAfterDate: Successfully loaded \(messages.count) messages")
-                return messages
+        return try await performDatabaseRead { db in
+            let C = MessageColumns.self
+            let handleFrom = C.handleTable[C.handleIdentifier]
+
+            let query = C.messageTable
+                .select(C.messageTable[C.guid], C.messageTable[C.fromMe], C.messageTable[C.text],
+                        C.messageTable[C.cacheRoomnames], C.messageTable[C.date], C.messageTable[C.isRead],
+                        handleFrom, C.messageTable[C.service])
+                .join(.leftOuter, C.handleTable, on: C.messageTable[C.handleId] == C.handleTable[C.rowId])
+                .where(C.messageTable[C.date] > dateOffset && C.messageTable[C.service] == "SMS")
+                .order(C.messageTable[C.date].asc)
+
+            let rows = try db.prepareRowIterator(query)
+            return try rows.compactMap { row -> Message? in
+                guard let text = row[C.text], let handle = row[handleFrom] else { return nil }
+                return Message(
+                    guid: row[C.guid],
+                    text: text,
+                    handle: handle,
+                    group: row[C.cacheRoomnames],
+                    fromMe: row[C.fromMe],
+                    isRead: row[C.isRead]
+                )
             }
-        } catch let error as MessageManagerError {
-            Logger.core.error("messageManager.loadMessagesAfterDate: MessageManagerError - \(error.localizedDescription)")
-            throw error
-        } catch {
-            Logger.core.error("messageManager.loadMessagesAfterDate: Unexpected error - \(error.localizedDescription)")
-            throw MessageManagerError.generic(message: "Failed to load messages: \(error.localizedDescription)")
         }
     }
     
     func startListening() {
         Logger.core.info("messageManager.startListening")
         syncMessages()
-        
+
         timer = Timer.scheduledTimer(withTimeInterval: checkTimeInterval, repeats: true) { [weak self] _ in
             self?.syncMessages()
         }
@@ -154,7 +147,7 @@ class MessageManager: ObservableObject, Identifiable {
         if let messagesFromDB = try await loadMessagesAfterDate(date) {
             let filteredMessages = messagesFromDB
                 .filter { !$0.fromMe }
-                .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
+                .filter { !shouldSkipMessage($0.text) }
                 .filter { !processedGuids.contains($0.guid) }
             
             filteredMessages.forEach { message in
@@ -174,60 +167,77 @@ class MessageManager: ObservableObject, Identifiable {
         }
     }
     
-    private func isInvalidMessageBodyValidPerCustomBlacklist(_ messageBody: String) -> Bool {
-        return (
-            messageBody.isEmpty ||
-            messageBody.count < 5 ||
-            messageBody.contains("$") ||
-            messageBody.contains("€") ||
-            messageBody.contains("₹") ||
-            messageBody.contains("¥")
-        )
+    private func shouldSkipMessage(_ text: String) -> Bool {
+        return text.isEmpty ||
+            text.count < 5 ||
+            text.contains("$") ||
+            text.contains("€") ||
+            text.contains("₹") ||
+            text.contains("¥")
     }
     
-    private func performDatabaseOperation<T>(_ operation: (Connection) async throws -> T) async throws -> T {
-        Logger.core.info("messageManager.performDatabaseOperation")
-        
-        do {
-            let homeDirectory: URL = FileManager.default.homeDirectoryForCurrentUser
-            let libraryPath: URL = homeDirectory.appending(path: "/Library")
-            let dbUrl = libraryPath.appending(path: "Messages/chat.db")
-            let db = try Connection(dbUrl.absoluteString)
-            
-            Logger.core.info("messageManager.performDatabaseOperation.success")
-            return try await operation(db)
-        } catch {
-            Logger.core.error("messageManager.performDatabaseOperation.error: Failed to read database - \(error)")
-            throw MessageManagerError.permission(message: "Failed to read database: \(error.localizedDescription)")
+    private func performDatabaseRead<T: Sendable>(_ operation: @escaping @Sendable (Connection) throws -> T) async throws -> T {
+        return try await withCheckedThrowingContinuation { continuation in
+            databaseQueue.async { [self] in
+                do {
+                    // Reuse existing connection or create new one
+                    let db: Connection
+                    if let existing = self.dbConnection {
+                        db = existing
+                    } else {
+                        db = try self.createConnection()
+                        self.dbConnection = db
+                    }
+                    let result = try operation(db)
+                    continuation.resume(returning: result)
+                } catch {
+                    // Connection may be stale, clear it for next attempt
+                    self.dbConnection = nil
+                    Logger.core.error("messageManager.performDatabaseRead: \(error)")
+                    continuation.resume(throwing: MessageManagerError(message: error.localizedDescription))
+                }
+            }
         }
     }
 
-    func markMessageAsRead(message: MessageWithParsedOTP) async {
-        // Logger.core.info("messageManager.markMessageAsRead: Starting for message \(message.0.guid)")
-        
-        // do {
-        //     try await performDatabaseOperation { db in
-        //         let messageTable = Table("message")
-        //         let guidColumn = SQLite.Expression<String>("guid")
-        //         let isReadColumn = SQLite.Expression<Bool>("is_read")
+    private func getDatabaseURL() -> URL {
+        let homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+        return homeDirectory.appending(path: "Library/Messages/chat.db")
+    }
 
-        //         let guid = message.0.guid
-                
-        //         let updateStatement = messageTable.filter(guidColumn == guid).update(isReadColumn <- true)
-        //         try db.run(updateStatement)
-                
-        //         // Update the local messages array on the main thread
-        //         Task { @MainActor in
-        //             if let index = self.messages.firstIndex(where: { $0.0.guid == guid }) {
-        //                 self.messages[index].0.isRead = true
-        //             }
-        //         }
-           
-        //         Logger.core.info("messageManager.markMessageAsRead: Successfully marked message \(guid) as read")
-        //     }
-        // } catch {
-        //    Logger.core.error("messageManager.markMessageAsRead.error: Failed to mark message as read - \(error)")
-        // }
+    /// Mark a message as read using AppleScript
+    @discardableResult
+    func markMessageAsRead(message: MessageWithParsedOTP) -> Bool {
+        let handle = message.0.handle
+        Logger.core.info("messageManager.markMessageAsRead: handle: \(handle)")
+
+        let script = """
+        tell application "Messages"
+            set chatList to every chat
+            repeat with aChat in chatList
+                if id of aChat contains "\(handle)" then
+                    return id of aChat
+                end if
+            end repeat
+            return "not_found"
+        end tell
+        """
+
+        var error: NSDictionary?
+        if let scriptObject = NSAppleScript(source: script) {
+            let result = scriptObject.executeAndReturnError(&error)
+
+            if let error = error {
+                Logger.core.warning("messageManager.markMessageAsRead: AppleScript error - \(error)")
+                return false
+            }
+
+            let resultString = result.stringValue ?? "nil"
+            Logger.core.info("messageManager.markMessageAsRead: result - \(resultString)")
+            return resultString != "not_found"
+        }
+
+        return false
     }   
     
     func copyOTPToClipboard(message: MessageWithParsedOTP) {
