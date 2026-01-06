@@ -2,5 +2,18 @@
 <dict>
     <key>NSUserNotificationAlertStyle</key>
     <string>alert</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Faktor needs to access Messages to mark verification codes as read after autofill.</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.faktor.app</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>faktor</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

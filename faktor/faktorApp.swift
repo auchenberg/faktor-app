@@ -12,6 +12,7 @@ extension Defaults.Keys {
     static let settingShowNotifications = Key<Bool>("showNotifications", default: true)
     static let settingsEnableBrowserIntegration = Key<Bool>("enableBrowserIntegration", default: true)
     static let libraryFolderBookmark = Key<Data?>("libraryFolderBookmark")
+    static let nativeMessagingInstalled = Key<Bool>("nativeMessagingInstalled", default: false)
 }
 
 @main
@@ -97,5 +98,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
        NSApp.setActivationPolicy(.accessory)
        NSApp.deactivate()
         return false
+    }
+
+    // MARK: - URL Scheme Handling
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls {
+            handleURL(url)
+        }
+    }
+
+    private func handleURL(_ url: URL) {
+        Logger.core.info("faktorApp: Received URL: \(url.absoluteString)")
+
+        guard url.scheme == "faktor" else {
+            Logger.core.warning("faktorApp: Unknown URL scheme: \(url.scheme ?? "nil")")
+            return
+        }
+
+        let host = url.host ?? ""
+
+        switch host {
+        case "activate":
+            // Just activate/launch the app - no UI action needed
+            // The app is already running if we received this
+            Logger.core.info("faktorApp: Activated via URL scheme")
+
+        case "settings":
+            // Open settings window
+            NSApp.activate(ignoringOtherApps: true)
+            if #available(macOS 14.0, *) {
+                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            } else if #available(macOS 13.0, *) {
+                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+            }
+
+        default:
+            Logger.core.info("faktorApp: Unknown URL host: \(host)")
+        }
     }
 }
