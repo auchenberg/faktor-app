@@ -1,55 +1,74 @@
 //
-//  NotificationManager.swift
+//  BrowserManager.swift
 //  Faktor
 //
-//  Created by Kenneth Auchenberg on 5/25/24.
+//  Manages browser extension communication via Native Messaging
+//  Uses CFMessagePort for IPC with the native messaging host
 //
 
 import Foundation
-import ServiceManagement
 import Combine
 import SwiftUI
 import Defaults
-import UserNotifications
-import Telegraph
 import OSLog
-import ObjectiveC
 
-private var clientNameKey: UInt8 = 0
+// MARK: - BrowserManager
 
-extension Telegraph.WebSocket {
-    var clientName: String? {
-        get {
-            return objc_getAssociatedObject(self, &clientNameKey) as? String
-        }
-        set {
-            objc_setAssociatedObject(self, &clientNameKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-}
+/// Manages native messaging communication with browser extensions
+/// Uses CFMessagePort for IPC with the native messaging host
+class BrowserManager: NSObject, ObservableObject {
 
-class BrowserManager: ObservableObject, ServerWebSocketDelegate {
-    
+    // MARK: - Constants
+
+    /// CFMessagePort name for receiving messages from native host
+    private static let messagePortName = "com.faktor.app.messageport"
+
+    // MARK: - Published Properties
+
+    @Published var connectedBrowsers: [ConnectedBrowser] = []
+
     @Default(.settingsEnableBrowserIntegration) var settingsEnableBrowserIntegration
     @ObservedObject var messageManager: MessageManager
-    @Published private var latestMessage: MessageWithParsedOTP?
-    @Published var connectedWebSockets: [WebSocket] = []
+
+    // MARK: - Private Properties
+
     private var cancellable: AnyCancellable?
-    var server: Server!    
-    
+    @Published private var latestMessage: MessageWithParsedOTP?
+
+    // CFMessagePort
+    private var messagePort: CFMessagePort?
+    private var runLoopSource: CFRunLoopSource?
+
+    // MARK: - Types
+
+    struct ConnectedBrowser: Identifiable, Equatable {
+        let id: String
+        let name: String
+        let connectedAt: Date
+
+        init(id: String = UUID().uuidString, name: String, connectedAt: Date = Date()) {
+            self.id = id
+            self.name = name
+            self.connectedAt = connectedAt
+        }
+    }
+
+    // MARK: - Initialization
+
     init(messageManager: MessageManager) {
-        self.messageManager = messageManager    
-                
+        self.messageManager = messageManager
+        super.init()
+
+        // Observe message changes to send to browsers
         cancellable = messageManager.$messages.sink { [weak self] messages in
             guard let self = self else { return }
-            
-            Logger.core.info("browserManager.messageChanged")
+
+            Logger.core.info("BrowserManager: messageChanged")
             if let newMessage = messages.last {
                 if let latestMessage = self.latestMessage {
                     if newMessage != latestMessage {
                         if self.settingsEnableBrowserIntegration {
-                            // Send message to web server
-                            sendNotificationToBrowsers(message: newMessage)
+                            self.sendNotificationToBrowsers(message: newMessage)
                         }
                     }
                 }
@@ -57,144 +76,261 @@ class BrowserManager: ObservableObject, ServerWebSocketDelegate {
             self.latestMessage = messages.last
         }
     }
-        
-    func server(_ server: Telegraph.Server, webSocketDidConnect webSocket: any Telegraph.WebSocket, handshake: Telegraph.HTTPRequest) {
-        Logger.core.info("browserManager.webSocketDidConnect")
-         
-        guard handshake.headers["Origin"] == "chrome-extension://lnbhbpdjedbjplopnkkimjenlhneekoc" else {
-            Logger.core.error("browserManager.webSocketDidConnect.error: Connection rejected - not from chrome extension")
-            return
+
+    // MARK: - Public Methods
+
+    /// Start the native messaging listener
+    func startServer() {
+        Logger.core.info("BrowserManager: Starting native messaging listener")
+
+        startMessagePort()
+
+        Logger.core.info("BrowserManager: Native messaging listener started")
+    }
+
+    /// Stop the native messaging listener
+    func stopServer() {
+        Logger.core.info("BrowserManager: Stopping native messaging listener")
+
+        // Stop CFMessagePort
+        if let source = runLoopSource {
+            CFRunLoopRemoveSource(CFRunLoopGetMain(), source, .commonModes)
+            runLoopSource = nil
         }
-        
-        connectedWebSockets.append(webSocket)
-        webSocket.clientName = inferClientName(from: handshake)
-        Logger.core.info("browserManager.webSocketDidConnect: Client \(webSocket.clientName ?? "Unknown") connected")
-        
-        let data: [String: Any] = [
-            "event": "app.ready",
-            "data": []
+
+        if let port = messagePort {
+            CFMessagePortInvalidate(port)
+            messagePort = nil
+        }
+
+        DispatchQueue.main.async {
+            self.connectedBrowsers.removeAll()
+        }
+
+        Logger.core.info("BrowserManager: Native messaging listener stopped")
+    }
+
+    /// Send a code notification to all connected browsers
+    func sendNotificationToBrowsers(message: MessageWithParsedOTP) {
+        let browserCount = connectedBrowsers.count
+
+        Logger.core.info("BrowserManager: Sending notification to browsers (browsers: \(browserCount))")
+
+        if browserCount == 0 {
+            Logger.core.warning("BrowserManager: No browsers connected - extension may not have connected yet")
+        }
+
+        let eventData: [String: Any] = [
+            "id": message.0.guid,
+            "code": message.1.code
         ]
-        
-        sendToSocket(socket: webSocket, data: data)
-    }
-    
-    func server(_ server: Telegraph.Server, webSocketDidDisconnect webSocket: any Telegraph.WebSocket, error: (any Error)?) {
-        if let index = connectedWebSockets.firstIndex(where: { $0 === webSocket }) {
-            connectedWebSockets.remove(at: index)
-        }
-        Logger.core.info("browserManager.webSocketDidDisconnect: Client \(webSocket.clientName ?? "Unknown") disconnected")
-    }
-    
-    func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didReceiveMessage message: Telegraph.WebSocketMessage) {
-        Logger.core.info("browserManager.didReceiveMessage from client \(webSocket.clientName ?? "Unknown")")
 
-        // Try to parse the message as JSON
-        guard case .text(let text) = message.payload,
-              let data = text.data(using: .utf8),
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let event = json["event"] as? String else {
-            Logger.core.warning("browserManager.didReceiveMessage: Could not parse message")
+        let payload: [String: Any] = [
+            "event": "code.received",
+            "data": eventData
+        ]
+
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: payload) else {
+            Logger.core.error("BrowserManager: Failed to serialize message")
             return
         }
 
-        Logger.core.info("browserManager.didReceiveMessage: Event = \(event)")
+        for browser in connectedBrowsers {
+            sendToBrowserViaCFMessagePort(browser: browser, data: jsonData)
+        }
+    }
 
-        // Handle "code.used" event from browser extension
+    /// Get a summary of connected clients for display
+    func getConnectedClientsSummary() -> String {
+        let browsers = connectedBrowsers
+        if browsers.isEmpty {
+            return ""
+        }
+        return browsers.map { $0.name }.joined(separator: ", ") + " connected"
+    }
+
+    // Legacy compatibility
+    var connectedWebSockets: [ConnectedBrowser] {
+        return connectedBrowsers
+    }
+
+    // MARK: - CFMessagePort
+
+    private func startMessagePort() {
+        Logger.core.info("BrowserManager: Starting CFMessagePort")
+
+        var context = CFMessagePortContext(
+            version: 0,
+            info: Unmanaged.passUnretained(self).toOpaque(),
+            retain: nil,
+            release: nil,
+            copyDescription: nil
+        )
+
+        messagePort = CFMessagePortCreateLocal(
+            nil,
+            Self.messagePortName as CFString,
+            { (port, msgid, data, info) -> Unmanaged<CFData>? in
+                guard let info = info else { return nil }
+                let manager = Unmanaged<BrowserManager>.fromOpaque(info).takeUnretainedValue()
+                return manager.handleIncomingCFMessage(msgid: msgid, data: data)
+            },
+            &context,
+            nil
+        )
+
+        guard let port = messagePort else {
+            Logger.core.error("BrowserManager: Failed to create CFMessagePort")
+            return
+        }
+
+        runLoopSource = CFMessagePortCreateRunLoopSource(nil, port, 0)
+        if let source = runLoopSource {
+            CFRunLoopAddSource(CFRunLoopGetMain(), source, .commonModes)
+            Logger.core.info("BrowserManager: CFMessagePort '\(Self.messagePortName)' started")
+        }
+    }
+
+    /// Send data to a specific browser via CFMessagePort
+    private func sendToBrowserViaCFMessagePort(browser: ConnectedBrowser, data: Data) {
+        let browserPortName = "com.faktor.nativehost.\(browser.id)"
+
+        guard let remotePort = CFMessagePortCreateRemote(nil, browserPortName as CFString) else {
+            Logger.core.warning("BrowserManager: Cannot connect to browser port \(browserPortName)")
+            return
+        }
+
+        let cfData = data as CFData
+        let status = CFMessagePortSendRequest(remotePort, 1, cfData, 5.0, 0, nil, nil)
+
+        if status == kCFMessagePortSuccess {
+            Logger.core.info("BrowserManager: Sent message to \(browser.name) via CFMessagePort")
+        } else {
+            Logger.core.warning("BrowserManager: Failed to send to \(browser.name), status: \(status)")
+        }
+    }
+
+    // MARK: - CFMessagePort Message Handling
+
+    private func handleIncomingCFMessage(msgid: Int32, data: CFData?) -> Unmanaged<CFData>? {
+        guard let data = data as Data? else {
+            Logger.core.warning("BrowserManager: Received empty CFMessage")
+            return nil
+        }
+
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let action = json["action"] as? String else {
+            Logger.core.warning("BrowserManager: Failed to parse incoming CFMessage")
+            return nil
+        }
+
+        Logger.core.info("BrowserManager: Received CFMessage action: \(action)")
+
+        switch action {
+        case "connect":
+            return handleBrowserConnect(json: json)
+        case "disconnect":
+            return handleBrowserDisconnect(json: json)
+        case "message":
+            return handleBrowserMessage(json: json)
+        case "getState":
+            return handleGetState()
+        default:
+            Logger.core.warning("BrowserManager: Unknown action: \(action)")
+            return nil
+        }
+    }
+
+    private func handleBrowserConnect(json: [String: Any]) -> Unmanaged<CFData>? {
+        guard let browserName = json["browserName"] as? String,
+              let extensionId = json["extensionId"] as? String,
+              let hostId = json["hostId"] as? String else {
+            Logger.core.warning("BrowserManager: Missing fields in connect message")
+            return nil
+        }
+
+        Logger.core.info("BrowserManager: Browser connecting - \(browserName), hostId: \(hostId)")
+
+        let expectedExtensionId = "afhmgkpdmifnmflcaegmjcaaehfklepp"
+        guard extensionId == expectedExtensionId else {
+            Logger.core.error("BrowserManager: Invalid extension ID: \(extensionId)")
+            return createResponse(["success": false, "error": "Invalid extension ID"])
+        }
+
+        let browser = ConnectedBrowser(id: hostId, name: browserName)
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if !self.connectedBrowsers.contains(where: { $0.id == hostId }) {
+                self.connectedBrowsers.append(browser)
+                Logger.core.info("BrowserManager: Browser added. Total: \(self.connectedBrowsers.count)")
+            }
+        }
+
+        return createResponse(["success": true])
+    }
+
+    private func handleBrowserDisconnect(json: [String: Any]) -> Unmanaged<CFData>? {
+        guard let hostId = json["hostId"] as? String else {
+            return nil
+        }
+
+        Logger.core.info("BrowserManager: Browser disconnecting - hostId: \(hostId)")
+
+        DispatchQueue.main.async { [weak self] in
+            self?.connectedBrowsers.removeAll { $0.id == hostId }
+        }
+
+        return createResponse(["success": true])
+    }
+
+    private func handleBrowserMessage(json: [String: Any]) -> Unmanaged<CFData>? {
+        guard let browserName = json["browserName"] as? String,
+              let messageData = json["data"] as? [String: Any] else {
+            return nil
+        }
+
+        Logger.core.info("BrowserManager: Received message from \(browserName)")
+
+        guard let event = messageData["event"] as? String else {
+            Logger.core.warning("BrowserManager: No event in message data")
+            return nil
+        }
+
+        Logger.core.info("BrowserManager: Event = \(event)")
+
         if event == "code.used" {
-            if let eventData = json["data"] as? [String: Any],
+            if let eventData = messageData["data"] as? [String: Any],
                let messageId = eventData["id"] as? String {
-                Logger.core.info("browserManager.didReceiveMessage: Code used, message id = \(messageId)")
+                Logger.core.info("BrowserManager: Code used, message id = \(messageId)")
 
-                // Find the message by ID and mark it as read
                 if let messageToMark = messageManager.messages.first(where: { $0.0.guid == messageId }) {
                     let success = messageManager.markMessageAsRead(message: messageToMark)
-                    Logger.core.info("browserManager.didReceiveMessage: markMessageAsRead = \(success)")
+                    Logger.core.info("BrowserManager: markMessageAsRead = \(success)")
                 } else {
-                    Logger.core.warning("browserManager.didReceiveMessage: Could not find message with id \(messageId)")
+                    Logger.core.warning("BrowserManager: Could not find message with id \(messageId)")
                 }
             }
         }
-    }
-    
-    func server(_ server: Telegraph.Server, webSocket: any Telegraph.WebSocket, didSendMessage message: Telegraph.WebSocketMessage) {
-        Logger.core.info("browserManager.didSendMessage to client \(webSocket.clientName ?? "Unknown")")
-    }
-            
-    func startServer() {
-        Logger.core.info("browserManager.startServer")
-        server = Server()
-        server.webSocketDelegate = self
-        server.webSocketConfig.pingInterval = 10
-        
-        do {
-            try server.start(port: 9234)
-            Logger.core.info("browserManager.startServer.success, port=9234")
-        } catch {
-            Logger.core.error("browserManager.startServer.error: Failed to start server - \(error.localizedDescription)")
-        }
+
+        return createResponse(["success": true])
     }
 
-    func stopServer() {
-        if let server = server {
-            server.stop()
-            connectedWebSockets.removeAll()
-            Logger.core.info("browserManager.stopServer.success")
-        } else {
-            Logger.core.info("browserManager.stopServer.error: No server running to stop")
-        }
-    }
-    
-    func sendNotificationToBrowsers(message: MessageWithParsedOTP) {
-        Logger.core.info("browserManager.sendNotificationToBrowsers")
+    private func handleGetState() -> Unmanaged<CFData>? {
+        Logger.core.info("BrowserManager: App state requested")
 
-        for socket in connectedWebSockets {
-            let data: [String: Any] = [
-                "event": "code.received",
-                "data": [
-                    "id": message.0.guid,
-                    "code": message.1.code
-                ]
-            ]
+        let state: [String: Any] = [
+            "ready": true,
+            "version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        ]
 
-            sendToSocket(socket: socket, data: data)
-        }
-    }
-    
-    func sendToSocket(socket: WebSocket, data: Any) {
-        Logger.core.info("browserManager.sendToSocket to client \(socket.clientName ?? "Unknown")")
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                socket.send(text: jsonString)
-                Logger.core.info("browserManager.sendToSocket.success")
-            }
-        } catch {
-            Logger.core.error("browserManager.sendToSocket.error: Failed to encode JSON: \(error.localizedDescription)")
-        }
+        return createResponse(state)
     }
 
-    private func inferClientName(from request: Telegraph.HTTPRequest) -> String {
-        if let userAgent = request.headers["User-Agent"] {
-            if userAgent.contains("Chrome") {
-                return "Chrome"
-            } else if userAgent.contains("Arc") {
-                return "Arc"
-            } else if userAgent.contains("Edge") {
-                return "Edge"
-            } else if userAgent.contains("Brave") {
-                return "Brave"
-            }
+    private func createResponse(_ dict: [String: Any]) -> Unmanaged<CFData>? {
+        guard let data = try? JSONSerialization.data(withJSONObject: dict) else {
+            return nil
         }
-        return "Unknown Browser"
-    }
-
-    func getConnectedClientsSummary() -> String {
-        let count = connectedWebSockets.count
-        if count > 0 {
-            let clientNames = connectedWebSockets.compactMap { $0.clientName }.joined(separator: ", ")
-            return "\(clientNames) connected"
-        } else {
-            return ""
-        }
+        return Unmanaged.passRetained(data as CFData)
     }
 }
