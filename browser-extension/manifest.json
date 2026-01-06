@@ -1,0 +1,33 @@
+{
+  "name": "Faktor",
+  "description": "Faktor - OTP autofill from your Mac",
+  "version": "3.0",
+  "manifest_version": 3,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8eaWj80HEJp0GTvmqj5y0bFFRqhAD/0E8Vz6ZatOb4zkHYhNMEO7l8D7fwtAo4D4+TjtKz9RE6yC3d6q72+1X+RFcFC+4wmASBAlLhzjV61d94HttA6v2x+ZGzBI8UgYpIyDxd4bVD3Ct5y7FxxqcrpO32VY4iS8X+DihIGHrl9GTFVh5EKyIrPb6PQwRPRIrMk6zXAxDV6HaxFpNBf9myHHcQ+/oKdUzuHOO0em6gpCNfyaajKVjk7hLUG7a8FYnTiOKgZ5fDk27hUXkylYipGB3okayXYX/atDqXj+wHI7jyLplSxDB4CCxVZBbs7V2Uz7/O8+L6DzGmHEFQFQxwIDAQAB",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "nativeMessaging",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-64.png",
+    "128": "icons/icon-128.png",
+    "256": "icons/icon-256.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  }
+}
