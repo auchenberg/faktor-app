@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F1000001D2C50000000F0001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002D2C50000000F0002 /* main.swift */; };
+		F1000003D2C50000000F0003 /* FaktorNativeHost in CopyFiles */ = {isa = PBXBuildFile; fileRef = F1000004D2C50000000F0004 /* FaktorNativeHost */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E20005C12C28A31F00DB8615 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = E20005C02C28A31F00DB8615 /* PostHog */; };
 		E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E208F9712C3C2541000ACAE2 /* LaunchAtLogin */; };
 		E20BA1C92C0164C90052B8FC /* SQLite.swift in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19B2C0164C90052B8FC /* SQLite.swift */; };
@@ -50,6 +52,7 @@
 		E230C0942C1520F900C2BF61 /* testMessages.json in Resources */ = {isa = PBXBuildFile; fileRef = E230C0932C1520F800C2BF61 /* testMessages.json */; };
 		E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */; };
 		E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */; };
+		E233C6BE2C77B4B0006DE68D /* AutomationOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BF2C77B4B0006DE68D /* AutomationOnboardingTask.swift */; };
 		E2716F1A2C9633C70031CA1A /* LogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2716F192C9633C70031CA1A /* LogsView.swift */; };
 		E2716F1D2C963C870031CA1A /* FullDiskAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2716F1C2C963C870031CA1A /* FullDiskAccess */; };
 		E282AA622C03DC660016CDA8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282AA612C03DC660016CDA8 /* NotificationManager.swift */; };
@@ -76,7 +79,6 @@
 		E2EB28902D18E2B40087A919 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB288F2D18E2B40087A919 /* AppState.swift */; };
 		E2EB28942D18E8F00087A919 /* StatusSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28932D18E8F00087A919 /* StatusSettingsView.swift */; };
 		E2EB28982D1922E80087A919 /* OTPParserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EB28972D1922E80087A919 /* OTPParserFactory.swift */; };
-		E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF8F892C04D3E100AC3652 /* Telegraph */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,9 +89,32 @@
 			remoteGlobalIDString = E22C9B032C01517100D2984D;
 			remoteInfo = faktor;
 		};
+		F1000005D2C50000000F0005 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E22C9AFC2C01517100D2984D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1000006D2C50000000F0006;
+			remoteInfo = FaktorNativeHost;
+		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F1000007D2C50000000F0007 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				F1000003D2C50000000F0003 /* FaktorNativeHost in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		F1000002D2C50000000F0002 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F1000004D2C50000000F0004 /* FaktorNativeHost */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FaktorNativeHost; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1000008D2C50000000F0008 /* FaktorNativeHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FaktorNativeHost.entitlements; sourceTree = "<group>"; };
 		E20BA19B2C0164C90052B8FC /* SQLite.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SQLite.swift; sourceTree = "<group>"; };
 		E20BA19D2C0164C90052B8FC /* applypatch-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "applypatch-msg.sample"; sourceTree = "<group>"; };
 		E20BA19E2C0164C90052B8FC /* commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "commit-msg.sample"; sourceTree = "<group>"; };
@@ -132,6 +157,7 @@
 		E230C0932C1520F800C2BF61 /* testMessages.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = testMessages.json; sourceTree = "<group>"; };
 		E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserExtensionOnboardingTask.swift; sourceTree = "<group>"; };
 		E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsOnboardingTask.swift; sourceTree = "<group>"; };
+		E233C6BF2C77B4B0006DE68D /* AutomationOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomationOnboardingTask.swift; sourceTree = "<group>"; };
 		E2716F192C9633C70031CA1A /* LogsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsView.swift; sourceTree = "<group>"; };
 		E282AA612C03DC660016CDA8 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E299E0A12C02719A00F1BDB5 /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
@@ -173,7 +199,6 @@
 				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
 				E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */,
 				E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */,
-				E2EF8F8A2C04D3E100AC3652 /* Telegraph in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +207,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2DE712C2C419551005D3019 /* SQLite in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F100000CD2C50000000F000C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,10 +422,20 @@
 			isa = PBXGroup;
 			children = (
 				E20BA1C82C0164C90052B8FC /* Faktor */,
+				F1000009D2C50000000F0009 /* FaktorNativeHost */,
 				E2C527D82C3B4F550085ECC7 /* FaktorTests */,
 				E22C9B052C01517100D2984D /* Products */,
 				E208F9702C3C2541000ACAE2 /* Frameworks */,
 			);
+			sourceTree = "<group>";
+		};
+		F1000009D2C50000000F0009 /* FaktorNativeHost */ = {
+			isa = PBXGroup;
+			children = (
+				F1000002D2C50000000F0002 /* main.swift */,
+				F1000008D2C50000000F0008 /* FaktorNativeHost.entitlements */,
+			);
+			path = FaktorNativeHost;
 			sourceTree = "<group>";
 		};
 		E22C9B052C01517100D2984D /* Products */ = {
@@ -401,6 +443,7 @@
 			children = (
 				E22C9B042C01517100D2984D /* Faktor.app */,
 				E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */,
+				F1000004D2C50000000F0004 /* FaktorNativeHost */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -421,6 +464,7 @@
 				E22004FB2C753064003B17E1 /* DiskAccessOnboardingTask.swift */,
 				E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */,
 				E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */,
+				E233C6BF2C77B4B0006DE68D /* AutomationOnboardingTask.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -479,18 +523,19 @@
 				E22C9B002C01517100D2984D /* Sources */,
 				E22C9B012C01517100D2984D /* Frameworks */,
 				E22C9B022C01517100D2984D /* Resources */,
+				F1000007D2C50000000F0007 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				E20BA1E92C0165D80052B8FC /* PBXTargetDependency */,
+				F100000DD2C50000000F000D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E218A7A22C9F815900A93776 /* Menu */,
 			);
 			name = faktor;
 			packageProductDependencies = (
-				E2EF8F892C04D3E100AC3652 /* Telegraph */,
 				E20005C02C28A31F00DB8615 /* PostHog */,
 				E208F9712C3C2541000ACAE2 /* LaunchAtLogin */,
 				E2DE712E2C419590005D3019 /* SQLite */,
@@ -524,6 +569,22 @@
 			productReference = E2C527D72C3B4F550085ECC7 /* FaktorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F1000006D2C50000000F0006 /* FaktorNativeHost */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F100000AD2C50000000F000A /* Build configuration list for PBXNativeTarget "FaktorNativeHost" */;
+			buildPhases = (
+				F100000BD2C50000000F000B /* Sources */,
+				F100000CD2C50000000F000C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FaktorNativeHost;
+			productName = FaktorNativeHost;
+			productReference = F1000004D2C50000000F0004 /* FaktorNativeHost */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -541,6 +602,9 @@
 						CreatedOnToolsVersion = 15.4;
 						TestTargetID = E22C9B032C01517100D2984D;
 					};
+					F1000006D2C50000000F0006 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 				};
 			};
 			buildConfigurationList = E22C9AFF2C01517100D2984D /* Build configuration list for PBXProject "faktor" */;
@@ -553,7 +617,6 @@
 			);
 			mainGroup = E22C9AFB2C01517100D2984D;
 			packageReferences = (
-				E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */,
 				E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 				E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */,
@@ -568,6 +631,7 @@
 			targets = (
 				E22C9B032C01517100D2984D /* faktor */,
 				E2C527D62C3B4F550085ECC7 /* FaktorTests */,
+				F1000006D2C50000000F0006 /* FaktorNativeHost */,
 			);
 		};
 /* End PBXProject section */
@@ -617,6 +681,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F100000BD2C50000000F000B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1000001D2C50000000F0001 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E22C9B002C01517100D2984D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -654,6 +726,7 @@
 				E22004FA2C75303F003B17E1 /* OnboardingItemLayout.swift in Sources */,
 				E299E0B32C0271A100F1BDB5 /* Message.swift in Sources */,
 				E22004F52C752A42003B17E1 /* OnboardingView.swift in Sources */,
+				E233C6BE2C77B4B0006DE68D /* AutomationOnboardingTask.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,6 +749,11 @@
 			isa = PBXTargetDependency;
 			target = E22C9B032C01517100D2984D /* faktor */;
 			targetProxy = E2C527DB2C3B4F550085ECC7 /* PBXContainerItemProxy */;
+		};
+		F100000DD2C50000000F000D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1000006D2C50000000F0006 /* FaktorNativeHost */;
+			targetProxy = F1000005D2C50000000F0005 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -820,7 +898,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.8;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
 				ENABLE_APP_SANDBOX = NO;
@@ -839,7 +917,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = faktor.mac;
 				PRODUCT_NAME = Faktor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -860,7 +938,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.8;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_ASSET_PATHS = "\"faktor/Preview Content\"";
 				DEVELOPMENT_TEAM = TP8BN7C8C6;
 				ENABLE_APP_SANDBOX = NO;
@@ -879,7 +957,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = faktor.mac;
 				PRODUCT_NAME = Faktor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -944,6 +1022,38 @@
 			};
 			name = Release;
 		};
+		F100000ED2C50000000F000E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FaktorNativeHost/FaktorNativeHost.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TP8BN7C8C6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faktor.nativehost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F100000FD2C50000000F000F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FaktorNativeHost/FaktorNativeHost.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TP8BN7C8C6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.faktor.nativehost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -970,6 +1080,15 @@
 			buildConfigurations = (
 				E2C527DE2C3B4F550085ECC7 /* Debug */,
 				E2C527DF2C3B4F550085ECC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F100000AD2C50000000F000A /* Build configuration list for PBXNativeTarget "FaktorNativeHost" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F100000ED2C50000000F000E /* Debug */,
+				F100000FD2C50000000F000F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1033,14 +1152,6 @@
 				minimumVersion = 0.15.3;
 			};
 		};
-		E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Building42/Telegraph.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.40.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1086,11 +1197,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */;
 			productName = SQLite;
-		};
-		E2EF8F892C04D3E100AC3652 /* Telegraph */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E2EF8F882C04D3E100AC3652 /* XCRemoteSwiftPackageReference "Telegraph" */;
-			productName = Telegraph;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
