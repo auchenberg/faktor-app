@@ -21,7 +21,11 @@ struct OnboardingTaskList: View {
             Section {
                 NotificationsOnboardingTask(appStateManager: appStateManager)
             }
-            
+
+            Section {
+                AutomationOnboardingTask(appStateManager: appStateManager)
+            }
+
             Section {
                 BrowserExtensionOnboardingTask(appStateManager: appStateManager)
             }
