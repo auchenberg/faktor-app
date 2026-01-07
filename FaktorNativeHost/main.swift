@@ -14,7 +14,6 @@ import AppKit
 enum Constants {
     static let extensionId = "afhmgkpdmifnmflcaegmjcaaehfklepp"
     static let appPortName = "com.faktor.app.messageport"
-    static let appURLScheme = "faktor://activate"
     static let appBundleId = "com.faktor.app"
     static let reconnectInterval: TimeInterval = 2.0
     static let maxReconnectAttempts = 60  // 2 minutes of retrying (app might need time to launch)
@@ -253,54 +252,42 @@ class AppConnection {
 
         log("Faktor app not running, attempting to launch...")
 
-        // Try URL scheme first
-        if let url = URL(string: Constants.appURLScheme) {
-            let config = NSWorkspace.OpenConfiguration()
-            config.activates = false  // Don't bring to front
-
-            NSWorkspace.shared.open(url, configuration: config) { app, error in
-                if let error = error {
-                    log("Failed to launch via URL scheme: \(error.localizedDescription)")
-                    // Fallback: try to launch by bundle ID
-                    self.launchFaktorByBundleId()
-                } else {
-                    log("Faktor launched via URL scheme")
-                }
-            }
-        } else {
-            launchFaktorByBundleId()
-        }
-    }
-
-    private func launchFaktorByBundleId() {
-        log("Attempting to launch Faktor by bundle ID...")
-
         let config = NSWorkspace.OpenConfiguration()
-        config.activates = false
+        config.activates = false  // Don't bring to front
 
+        // Try bundle ID first (most reliable)
         if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: Constants.appBundleId) {
             NSWorkspace.shared.openApplication(at: appURL, configuration: config) { app, error in
                 if let error = error {
-                    log("Failed to launch Faktor: \(error.localizedDescription)")
+                    log("Failed to launch Faktor by bundle ID: \(error.localizedDescription)")
+                    self.launchFaktorFallback()
                 } else {
-                    log("Faktor launched successfully")
+                    log("Faktor launched successfully by bundle ID")
                 }
             }
         } else {
-            log("Could not find Faktor app by bundle ID")
+            log("Could not find Faktor app by bundle ID, trying fallback...")
+            launchFaktorFallback()
+        }
+    }
 
-            // Last resort: try to open from /Applications
-            let appPath = "/Applications/Faktor.app"
-            if FileManager.default.fileExists(atPath: appPath) {
-                let appURL = URL(fileURLWithPath: appPath)
-                NSWorkspace.shared.openApplication(at: appURL, configuration: config) { app, error in
-                    if let error = error {
-                        log("Failed to launch Faktor from /Applications: \(error.localizedDescription)")
-                    } else {
-                        log("Faktor launched from /Applications")
-                    }
+    private func launchFaktorFallback() {
+        let config = NSWorkspace.OpenConfiguration()
+        config.activates = false
+
+        // Try /Applications path
+        let appPath = "/Applications/Faktor.app"
+        if FileManager.default.fileExists(atPath: appPath) {
+            let appURL = URL(fileURLWithPath: appPath)
+            NSWorkspace.shared.openApplication(at: appURL, configuration: config) { app, error in
+                if let error = error {
+                    log("Failed to launch Faktor from /Applications: \(error.localizedDescription)")
+                } else {
+                    log("Faktor launched from /Applications")
                 }
             }
+        } else {
+            log("Faktor not found in /Applications")
         }
     }
 
