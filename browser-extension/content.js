@@ -1,12 +1,9 @@
-// Wait for the DOM to be fully loaded
+// Faktor Content Script
+// Uses Shadow DOM for complete style isolation from host page
+
 console.log('faktor.contentscript.loaded');
 
 chrome.runtime.sendMessage({ event: 'factor.content.loaded' });
-
-// Useful for testing
-// setTimeout(() => {
-//     showAutocomplete({ code: '1234' });
-// }, 1000);
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
@@ -29,100 +26,183 @@ function showAutocomplete(data) {
     const inputElements = document.querySelectorAll('input');
 
     console.log('faktor.contentscript.showAutocomplete', data, 'inputs:', inputElements.length);
-    let notification = new Notification(id, code, inputElements);
+    let notification = new FaktorNotification(id, code, inputElements);
 }
 
-class Notification {
+// CSS styles to be injected into Shadow DOM
+const FAKTOR_STYLES = `
+    :host {
+        all: initial;
+        position: fixed;
+        z-index: 2147483647;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        line-height: 1.4;
+        color-scheme: light dark;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .faktor-notification {
+        position: relative;
+        user-select: none;
+        cursor: pointer;
+        opacity: 1;
+        animation: faktor-fadeIn 100ms ease-in;
+    }
+
+    .faktor-tooltip {
+        position: relative;
+        width: 234px;
+        padding: 7px;
+        background-color: light-dark(#e4e3e2, #555);
+        border: 1px solid light-dark(rgba(255, 255, 255, 0), #838484);
+        outline: 0.5px solid light-dark(#b7b7b7, #000);
+        color: light-dark(#494949, #efefef);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+    }
+
+    .faktor-inner {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        padding: 7px;
+        border-radius: 8px;
+    }
+
+    .faktor-notification:hover .faktor-inner {
+        background-color: light-dark(#569fff, #648ee6);
+        color: #fff;
+    }
+
+    .faktor-content p {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        padding: 0 0 1px 0;
+        margin: 0;
+    }
+
+    .faktor-source {
+        font-size: 12px;
+        color: light-dark(#656463, #dfe0e1);
+    }
+
+    .faktor-notification:hover .faktor-source {
+        color: #fff;
+    }
+
+    .faktor-icon {
+        background: #eee;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .faktor-icon::before {
+        content: "💬";
+        font-size: 14px;
+    }
+
+    @keyframes faktor-fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+`;
+
+class FaktorNotification {
     constructor(id, code, inputElements) {
         this.id = id;
         this.code = code;
         this.inputElements = inputElements;
         this.activeInputElement = null;
-        this.divNotification = document.createElement('div');
+        this.hostElement = null;
+        this.shadowRoot = null;
         this.inputEventController = new AbortController();
 
-        // Initialize the notification
         this.init();
     }
 
     init() {
-        console.log('faktor.contentscript.Notification.init', 'inputs:', this.inputElements.length, 'activeElement:', document.activeElement?.tagName);
-        this.divNotification.classList.add('faktor-notification');
+        console.log('faktor.contentscript.FaktorNotification.init', 'inputs:', this.inputElements.length, 'activeElement:', document.activeElement?.tagName);
+
+        // Create the Shadow DOM host element
+        this.createShadowHost();
+
         this.attachToInputElements();
-        this.attachNotificationEventListeners();
         this.startAutomaticDisposal();
     }
 
+    createShadowHost() {
+        // Create host element for Shadow DOM
+        this.hostElement = document.createElement('faktor-notification');
+        this.hostElement.style.cssText = 'display: none; position: fixed; z-index: 2147483647;';
+
+        // Attach closed shadow root for maximum isolation
+        this.shadowRoot = this.hostElement.attachShadow({ mode: 'closed' });
+
+        // Inject styles into shadow root
+        const styleElement = document.createElement('style');
+        styleElement.textContent = FAKTOR_STYLES;
+        this.shadowRoot.appendChild(styleElement);
+
+        // Add to document
+        document.body.appendChild(this.hostElement);
+    }
+
     startAutomaticDisposal() {
-        // console.log('factor.contentscript.startAutomaticDisposal');
-        setTimeout(this.dispose, 10000);
+        setTimeout(() => this.dispose(), 10000);
     }
 
     attachToInputElements() {
         this.inputElements.forEach((inputElement) => {
             this.attachInputEventListener(inputElement);
-
-            // Check if inputElement is currently focused
             this.focusInputIfActive(inputElement);
-
         });
     }
 
     attachInputEventListener(inputElement) {
-        // console.log('factor.contentscript.attachInputEventListener', inputElement)
         inputElement.addEventListener('focus', this.onInputFocus, { signal: this.inputEventController.signal });
         inputElement.addEventListener('blur', this.onInputBlur, { signal: this.inputEventController.signal });
     }
 
     detachInputEventListeners() {
-        // console.log('factor.contentscript.detachInputEventListeners')
-
-        // use abort controller to scope issues, https://macarthur.me/posts/options-for-removing-event-listeners/
         this.inputEventController.abort();
-    }
-
-    attachNotificationEventListeners() {
-        // console.log('factor.contentscript.attachNotificationEventListeners', this.divNotification)
-        // Use onmousedown instead of onclick to prevent the blur event from firing. See https://stackoverflow.com/questions/17769005/onclick-and-onblur-ordering-issue
-        this.divNotification.addEventListener('mousedown', this.onNotificationClick, true);
-    }
-
-    detachNotificationEventListeners() {
-        // console.log('factor.contentscript.detachNotificationEventListeners', this.divNotification)
-        this.divNotification.removeEventListener('mousedown', this.onNotificationClick);
     }
 
     // Event handlers
     onInputFocus = (e) => {
         let inputElement = e.target;
-        // console.log('faktor.contentscript.focus', inputElement, this.divNotification);
-
-        // Delay rendering to make the notification is appearing on top of 1password or other password managers
-        setTimeout(this.show.bind(this, inputElement), 50);
+        // Delay rendering to appear on top of other password managers
+        setTimeout(() => this.show(inputElement), 50);
     };
 
     onInputBlur = (e) => {
-        let inputElement = e.target;
-        // console.log('faktor.contentscript.blur', inputElement, this.divNotification);
-        this.remove();
+        this.hide();
     };
 
     onNotificationClick = (e) => {
-        // console.log('factor.contentscript.click', this.code);
+        e.preventDefault();
+        e.stopPropagation();
         this.fillValue();
         this.notifyCodeUsed();
         this.dispose();
     };
 
     notifyCodeUsed() {
-        // console.log('factor.contentscript.notifyCodeUsed', this.id);
         chrome.runtime.sendMessage({
             event: 'code.used',
             data: { id: this.id }
         });
     }
 
-    // Utils
     focusInputIfActive(inputElement) {
         console.log('faktor.contentscript.focusInputIfActive', inputElement, 'isActive:', document.activeElement === inputElement);
         if (document.activeElement === inputElement) {
@@ -132,60 +212,80 @@ class Notification {
     }
 
     fillValue() {
-        // console.log('factor.contentscript.fillValue');
-
-        // Clear existing value
         if (this.activeInputElement) {
             this.activeInputElement.value = '';
+            this.activeInputElement.focus();
         }
-
-        // Fill out value
         document.execCommand('insertText', false, this.code);
     }
 
-    // Core methods
     show(inputElement) {
-        console.log('faktor.contentscript.Notification.show', inputElement);
+        console.log('faktor.contentscript.FaktorNotification.show', inputElement);
 
-        // Set the active input element
         this.activeInputElement = inputElement;
 
-        // Set the position of the div element
+        // Position the host element
         const inputRect = inputElement.getBoundingClientRect();
-        this.divNotification.style.top = `${inputRect.bottom}px`;
-        this.divNotification.style.left = `${inputRect.left}px`;
+        this.hostElement.style.top = `${inputRect.bottom + window.scrollY}px`;
+        this.hostElement.style.left = `${inputRect.left + window.scrollX}px`;
+        this.hostElement.style.display = 'block';
 
-        // Insert the HTML into the DOM
-        this.divNotification.innerHTML = `
+        // Clear previous content (except styles)
+        const existingNotification = this.shadowRoot.querySelector('.faktor-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Create notification content inside shadow root
+        const notification = document.createElement('div');
+        notification.className = 'faktor-notification';
+        notification.innerHTML = `
             <div class="faktor-tooltip">
                 <div class="faktor-inner">
                     <div class="faktor-icon"></div>
                     <div class="faktor-content">
-                        <p>Fill code ${this.code}</p>
+                        <p>Fill code ${this.escapeHtml(this.code)}</p>
                         <p class="faktor-source">From Messages</p>
                     </div>
                 </div>
             </div>
         `;
 
-        document.body.appendChild(this.divNotification);
+        // Use mousedown to prevent blur from firing before click
+        notification.addEventListener('mousedown', this.onNotificationClick, true);
+
+        this.shadowRoot.appendChild(notification);
     }
 
-    remove() {
-        // console.log('factor.contentscript.remove', this.divNotification);
-        this.detachNotificationEventListeners();
-
-        // Clear the active input element
+    hide() {
+        if (this.hostElement) {
+            this.hostElement.style.display = 'none';
+        }
         this.activeInputElement = null;
 
-        if (this.divNotification) {
-            this.divNotification.remove();
+        // Remove notification content but keep styles
+        const existingNotification = this.shadowRoot.querySelector('.faktor-notification');
+        if (existingNotification) {
+            existingNotification.remove();
         }
     }
 
-    dispose = () => {
-        // console.log('factor.contentscript.dispose', this.inputElements, this.divNotification);
-        this.remove();
+    dispose() {
+        this.hide();
         this.detachInputEventListeners();
-    };
+
+        if (this.hostElement && this.hostElement.parentNode) {
+            this.hostElement.parentNode.removeChild(this.hostElement);
+        }
+
+        this.hostElement = null;
+        this.shadowRoot = null;
+    }
+
+    // Utility to prevent XSS
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 }
