@@ -1112,7 +1112,7 @@
 		};
 		E2716F1B2C963C870031CA1A /* XCRemoteSwiftPackageReference "FullDiskAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:inket/FullDiskAccess.git";
+			repositoryURL = "https://github.com/inket/FullDiskAccess.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
