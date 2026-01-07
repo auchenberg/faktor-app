@@ -35,9 +35,9 @@ node_modules/
 npm-debug.log*
 
 # Browser extension
-browser-extension/*.pem
-browser-extension/*.crx
-browser-extension/*.zip
+BrowserExtension/*.pem
+BrowserExtension/*.crx
+BrowserExtension/*.zip
 
 # IDE
 .idea/

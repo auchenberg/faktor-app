@@ -89,7 +89,7 @@ Feature requests are welcome! Please:
 - **OTPParser/** - OTP extraction and parsing logic
 - **UI/** - SwiftUI views organized by feature
 
-### Browser Extension (`browser-extension/`)
+### Browser Extension (`BrowserExtension/`)
 
 - **service-worker.js** - Background service for native messaging
 - **content.js** - Content script with autofill UI

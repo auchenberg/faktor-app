@@ -68,7 +68,7 @@ The browser extension is required for autofill functionality:
 
 1. Open your browser and navigate to `chrome://extensions`
 2. Enable "Developer mode"
-3. Click "Load unpacked" and select the `browser-extension` folder
+3. Click "Load unpacked" and select the `BrowserExtension` folder
 
 ## Project Structure
 
@@ -88,7 +88,7 @@ faktor-app/
 │       ├── Menu/                # Menu bar UI
 │       ├── Settings/            # Settings window
 │       └── Onboarding/          # Permission setup flow
-├── browser-extension/           # Chrome extension (Manifest V3)
+├── BrowserExtension/            # Chrome extension (Manifest V3)
 │   ├── manifest.json
 │   ├── service-worker.js        # Background worker
 │   └── content.js               # Content script with autofill UI
