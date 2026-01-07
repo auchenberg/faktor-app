@@ -1,0 +1,72 @@
+{
+    "messages": [
+        {
+            "text": "821957 is your Amazon OTP. Do not share it with anyone.",
+            "expectedCode": "821957",
+            "expectedService": "amazon"
+        },
+        {
+            "text": "G-412157 is your Google verification code.",
+            "expectedCode": "412157",
+            "expectedService": "google"
+        },
+        {
+            "text": "Your LinkedIn verification code is 804706.",
+            "expectedCode": "804706",
+            "expectedService": "linkedin"
+        },
+        {
+            "text": "Use 5677 as Microsoft account security code",
+            "expectedCode": "5677",
+            "expectedService": "microsoft"
+        },
+        {
+            "text": "Your WhatsApp code is 105-876 but you can simply tap on this link to verify your device: v.whatsapp.com/105876",
+            "expectedCode": "105876",
+            "expectedService": "whatsapp"
+        },
+        {
+            "text": "Telegram code 65847",
+            "expectedCode": "65847",
+            "expectedService": "telegram"
+        },
+        {
+            "text": "Snapchat code: 481489. Do not share it or use it elsewhere!",
+            "expectedCode": "481489",
+            "expectedService": "snapchat"
+        },
+        {
+            "text": "[#] Your Uber code: 5934 qlRnn4A1sbt",
+            "expectedCode": "5934",
+            "expectedService": "uber"
+        },
+        {
+            "text": "Your Lyft code is 744444",
+            "expectedCode": "744444",
+            "expectedService": "lyft"
+        },
+        {
+            "text": "Use 003407 as your password for Facebook for iPhone.",
+            "expectedCode": "003407",
+            "expectedService": "facebook"
+        }
+    ],
+    "nonOtpMessages": [
+        {
+            "text": "Hej\\n+4523727784 har ringet til dig uden at efterlade en besked.\\nVh. 3",
+            "reason": "Phone call notification, no OTP"
+        },
+        {
+            "text": "Hej Alva\\nDu har en tid på tandklinikken 12/06-2024 kl. 13:50\\npå Kildevældsskolen\\nVed afbud: tlf. 35303960\\nSMS kan ikke besvares",
+            "reason": "Appointment reminder, no OTP"
+        },
+        {
+            "text": "2-step verification is now deactivated on your Sony Entertainment Network account.",
+            "reason": "Deactivation message, no code"
+        },
+        {
+            "text": "Reasy. Set. Get. Your new glasses are ready for pick up at LensCrafters! Stop in any time to see the new you. Questions? 718-858-7036",
+            "reason": "Marketing message with phone number"
+        }
+    ]
+}
