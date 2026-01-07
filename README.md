@@ -95,7 +95,7 @@ faktor-app/
 ├── FaktorNativeHost/            # Native messaging bridge
 │   ├── main.swift               # CLI tool for browser communication
 │   └── README.md                # Setup documentation
-└── tests/                       # Test suites
+└── FaktorTests/                 # Unit tests
 ```
 
 ## Development
@@ -118,12 +118,7 @@ cd FaktorNativeHost
 ### Running Tests
 
 ```bash
-# Swift tests
 xcodebuild test -scheme faktor
-
-# JavaScript tests
-npm install
-npm test
 ```
 
 ## Technology Stack
@@ -132,7 +127,6 @@ npm test
 - **SQLite.swift** - Database queries
 - **Combine** - Reactive data flow
 - **Chrome Native Messaging** - Browser communication
-- **PostHog** - Analytics (optional)
 
 ## Supported Services
 
@@ -182,4 +176,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [SQLite.swift](https://github.com/stephencelis/SQLite.swift) - Database wrapper
 - [FluidMenuBarExtra](https://github.com/lfrb/FluidMenuBarExtra) - Menu bar component
-- [PostHog](https://posthog.com) - Product analytics

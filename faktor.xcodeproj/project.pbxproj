@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F1000001D2C50000000F0001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002D2C50000000F0002 /* main.swift */; };
 		F1000003D2C50000000F0003 /* FaktorNativeHost in CopyFiles */ = {isa = PBXBuildFile; fileRef = F1000004D2C50000000F0004 /* FaktorNativeHost */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		E20005C12C28A31F00DB8615 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = E20005C02C28A31F00DB8615 /* PostHog */; };
 		E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = E208F9712C3C2541000ACAE2 /* LaunchAtLogin */; };
 		E20BA1C92C0164C90052B8FC /* SQLite.swift in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19B2C0164C90052B8FC /* SQLite.swift */; };
 		E20BA1CA2C0164C90052B8FC /* applypatch-msg.sample in Resources */ = {isa = PBXBuildFile; fileRef = E20BA19D2C0164C90052B8FC /* applypatch-msg.sample */; };
@@ -196,7 +195,6 @@
 				E2B96DA62C749ED200D435D8 /* Defaults in Frameworks */,
 				E29B43B82C865BD6008FF25F /* SettingsAccess in Frameworks */,
 				E2DE712F2C419590005D3019 /* SQLite in Frameworks */,
-				E20005C12C28A31F00DB8615 /* PostHog in Frameworks */,
 				E208F9722C3C2541000ACAE2 /* LaunchAtLogin in Frameworks */,
 				E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */,
 			);
@@ -536,7 +534,6 @@
 			);
 			name = faktor;
 			packageProductDependencies = (
-				E20005C02C28A31F00DB8615 /* PostHog */,
 				E208F9712C3C2541000ACAE2 /* LaunchAtLogin */,
 				E2DE712E2C419590005D3019 /* SQLite */,
 				E2B96DA52C749ED200D435D8 /* Defaults */,
@@ -617,7 +614,6 @@
 			);
 			mainGroup = E22C9AFB2C01517100D2984D;
 			packageReferences = (
-				E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 				E2DE712D2C419590005D3019 /* XCRemoteSwiftPackageReference "SQLite" */,
 				E2B96DA42C749ED200D435D8 /* XCRemoteSwiftPackageReference "Defaults" */,
@@ -1098,14 +1094,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.5.2;
-			};
-		};
 		E22005022C75EFFF003B17E1 /* XCRemoteSwiftPackageReference "fluid-menu-bar-extra" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lfroms/fluid-menu-bar-extra";
@@ -1157,11 +1145,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E20005C02C28A31F00DB8615 /* PostHog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E20005BF2C28A31F00DB8615 /* XCRemoteSwiftPackageReference "posthog-ios" */;
-			productName = PostHog;
-		};
 		E208F9712C3C2541000ACAE2 /* LaunchAtLogin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E27141832C28F20B00A55616 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;

@@ -1,15 +1,11 @@
 import SwiftUI
 
-import PostHog
-
-
 struct CodesView: View {
     @EnvironmentObject var messageManager: MessageManager
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var browserManager: BrowserManager
         
     func onCodeClicked(message: MessageWithParsedOTP) {
-        PostHogSDK.shared.capture("faktor.copyToClipboard")
         browserManager.sendNotificationToBrowsers(message: message)
         messageManager.copyOTPToClipboard(message: message)
         messageManager.markMessageAsRead(message: message)

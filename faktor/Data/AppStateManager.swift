@@ -13,7 +13,6 @@ import UserNotifications
 import UniformTypeIdentifiers
 import FullDiskAccess
 import Defaults
-import PostHog
 import OSLog
 
 class AppStateManager: ObservableObject, Identifiable {
@@ -84,8 +83,6 @@ class AppStateManager: ObservableObject, Identifiable {
         
         self.closeOnboardingWindow()
         self.updateDockIconVisibility(isVisible: false)
-
-        PostHogSDK.shared.capture("onboarding_completed")
     }
     
     func startOnboarding() {

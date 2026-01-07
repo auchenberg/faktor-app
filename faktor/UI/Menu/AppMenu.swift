@@ -10,7 +10,6 @@ import Foundation
 
 import LaunchAtLogin
 import Defaults
-import PostHog
 import SettingsAccess
 import OSLog
 

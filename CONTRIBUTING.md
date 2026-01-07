@@ -9,7 +9,6 @@ Thank you for your interest in contributing to Faktor! This document provides gu
 - macOS 13.0 (Ventura) or later
 - Xcode 15+
 - Swift 5.9+
-- Node.js (for running JavaScript tests)
 
 ### Setting Up the Development Environment
 
@@ -25,11 +24,6 @@ Thank you for your interest in contributing to Faktor! This document provides gu
    ```
 
 3. Build and run the project (⌘R)
-
-4. Install test dependencies:
-   ```bash
-   npm install
-   ```
 
 ## How to Contribute
 
@@ -69,11 +63,7 @@ Feature requests are welcome! Please:
 
 3. **Test your changes**:
    ```bash
-   # Run Swift tests
    xcodebuild test -scheme faktor
-
-   # Run JavaScript tests
-   npm test
    ```
 
 4. **Submit a pull request**:
@@ -89,12 +79,6 @@ Feature requests are welcome! Please:
 - Use meaningful variable and function names
 - Add comments for complex logic
 - Keep functions focused and concise
-
-### JavaScript
-
-- Use ES6+ syntax
-- Follow consistent formatting
-- Add JSDoc comments for functions
 
 ## Project Architecture
 
@@ -122,22 +106,14 @@ To add support for a new service:
 
 1. Check if the service follows standard OTP formats (4-8 digit codes)
 2. If custom parsing is needed, add a parser in `OTPParser/CustomOTPParsers.swift`
-3. Add test cases in `tests/test-cases.json`
+3. Add test cases in `FaktorTests/`
 4. Run tests to verify parsing works correctly
 
 ## Testing
 
-### Unit Tests
-
-Located in `FaktorTests/`:
+Unit tests are located in `FaktorTests/`:
 - OTP parsing tests
 - Message filtering tests
-
-### Integration Tests
-
-Located in `tests/`:
-- API tests
-- End-to-end parsing tests
 
 ## Questions?
 

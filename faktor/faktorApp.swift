@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 import Defaults
 import Combine
-import PostHog
 import LaunchAtLogin
 import OSLog
 import FluidMenuBarExtra
@@ -52,14 +51,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
         
     func applicationDidFinishLaunching(_ notification: Notification) {
-        
-        // Analytics
-        let POSTHOG_API_KEY = "phc_zlgdjtWBUz7s2P7Hf3OzMkA39WJ4iZWN5bVaoao0sqg"
-        let POSTHOG_HOST = "https://us.i.posthog.com"
-        
-        let config = PostHogConfig(apiKey: POSTHOG_API_KEY, host: POSTHOG_HOST)
-        PostHogSDK.shared.setup(config)
-        PostHogSDK.shared.capture("faktor.init")
         
         // Menubar
         menuBarExtra = FluidMenuBarExtra(title: "Faktor",  image: "menu.icon") {
