@@ -74,8 +74,8 @@ The browser extension is required for autofill functionality:
 
 ```
 faktor-app/
-├── faktor/                      # Main macOS app
-│   ├── faktorApp.swift          # App entry point
+├── Faktor/                      # Main macOS app
+│   ├── FaktorApp.swift          # App entry point
 │   ├── Models/                  # Data models
 │   ├── Data/                    # Business logic managers
 │   │   ├── MessageManager.swift # SMS database queries

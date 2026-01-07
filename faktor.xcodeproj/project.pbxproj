@@ -36,8 +36,8 @@
 		E20BA1E02C0164C90052B8FC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1BE2C0164C90052B8FC /* Preview Assets.xcassets */; };
 		E20BA1E12C0164C90052B8FC /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C02C0164C90052B8FC /* .gitignore */; };
 		E20BA1E32C0164C90052B8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E20BA1C22C0164C90052B8FC /* Assets.xcassets */; };
-		E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* faktorApp.swift */; };
-		E218A7A12C9F7F3100A93776 /* View+OnTrackingHover.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift.swift */; };
+		E20BA1E42C0164C90052B8FC /* FaktorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA1C42C0164C90052B8FC /* FaktorApp.swift */; };
+		E218A7A12C9F7F3100A93776 /* View+OnTrackingHover.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift */; };
 		E22004EE2C7503C3003B17E1 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004ED2C7503C3003B17E1 /* GeneralView.swift */; };
 		E22004F12C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */; };
 		E22004F52C752A42003B17E1 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004F42C752A42003B17E1 /* OnboardingView.swift */; };
@@ -60,7 +60,7 @@
 		E299E0AA2C02719A00F1BDB5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A32C02719A00F1BDB5 /* Extensions.swift */; };
 		E299E0AB2C02719A00F1BDB5 /* OTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A42C02719A00F1BDB5 /* OTPParser.swift */; };
 		E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A52C02719A00F1BDB5 /* OTPParserConfiguration.swift */; };
-		E299E0AD2C02719A00F1BDB5 /* OTPParserContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A62C02719A00F1BDB5 /* OTPParserContants.swift */; };
+		E299E0AD2C02719A00F1BDB5 /* OTPParserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0A62C02719A00F1BDB5 /* OTPParserConstants.swift */; };
 		E299E0B22C0271A100F1BDB5 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0AE2C0271A100F1BDB5 /* MessageManager.swift */; };
 		E299E0B32C0271A100F1BDB5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B02C0271A100F1BDB5 /* Message.swift */; };
 		E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */; };
@@ -141,8 +141,8 @@
 		E20BA1C02C0164C90052B8FC /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E20BA1C22C0164C90052B8FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E20BA1C32C0164C90052B8FC /* faktor.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = faktor.entitlements; sourceTree = "<group>"; };
-		E20BA1C42C0164C90052B8FC /* faktorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = faktorApp.swift; sourceTree = "<group>"; };
-		E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+OnTrackingHover.swift.swift"; sourceTree = "<group>"; };
+		E20BA1C42C0164C90052B8FC /* FaktorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaktorApp.swift; sourceTree = "<group>"; };
+		E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+OnTrackingHover.swift"; sourceTree = "<group>"; };
 		E22004ED2C7503C3003B17E1 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
 		E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApplication+ShowSettingsWindow.swift"; sourceTree = "<group>"; };
 		E22004F42C752A42003B17E1 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -164,7 +164,7 @@
 		E299E0A32C02719A00F1BDB5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E299E0A42C02719A00F1BDB5 /* OTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParser.swift; sourceTree = "<group>"; };
 		E299E0A52C02719A00F1BDB5 /* OTPParserConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParserConfiguration.swift; sourceTree = "<group>"; };
-		E299E0A62C02719A00F1BDB5 /* OTPParserContants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParserContants.swift; sourceTree = "<group>"; };
+		E299E0A62C02719A00F1BDB5 /* OTPParserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParserConstants.swift; sourceTree = "<group>"; };
 		E299E0AE2C0271A100F1BDB5 /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
 		E299E0B02C0271A100F1BDB5 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E299E0B42C02806A00F1BDB5 /* ParsedOTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedOTP.swift; sourceTree = "<group>"; };
@@ -372,10 +372,10 @@
 				E20BA1C02C0164C90052B8FC /* .gitignore */,
 				E20BA1C22C0164C90052B8FC /* Assets.xcassets */,
 				E20BA1C32C0164C90052B8FC /* faktor.entitlements */,
-				E20BA1C42C0164C90052B8FC /* faktorApp.swift */,
+				E20BA1C42C0164C90052B8FC /* FaktorApp.swift */,
 			);
 			name = Faktor;
-			path = faktor;
+			path = Faktor;
 			sourceTree = "<group>";
 		};
 		E22004EC2C7503B2003B17E1 /* Settings */ = {
@@ -394,7 +394,7 @@
 		E22004EF2C7508EB003B17E1 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift.swift */,
+				E218A7A02C9F7F3000A93776 /* View+OnTrackingHover.swift */,
 				E29B43B42C82531F008FF25F /* Logger.swift */,
 				E299E0A32C02719A00F1BDB5 /* Extensions.swift */,
 				E22004F02C7508F6003B17E1 /* NSApplication+ShowSettingsWindow.swift */,
@@ -475,7 +475,7 @@
 				E299E0A22C02719A00F1BDB5 /* CustomOTPParsers.swift */,
 				E299E0A42C02719A00F1BDB5 /* OTPParser.swift */,
 				E299E0A52C02719A00F1BDB5 /* OTPParserConfiguration.swift */,
-				E299E0A62C02719A00F1BDB5 /* OTPParserContants.swift */,
+				E299E0A62C02719A00F1BDB5 /* OTPParserConstants.swift */,
 			);
 			path = OTPParser;
 			sourceTree = "<group>";
@@ -689,9 +689,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E218A7A12C9F7F3100A93776 /* View+OnTrackingHover.swift.swift in Sources */,
+				E218A7A12C9F7F3100A93776 /* View+OnTrackingHover.swift in Sources */,
 				E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */,
-				E299E0AD2C02719A00F1BDB5 /* OTPParserContants.swift in Sources */,
+				E299E0AD2C02719A00F1BDB5 /* OTPParserConstants.swift in Sources */,
 				E2EB28902D18E2B40087A919 /* AppState.swift in Sources */,
 				E299E0AB2C02719A00F1BDB5 /* OTPParser.swift in Sources */,
 				E299E0A82C02719A00F1BDB5 /* CustomOTPParser.swift in Sources */,
@@ -712,7 +712,7 @@
 				E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */,
 				E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */,
 				E299E0AC2C02719A00F1BDB5 /* OTPParserConfiguration.swift in Sources */,
-				E20BA1E42C0164C90052B8FC /* faktorApp.swift in Sources */,
+				E20BA1E42C0164C90052B8FC /* FaktorApp.swift in Sources */,
 				E299E0B52C02806A00F1BDB5 /* ParsedOTP.swift in Sources */,
 				E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */,
 				E29B43B32C7FE87D008FF25F /* PermissionsView.swift in Sources */,
