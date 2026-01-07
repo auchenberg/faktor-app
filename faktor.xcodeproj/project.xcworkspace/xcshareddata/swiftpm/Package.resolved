@@ -37,15 +37,6 @@
       }
     },
     {
-      "identity" : "posthog-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/PostHog/posthog-ios.git",
-      "state" : {
-        "revision" : "889f89a0da78544df735674d6bd1cb18481817c9",
-        "version" : "3.21.0"
-      }
-    },
-    {
       "identity" : "settingsaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/SettingsAccess",
