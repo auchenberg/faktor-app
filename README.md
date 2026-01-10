@@ -1,6 +1,6 @@
 # Faktor
 
-A macOS menu bar app that automatically extracts OTP verification codes from SMS messages and autofills them in your browser.
+Faktor is a Mac app that keeps an eye out for new 2FA codes and gives you a great autocomplete experience in Google Chrome.
 
 ![macOS](https://img.shields.io/badge/macOS-13.0+-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9+-orange)
