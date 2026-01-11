@@ -48,7 +48,6 @@
 		E22005002C7530A5003B17E1 /* OnboardingItemStatusIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22004FF2C7530A5003B17E1 /* OnboardingItemStatusIcon.swift */; };
 		E22005042C75EFFF003B17E1 /* FluidMenuBarExtra in Frameworks */ = {isa = PBXBuildFile; productRef = E22005032C75EFFF003B17E1 /* FluidMenuBarExtra */; };
 		E220407C2C06BE2300846029 /* BrowserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E220407B2C06BE2300846029 /* BrowserManager.swift */; };
-		E230C0942C1520F900C2BF61 /* testMessages.json in Resources */ = {isa = PBXBuildFile; fileRef = E230C0932C1520F800C2BF61 /* testMessages.json */; };
 		E233C6BB2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */; };
 		E233C6BD2C77B4A8006DE68D /* NotificationsOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */; };
 		E233C6BE2C77B4B0006DE68D /* AutomationOnboardingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E233C6BF2C77B4B0006DE68D /* AutomationOnboardingTask.swift */; };
@@ -153,7 +152,6 @@
 		E22004FF2C7530A5003B17E1 /* OnboardingItemStatusIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItemStatusIcon.swift; sourceTree = "<group>"; };
 		E220407B2C06BE2300846029 /* BrowserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserManager.swift; sourceTree = "<group>"; };
 		E22C9B042C01517100D2984D /* Faktor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Faktor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E230C0932C1520F800C2BF61 /* testMessages.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = testMessages.json; sourceTree = "<group>"; };
 		E233C6BA2C77B46C006DE68D /* BrowserExtensionOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserExtensionOnboardingTask.swift; sourceTree = "<group>"; };
 		E233C6BC2C77B4A8006DE68D /* NotificationsOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsOnboardingTask.swift; sourceTree = "<group>"; };
 		E233C6BF2C77B4B0006DE68D /* AutomationOnboardingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomationOnboardingTask.swift; sourceTree = "<group>"; };
@@ -505,7 +503,6 @@
 			isa = PBXGroup;
 			children = (
 				E2C527E32C3B4F830085ECC7 /* TestPlan.xctestplan */,
-				E230C0932C1520F800C2BF61 /* testMessages.json */,
 				E2C527D12C3B4E860085ECC7 /* FaktorTests.swift */,
 			);
 			path = FaktorTests;
@@ -651,7 +648,6 @@
 				E20BA1E12C0164C90052B8FC /* .gitignore in Resources */,
 				E20BA1D32C0164C90052B8FC /* pre-receive.sample in Resources */,
 				E20BA1D52C0164C90052B8FC /* push-to-checkout.sample in Resources */,
-				E230C0942C1520F900C2BF61 /* testMessages.json in Resources */,
 				E20BA1CE2C0164C90052B8FC /* pre-applypatch.sample in Resources */,
 				E20BA1CA2C0164C90052B8FC /* applypatch-msg.sample in Resources */,
 				E20BA1D72C0164C90052B8FC /* exclude in Resources */,
