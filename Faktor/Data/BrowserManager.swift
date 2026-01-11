@@ -251,7 +251,7 @@ class BrowserManager: NSObject, ObservableObject {
 
         Logger.core.info("BrowserManager: Browser connecting - \(browserName), hostId: \(hostId)")
 
-        let expectedExtensionId = "afhmgkpdmifnmflcaegmjcaaehfklepp"
+        let expectedExtensionId = "lnbhbpdjedbjplopnkkimjenlhneekoc"
         guard extensionId == expectedExtensionId else {
             Logger.core.error("BrowserManager: Invalid extension ID: \(extensionId)")
             return createResponse(["success": false, "error": "Invalid extension ID"])

@@ -118,7 +118,7 @@ struct BrowserExtensionOnboardingTask: View {
             return false
         }
 
-        let extensionID = "afhmgkpdmifnmflcaegmjcaaehfklepp"
+        let extensionID = "lnbhbpdjedbjplopnkkimjenlhneekoc"
         let homeDirectory = FileManager.default.homeDirectoryForCurrentUser
         let libraryPath = homeDirectory.appending(path: "/Library")
 
@@ -150,7 +150,7 @@ struct BrowserExtensionOnboardingTask: View {
     // MARK: - Static Native Messaging Helpers
 
     private static let hostName = "com.faktor.nativehost"
-    private static let extensionId = "afhmgkpdmifnmflcaegmjcaaehfklepp"
+    private static let extensionId = "lnbhbpdjedbjplopnkkimjenlhneekoc"
 
     private static func isNativeMessagingInstalled() -> Bool {
         let home = FileManager.default.homeDirectoryForCurrentUser.path

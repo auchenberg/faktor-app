@@ -12,7 +12,7 @@ import AppKit
 // MARK: - Constants
 
 enum Constants {
-    static let extensionId = "afhmgkpdmifnmflcaegmjcaaehfklepp"
+    static let extensionId = "lnbhbpdjedbjplopnkkimjenlhneekoc"
     static let appPortName = "com.faktor.app.messageport"
     static let appBundleId = "com.faktor.app"
     static let reconnectInterval: TimeInterval = 2.0
