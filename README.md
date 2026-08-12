@@ -1,3 +1,5 @@
+
+
 # Faktor
 
 Faktor is a Mac app that keeps an eye out for new 2FA codes and gives you a great autocomplete experience in Google Chrome.
@@ -47,7 +49,7 @@ Faktor is a Mac app that keeps an eye out for new 2FA codes and gives you a grea
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/user/faktor-app.git
+   git clone https://github.com/auchenberg/faktor-app.git
    cd faktor-app
    ```
 
